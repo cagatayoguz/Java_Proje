@@ -13,12 +13,18 @@ public class BilgiMenuGUI extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         // Menü maddeleri:
-        JButton btnOgrenci = new JButton("Öğrenci Bilgi Sistemi");
-        btnOgrenci.addActionListener(e -> { /* Öğrenci Bilgi Sorgulama Ekranı */ });
-        add(btnOgrenci);
+//        JButton btnOgrenci = new JButton("Öğrenci Bilgi Sistemi");
+//        btnOgrenci.addActionListener(e -> { /* Öğrenci Bilgi Sorgulama Ekranı */ });
+//        add(btnOgrenci);
 
         JButton btnAkademisyen = new JButton("Akademisyen Bilgi Sistemi");
         add(btnAkademisyen);
+        // BilgiMenuGUI.java içinde:
+// ...
+        JButton btnOgrenci = new JButton("Öğrenci Bilgi Sistemi");
+        btnOgrenci.addActionListener(e -> new OgrenciSorgulamaGUI().setVisible(true)); // Sorgulama ekranını aç
+        add(btnOgrenci);
+// ...
 
         JButton btnDersProgrami = new JButton("Ders Programı");
         add(btnDersProgrami);
