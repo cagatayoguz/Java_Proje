@@ -24,6 +24,7 @@ public class BilgiMenuGUI extends JFrame {
         add(btnDersProgrami);
 
         JButton btnYemekhane = new JButton("Yemekhane");
+        btnYemekhane.addActionListener(e -> new YemekhaneGUI().setVisible(true));
         add(btnYemekhane);
 
         JButton btnKutuphane = new JButton("Kütüphane");
