@@ -21,6 +21,8 @@ public class BilgiMenuGUI extends JFrame {
         add(btnAkademisyen);
 
         JButton btnDersProgrami = new JButton("Ders Programı");
+// Tıklanınca Fakülte Seçim Ekranını Aç
+        btnDersProgrami.addActionListener(e -> new FakulteSecimGUI().setVisible(true));
         add(btnDersProgrami);
 
         JButton btnYemekhane = new JButton("Yemekhane");

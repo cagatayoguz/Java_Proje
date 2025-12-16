@@ -53,9 +53,14 @@ public abstract class Ogrenci extends Kisiler implements Yonetilebilir {
 
     // Override Edilen Metotlar (Polimorfizm ve Bölüm 4.4 gereksinimi)
     @Override
-    public String getPozisyon() { return "Ogrenci - " + this.bolum; }
+    public String getPozisyon() {
+        return "Ogrenci - " + this.bolum;
+    }
+
     @Override
-    public void bilgiSistemiErisim() { System.out.println("Ogrenci bilgi sistemine erisildi."); }
+    public void bilgiSistemiErisim() {
+        System.out.println("Ogrenci bilgi sistemine erisildi.");
+    }
 
     @Override // Raporlanabilir'den gelen metot override edildi (Bölüm 4.4)
     public String detayliRaporOlustur() {
@@ -66,13 +71,30 @@ public abstract class Ogrenci extends Kisiler implements Yonetilebilir {
     }
 
     // ... (Getterlar ve Yonetilebilir Metotları)
-    public String getOgrenciNo() { return ogrenciNo; }
-    public String getBolum() { return bolum; }
+    public String getOgrenciNo() {
+        return ogrenciNo;
+    }
+
+    public String getBolum() {
+        return bolum;
+    }
 
     @Override
-    public boolean kaydet() { return true; }
+    public boolean kaydet() {
+        return true;
+    }
+
     @Override
-    public boolean sil(String id) { return true; }
+    public boolean sil(String id) {
+        return true;
+    }
+
     @Override
-    public boolean guncelle() { return true; }
+    public boolean guncelle() {
+        return true;
+    }
+
+    public Object getNotOrtalamasi() {
+        return null;
+    }
 }
