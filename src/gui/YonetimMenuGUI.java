@@ -2,30 +2,40 @@ package gui;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 
 public class YonetimMenuGUI extends JFrame {
 
     public YonetimMenuGUI() {
         setTitle("Yönetim Menüsü");
         setSize(400, 400);
-        setLayout(new GridLayout(4, 1));
+        setLayout(new GridLayout(4, 1, 10, 10)); // Butonlar arası boşluk eklendi
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        // Öğrenci Ekleme/Silme
+        // 1. Öğrenci Yönetimi Butonu
         JButton btnOgrenciYonetim = new JButton("Öğrenci Yönetimi");
+        btnOgrenciYonetim.setFont(new Font("Arial", Font.BOLD, 14));
+
+        // --- DÜZELTME BURADA ---
+        // Tıklanınca OgrenciYonetimMenuGUI penceresini açar
+        btnOgrenciYonetim.addActionListener(e -> new OgrenciYonetimMenuGUI().setVisible(true));
+
         add(btnOgrenciYonetim);
 
-        // Kitap Ekleme/Silme
+        // 2. Kütüphane Yönetimi Butonu
         JButton btnKutuphaneYonetim = new JButton("Kütüphane Yönetimi");
+        btnKutuphaneYonetim.setFont(new Font("Arial", Font.BOLD, 14));
         add(btnKutuphaneYonetim);
 
-        // Spor Salonu Üye Ekleme
+        // 3. Spor Salonu Yönetimi Butonu
         JButton btnSporYonetim = new JButton("Spor Salonu Yönetimi");
+        btnSporYonetim.setFont(new Font("Arial", Font.BOLD, 14));
         add(btnSporYonetim);
 
-        // Duyuru Ekleme
+        // 4. Duyuru Ekleme Butonu
         JButton btnDuyuruEkle = new JButton("Duyuru Ekle");
+        btnDuyuruEkle.setFont(new Font("Arial", Font.BOLD, 14));
         add(btnDuyuruEkle);
+
+        setLocationRelativeTo(null); // Ekranın ortasında açılsın
     }
 }

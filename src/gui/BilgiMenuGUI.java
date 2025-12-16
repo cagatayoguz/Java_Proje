@@ -14,7 +14,7 @@ public class BilgiMenuGUI extends JFrame {
 
         // Menü maddeleri:
         JButton btnOgrenci = new JButton("Öğrenci Bilgi Sistemi");
-        btnOgrenci.addActionListener(e -> { /* Öğrenci Bilgi Sorgulama Ekranı */ });
+        btnOgrenci.addActionListener(e -> new OgrenciBilgiSistemiGUI().setVisible(true));
         add(btnOgrenci);
 
         JButton btnAkademisyen = new JButton("Akademisyen Bilgi Sistemi");
@@ -33,11 +33,16 @@ public class BilgiMenuGUI extends JFrame {
         btnKutuphane.addActionListener(e -> new KutuphaneListeGUI().setVisible(true)); // Kütüphane listesini aç
         add(btnKutuphane);
 
+        JButton btnOgrenciYonetim = new JButton("Öğrenci Yönetimi");
+        btnOgrenciYonetim.addActionListener(e -> new OgrenciYonetimMenuGUI().setVisible(true));
+        add(btnOgrenciYonetim);
+
         JButton btnSporSalonu = new JButton("Spor Salonu");
         btnSporSalonu.addActionListener(e -> new SporSalonuMenuGUI().setVisible(true));
         add(btnSporSalonu);
 
-        JButton btnTakvim = new JButton("Akademik Takvim");
+        JButton btnTakvim = new JButton("Takvimler"); // İsmi değişti
+        btnTakvim.addActionListener(e -> new TakvimSecimGUI().setVisible(true));
         add(btnTakvim);
 
         JButton btnDuyurular = new JButton("Duyurular");
