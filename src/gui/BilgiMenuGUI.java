@@ -18,6 +18,8 @@ public class BilgiMenuGUI extends JFrame {
         add(btnOgrenci);
 
         JButton btnAkademisyen = new JButton("Akademisyen Bilgi Sistemi");
+// Tıklanınca Akademisyen Listesini aç
+        btnAkademisyen.addActionListener(e -> new AkademisyenListeGUI().setVisible(true));
         add(btnAkademisyen);
 
         JButton btnDersProgrami = new JButton("Ders Programı");
