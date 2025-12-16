@@ -18,12 +18,10 @@ public class BilgiMenuGUI extends JFrame {
         add(btnOgrenci);
 
         JButton btnAkademisyen = new JButton("Akademisyen Bilgi Sistemi");
-// Tıklanınca Akademisyen Listesini aç
         btnAkademisyen.addActionListener(e -> new AkademisyenListeGUI().setVisible(true));
         add(btnAkademisyen);
 
         JButton btnDersProgrami = new JButton("Ders Programı");
-// Tıklanınca Fakülte Seçim Ekranını Aç
         btnDersProgrami.addActionListener(e -> new FakulteSecimGUI().setVisible(true));
         add(btnDersProgrami);
 
@@ -36,6 +34,7 @@ public class BilgiMenuGUI extends JFrame {
         add(btnKutuphane);
 
         JButton btnSporSalonu = new JButton("Spor Salonu");
+        btnSporSalonu.addActionListener(e -> new SporSalonuMenuGUI().setVisible(true));
         add(btnSporSalonu);
 
         JButton btnTakvim = new JButton("Akademik Takvim");
