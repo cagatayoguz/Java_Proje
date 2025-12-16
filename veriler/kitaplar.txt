@@ -1,0 +1,50 @@
+Suç ve Ceza,Dostoyevski,978-605-7798-01-1,true
+Kürk Mantolu Madonna,Sabahattin Ali,978-975-07-2720-0,true
+1984,George Orwell,978-975-07-3531-1,true
+Sefiller,Victor Hugo,978-605-360-951-4,true
+Nutuk,Mustafa Kemal Atatürk,978-975-16-1681-3,true
+Tutunamayanlar,Oğuz Atay,978-975-07-0683-0,true
+Çalıkuşu,Reşat Nuri Güntekin,978-975-10-2187-5,true
+İnce Memed,Yaşar Kemal,978-975-08-0775-9,true
+Saatleri Ayarlama Enstitüsü,Ahmet Hamdi Tanpınar,978-975-08-0056-9,true
+Medeniyetler Çatışması,Samuel P. Huntington,978-605-4764-58-1,true
+Hayvan Çiftliği,George Orwell,978-975-07-2723-1,true
+Fahrenheit 451,Ray Bradbury,978-975-273-047-9,true
+Cesur Yeni Dünya,Aldous Huxley,978-975-07-1604-4,true
+Yüz Yıllık Yalnızlık,Gabriel García Márquez,978-975-07-2826-9,true
+Bülbülü Öldürmek,Harper Lee,978-975-07-2172-7,true
+Kitap Adı 16,Yazar 1,978-605-12345-16,true
+Kitap Adı 17,Yazar 2,978-605-12345-17,true
+Kitap Adı 18,Yazar 3,978-605-12345-18,false
+Kitap Adı 19,Yazar 4,978-605-12345-19,true
+Kitap Adı 20,Yazar 0,978-605-12345-20,true
+Kitap Adı 21,Yazar 1,978-605-12345-21,false
+Kitap Adı 22,Yazar 2,978-605-12345-22,true
+Kitap Adı 23,Yazar 3,978-605-12345-23,true
+Kitap Adı 24,Yazar 4,978-605-12345-24,false
+Kitap Adı 25,Yazar 0,978-605-12345-25,true
+Kitap Adı 26,Yazar 1,978-605-12345-26,true
+Kitap Adı 27,Yazar 2,978-605-12345-27,false
+Kitap Adı 28,Yazar 3,978-605-12345-28,true
+Kitap Adı 29,Yazar 4,978-605-12345-29,true
+Kitap Adı 30,Yazar 0,978-605-12345-30,false
+Kitap Adı 31,Yazar 1,978-605-12345-31,true
+Kitap Adı 32,Yazar 2,978-605-12345-32,true
+Kitap Adı 33,Yazar 3,978-605-12345-33,false
+Kitap Adı 34,Yazar 4,978-605-12345-34,true
+Kitap Adı 35,Yazar 0,978-605-12345-35,true
+Kitap Adı 36,Yazar 1,978-605-12345-36,false
+Kitap Adı 37,Yazar 2,978-605-12345-37,true
+Kitap Adı 38,Yazar 3,978-605-12345-38,true
+Kitap Adı 39,Yazar 4,978-605-12345-39,false
+Kitap Adı 40,Yazar 0,978-605-12345-40,true
+Kitap Adı 41,Yazar 1,978-605-12345-41,true
+Kitap Adı 42,Yazar 2,978-605-12345-42,false
+Kitap Adı 43,Yazar 3,978-605-12345-43,true
+Kitap Adı 44,Yazar 4,978-605-12345-44,true
+Kitap Adı 45,Yazar 0,978-605-12345-45,false
+Kitap Adı 46,Yazar 1,978-605-12345-46,true
+Kitap Adı 47,Yazar 2,978-605-12345-47,true
+Kitap Adı 48,Yazar 3,978-605-12345-48,false
+Kitap Adı 49,Yazar 4,978-605-12345-49,true
+Kitap Adı 50,Yazar 0,978-605-12345-50,true
