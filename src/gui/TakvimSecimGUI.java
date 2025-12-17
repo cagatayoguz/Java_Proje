@@ -1,45 +1,94 @@
 package gui;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
-import java.io.IOException;
 
 public class TakvimSecimGUI extends JFrame {
 
     public TakvimSecimGUI() {
         setTitle("Takvimler");
-        setSize(400, 250);
+        setSize(600, 400);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setLayout(new GridLayout(2, 1, 10, 20)); // 2 Buton alt alta
-        ((JPanel)getContentPane()).setBorder(BorderFactory.createEmptyBorder(30, 40, 30, 40));
-
-        // 1. Buton: Akademik Takvim (Direkt PDF açar)
-        JButton btnAkademik = new JButton("Akademik Takvim");
-        btnAkademik.setFont(new Font("Arial", Font.BOLD, 16));
-        btnAkademik.addActionListener(e -> akademikTakvimAc());
-        add(btnAkademik);
-
-        // 2. Buton: Sınav Takvimi (Fakülte Seçimine Gider)
-        JButton btnSinav = new JButton("Sınav Takvimi");
-        btnSinav.setFont(new Font("Arial", Font.BOLD, 16));
-        btnSinav.addActionListener(e -> new SinavFakulteSecimGUI().setVisible(true));
-        add(btnSinav);
-
         setLocationRelativeTo(null);
+
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.setBackground(new Color(248, 249, 250));
+        setContentPane(mainPanel);
+
+        // Başlık
+        JPanel headerPanel = new JPanel(new BorderLayout());
+        headerPanel.setBackground(new Color(248, 249, 250));
+        headerPanel.setBorder(new EmptyBorder(30, 40, 10, 40));
+        JLabel lblTitle = new JLabel("Akademik Takvimler");
+        lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 24));
+        headerPanel.add(lblTitle, BorderLayout.NORTH);
+        mainPanel.add(headerPanel, BorderLayout.NORTH);
+
+        // Kartlar
+        JPanel gridPanel = new JPanel(new GridLayout(1, 2, 20, 20));
+        gridPanel.setBackground(new Color(248, 249, 250));
+        gridPanel.setBorder(new EmptyBorder(20, 40, 40, 40));
+
+        gridPanel.add(createCard("Akademik Takvim", "Yıl içi planı görüntüle.", "📅",
+                e -> resimAc("veriler/resimler/akademik_takvim.jpg")));
+
+        gridPanel.add(createCard("Sınav Takvimi", "Vize ve final tarihleri.", "📝",
+                e -> resimAc("veriler/resimler/sinav_takvimi.jpg")));
+
+        mainPanel.add(gridPanel, BorderLayout.CENTER);
     }
 
-    private void akademikTakvimAc() {
-        try {
-            // Dosya yolu: veriler/takvimler/akademik_takvim.pdf
-            File dosya = new File("veriler/takvimler/akademik_takvim.pdf");
-            if (dosya.exists()) {
-                Desktop.getDesktop().open(dosya);
-            } else {
-                JOptionPane.showMessageDialog(this, "Akademik takvim dosyası bulunamadı!", "Hata", JOptionPane.ERROR_MESSAGE);
+    private JPanel createCard(String title, String desc, String icon, java.awt.event.ActionListener action) {
+        JPanel card = new JPanel(new BorderLayout());
+        card.setBackground(Color.WHITE);
+        card.setBorder(BorderFactory.createCompoundBorder(
+                new LineBorder(new Color(230, 230, 230), 1),
+                new EmptyBorder(20, 20, 20, 20)
+        ));
+        card.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        JLabel lblIcon = new JLabel(icon);
+        lblIcon.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 32));
+        lblIcon.setBorder(new EmptyBorder(0, 0, 0, 15));
+        card.add(lblIcon, BorderLayout.WEST);
+
+        JPanel textPanel = new JPanel(new GridLayout(2, 1));
+        textPanel.setBackground(Color.WHITE);
+        JLabel lblT = new JLabel(title);
+        lblT.setFont(new Font("Segoe UI", Font.BOLD, 16));
+        JLabel lblD = new JLabel(desc);
+        lblD.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        lblD.setForeground(Color.GRAY);
+        textPanel.add(lblT);
+        textPanel.add(lblD);
+        card.add(textPanel, BorderLayout.CENTER);
+
+        card.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) { action.actionPerformed(null); }
+            public void mouseEntered(MouseEvent e) {
+                card.setBorder(new LineBorder(new Color(155, 89, 182), 1)); // Mor vurgu
             }
-        } catch (IOException ex) {
-            JOptionPane.showMessageDialog(this, "Dosya açılırken hata oluştu: " + ex.getMessage());
-        }
+            public void mouseExited(MouseEvent e) {
+                card.setBorder(new LineBorder(new Color(230, 230, 230), 1));
+            }
+        });
+        return card;
+    }
+
+    private void resimAc(String path) {
+        JDialog d = new JDialog(this, "Takvim Görüntüleyici", true);
+        d.setSize(600, 800);
+        JLabel l = new JLabel();
+        l.setHorizontalAlignment(SwingConstants.CENTER);
+        if(new File(path).exists()) l.setIcon(new ImageIcon(path));
+        else l.setText("Dosya bulunamadı: " + path);
+        d.add(new JScrollPane(l));
+        d.setLocationRelativeTo(this);
+        d.setVisible(true);
     }
 }

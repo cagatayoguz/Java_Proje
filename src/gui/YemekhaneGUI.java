@@ -1,7 +1,8 @@
 package gui;
 
 import javax.swing.*;
-import javax.swing.border.TitledBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.io.File;
 
@@ -9,118 +10,117 @@ public class YemekhaneGUI extends JFrame {
 
     public YemekhaneGUI() {
         setTitle("Yemekhane Bilgi Sistemi");
-        setSize(850, 500); // Ekran genişliği
+        setSize(900, 600);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setLayout(new BorderLayout(10, 10)); // Bileşenler arası boşluk
+        setLocationRelativeTo(null);
 
-        // --- ORTA PANEL (Yemekhane Bilgileri) ---
-        JPanel ortaPanel = new JPanel(new GridLayout(1, 2, 20, 0)); // 1 Satır, 2 Sütun (Yan Yana)
-        ortaPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); // Kenar boşlukları
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.setBackground(new Color(248, 249, 250));
+        setContentPane(mainPanel);
 
-        // 1. Merkez Yemekhane Paneli
-        JPanel merkezPanel = yemekhanePanelOlustur("Merkez Yemekhane", "Kapasite: 800 Kişi", "veriler/resimler/merkez.jpg");
-        ortaPanel.add(merkezPanel);
+        // Başlık
+        JPanel headerPanel = new JPanel(new BorderLayout());
+        headerPanel.setBackground(new Color(248, 249, 250));
+        headerPanel.setBorder(new EmptyBorder(30, 40, 10, 40));
+        JLabel lblTitle = new JLabel("Yemekhane Durumu");
+        lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 28));
+        headerPanel.add(lblTitle, BorderLayout.NORTH);
+        mainPanel.add(headerPanel, BorderLayout.NORTH);
 
-        // 2. Dökümhane Yemekhane Paneli
-        JPanel dokumhanePanel = yemekhanePanelOlustur("Dökümhane Yemekhane", "Kapasite: 600 Kişi", "veriler/resimler/dokumhane.jpg");
-        ortaPanel.add(dokumhanePanel);
+        // Yemekhane Kartları (Merkez & Dökümhane)
+        JPanel gridPanel = new JPanel(new GridLayout(1, 2, 25, 0));
+        gridPanel.setBackground(new Color(248, 249, 250));
+        gridPanel.setBorder(new EmptyBorder(20, 40, 20, 40));
 
-        add(ortaPanel, BorderLayout.CENTER);
+        gridPanel.add(createYemekhaneCard("Merkez Yemekhane", "Kapasite: 800 | Doluluk: %45", "veriler/resimler/merkez.jpg"));
+        gridPanel.add(createYemekhaneCard("Dökümhane Yemekhane", "Kapasite: 600 | Doluluk: %70", "veriler/resimler/dokumhane.jpg"));
 
-        // --- ALT PANEL (Butonlar) ---
-        JPanel altPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 30, 20));
+        mainPanel.add(gridPanel, BorderLayout.CENTER);
 
-        // Buton 1: Günün Menüsü (Veritabanından Çeker)
-        JButton btnGununMenusu = new JButton("Günün Menüsü");
-        btnGununMenusu.setFont(new Font("Arial", Font.BOLD, 14));
-        btnGununMenusu.setPreferredSize(new Dimension(150, 40));
+        // Alt Butonlar
+        JPanel footerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 30));
+        footerPanel.setBackground(new Color(248, 249, 250));
 
-        btnGununMenusu.addActionListener(e -> {
-            // Veritabanı sınıfından bugünün menüsünü iste
+        JButton btnMenu = createActionButton("Günün Menüsü", new Color(13, 110, 253));
+        btnMenu.addActionListener(e -> {
             String menu = service.YemekVeriTabani.gununMenusuGetir();
-
-            // Metni göstereceğimiz şık bir alan oluştur
             JTextArea textArea = new JTextArea(menu);
-            textArea.setFont(new Font("Monospaced", Font.BOLD, 14)); // Hizalı görünmesi için Monospaced font
-            textArea.setEditable(false); // Kullanıcı değiştiremesin
-            textArea.setBackground(new Color(240, 240, 240)); // Gri arka plan
-            textArea.setMargin(new Insets(10, 10, 10, 10)); // İç boşluk
-
-            // Ekrana bas
-            JOptionPane.showMessageDialog(this,
-                    textArea,
-                    "Günün Yemek Menüsü",
-                    JOptionPane.INFORMATION_MESSAGE);
+            textArea.setFont(new Font("Monospaced", Font.BOLD, 14));
+            textArea.setEditable(false);
+            textArea.setBackground(new Color(240, 240, 240));
+            JOptionPane.showMessageDialog(this, textArea, "Günün Menüsü", JOptionPane.PLAIN_MESSAGE);
         });
 
-        // Buton 2: Yemek Listesi (Resmi Açar)
-        JButton btnYemekListesi = new JButton("Yemek Listesi");
-        btnYemekListesi.setFont(new Font("Arial", Font.BOLD, 14));
-        btnYemekListesi.setPreferredSize(new Dimension(150, 40));
+        JButton btnList = createActionButton("Aylık Liste", new Color(108, 117, 125));
+        btnList.addActionListener(e -> resimAc("veriler/resimler/menu_aylik.jpg"));
 
-        btnYemekListesi.addActionListener(e -> resimPenceresiAc("Yemek Listesi", "C:\\Users\\cagat\\Downloads\\yemek listesi.png"));
-
-        altPanel.add(btnGununMenusu);
-        altPanel.add(btnYemekListesi);
-
-        add(altPanel, BorderLayout.SOUTH);
-        setLocationRelativeTo(null); // Ekranın ortasında açılması için
+        footerPanel.add(btnMenu);
+        footerPanel.add(btnList);
+        mainPanel.add(footerPanel, BorderLayout.SOUTH);
     }
 
-    // Yemekhane kutularını oluşturmak için yardımcı metot
-    private JPanel yemekhanePanelOlustur(String baslik, String kapasite, String resimYolu) {
-        JPanel panel = new JPanel(new BorderLayout());
+    private JPanel createYemekhaneCard(String title, String info, String imagePath) {
+        JPanel card = new JPanel(new BorderLayout());
+        card.setBackground(Color.WHITE);
+        card.setBorder(BorderFactory.createCompoundBorder(
+                new LineBorder(new Color(230, 230, 230), 1),
+                new EmptyBorder(15, 15, 15, 15)
+        ));
 
-        // Çerçeve ve Başlık
-        TitledBorder border = BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.GRAY), baslik);
-        border.setTitleJustification(TitledBorder.CENTER);
-        border.setTitleFont(new Font("Arial", Font.BOLD, 18));
-        panel.setBorder(border);
+        // Resim Alanı
+        JLabel lblImage = new JLabel();
+        lblImage.setHorizontalAlignment(SwingConstants.CENTER);
+        lblImage.setBackground(new Color(240, 240, 240));
+        lblImage.setOpaque(true);
+        lblImage.setPreferredSize(new Dimension(300, 200));
 
-        // Kapasite Yazısı
-        JLabel lblKapasite = new JLabel(kapasite, SwingConstants.CENTER);
-        lblKapasite.setFont(new Font("Arial", Font.BOLD, 14));
-        lblKapasite.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
-        panel.add(lblKapasite, BorderLayout.NORTH);
-
-        // Yemekhane Resmi
-        JLabel lblResim = new JLabel();
-        lblResim.setHorizontalAlignment(SwingConstants.CENTER);
-
-        File imgFile = new File(resimYolu);
+        File imgFile = new File(imagePath);
         if (imgFile.exists()) {
-            // Resmi kutuya sığacak şekilde ölçekle (300x200)
-            ImageIcon icon = new ImageIcon(new ImageIcon(resimYolu).getImage().getScaledInstance(300, 200, Image.SCALE_SMOOTH));
-            lblResim.setIcon(icon);
+            ImageIcon icon = new ImageIcon(new ImageIcon(imagePath).getImage().getScaledInstance(350, 220, Image.SCALE_SMOOTH));
+            lblImage.setIcon(icon);
         } else {
-            lblResim.setText("[Resim Yok]");
-            lblResim.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
+            lblImage.setText("Görsel Yok");
         }
+        card.add(lblImage, BorderLayout.CENTER);
 
-        panel.add(lblResim, BorderLayout.CENTER);
+        // Bilgi Alanı
+        JPanel infoPanel = new JPanel(new GridLayout(2, 1));
+        infoPanel.setBackground(Color.WHITE);
+        infoPanel.setBorder(new EmptyBorder(10, 0, 0, 0));
 
-        return panel;
+        JLabel lblT = new JLabel(title, SwingConstants.CENTER);
+        lblT.setFont(new Font("Segoe UI", Font.BOLD, 18));
+
+        JLabel lblI = new JLabel(info, SwingConstants.CENTER);
+        lblI.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        lblI.setForeground(Color.GRAY);
+
+        infoPanel.add(lblT);
+        infoPanel.add(lblI);
+        card.add(infoPanel, BorderLayout.SOUTH);
+
+        return card;
     }
 
-    // Resim açan yardımcı pencere (Yemek Listesi için)
-    private void resimPenceresiAc(String baslik, String dosyaYolu) {
-        JDialog dialog = new JDialog(this, baslik, true);
-        dialog.setSize(600, 800);
-        dialog.setLayout(new BorderLayout());
+    private JButton createActionButton(String text, Color color) {
+        JButton btn = new JButton(text);
+        btn.setFont(new Font("Segoe UI", Font.BOLD, 16));
+        btn.setForeground(Color.WHITE);
+        btn.setBackground(color);
+        btn.setFocusPainted(false);
+        btn.setBorder(new EmptyBorder(10, 25, 10, 25));
+        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        return btn;
+    }
 
-        JLabel lblResim = new JLabel();
-        lblResim.setHorizontalAlignment(SwingConstants.CENTER);
-
-        File dosya = new File(dosyaYolu);
-        if (dosya.exists()) {
-            ImageIcon icon = new ImageIcon(dosyaYolu);
-            lblResim.setIcon(icon);
-        } else {
-            lblResim.setText("<html><center><h2>Görsel Bulunamadı</h2>" + dosyaYolu + "</center></html>");
-        }
-
-        dialog.add(new JScrollPane(lblResim));
-        dialog.setLocationRelativeTo(this);
-        dialog.setVisible(true);
+    private void resimAc(String path) {
+        JDialog d = new JDialog(this, "Görsel", true);
+        d.setSize(600, 800);
+        JLabel l = new JLabel();
+        if(new File(path).exists()) l.setIcon(new ImageIcon(path));
+        else l.setText("Dosya yok: " + path);
+        d.add(new JScrollPane(l));
+        d.setLocationRelativeTo(this);
+        d.setVisible(true);
     }
 }

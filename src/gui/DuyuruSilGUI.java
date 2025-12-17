@@ -2,85 +2,77 @@ package gui;
 
 import service.DosyaIslemleri;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
 
 public class DuyuruSilGUI extends JFrame {
-
     private DefaultTableModel model;
     private JTable table;
 
     public DuyuruSilGUI() {
-        setTitle("Duyuru Sil");
-        setSize(700, 400);
+        setTitle("Duyuruları Yönet");
+        setSize(800, 500);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setLayout(new BorderLayout());
-
-        // --- Tablo ---
-        String[] kolonlar = {"Tarih", "Konu", "İçerik"};
-        model = new DefaultTableModel(kolonlar, 0) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false; // Düzenlenemesin, sadece seçilsin
-            }
-        };
-
-        table = new JTable(model);
-        table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); // Tek tek seçilsin
-        verileriYukle(); // Listeyi doldur
-
-        add(new JScrollPane(table), BorderLayout.CENTER);
-
-        // --- Alt Panel (Sil Butonu) ---
-        JPanel altPanel = new JPanel();
-        JButton btnSil = new JButton("Seçili Duyuruyu Sil");
-        btnSil.setFont(new Font("Arial", Font.BOLD, 14));
-        btnSil.setForeground(Color.RED);
-
-        btnSil.addActionListener(e -> silmeIslemi());
-
-        altPanel.add(btnSil);
-        add(altPanel, BorderLayout.SOUTH);
-
         setLocationRelativeTo(null);
+
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.setBackground(Color.WHITE);
+        setContentPane(mainPanel);
+
+        JPanel header = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        header.setBackground(new Color(248, 249, 250));
+        JLabel lbl = new JLabel(" Yayındaki Duyurular");
+        lbl.setFont(new Font("Segoe UI", Font.BOLD, 18));
+        header.add(lbl);
+        mainPanel.add(header, BorderLayout.NORTH);
+
+        String[] cols = {"Tarih", "Başlık", "İçerik (Önizleme)"};
+        model = new DefaultTableModel(cols, 0) {
+            public boolean isCellEditable(int r, int c) { return false; }
+        };
+        table = new JTable(model);
+        table.setRowHeight(30);
+        table.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+
+        yukle();
+
+        JScrollPane sp = new JScrollPane(table);
+        sp.setBorder(new EmptyBorder(10, 20, 10, 20));
+        sp.getViewport().setBackground(Color.WHITE);
+        mainPanel.add(sp, BorderLayout.CENTER);
+
+        JPanel footer = new JPanel();
+        footer.setBackground(Color.WHITE);
+        JButton btnSil = new JButton("Seçili Duyuruyu Kaldır");
+        btnSil.setBackground(new Color(220, 53, 69));
+        btnSil.setForeground(Color.WHITE);
+        btnSil.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        btnSil.addActionListener(e -> sil());
+        footer.add(btnSil);
+        mainPanel.add(footer, BorderLayout.SOUTH);
     }
 
-    private void verileriYukle() {
-        model.setRowCount(0); // Tabloyu temizle
-        List<String[]> duyurular = DosyaIslemleri.duyurulariOku();
-        for (String[] d : duyurular) {
-            model.addRow(d);
-        }
+    private void yukle() {
+        model.setRowCount(0);
+        List<String[]> list = DosyaIslemleri.duyurulariOku();
+        for(String[] d : list) model.addRow(d);
     }
 
-    private void silmeIslemi() {
-        int seciliSatir = table.getSelectedRow();
+    private void sil() {
+        int r = table.getSelectedRow();
+        if(r == -1) { JOptionPane.showMessageDialog(this,"Seçim yapınız."); return; }
 
-        if (seciliSatir == -1) {
-            JOptionPane.showMessageDialog(this, "Lütfen silinecek bir duyuru seçin.");
-            return;
-        }
+        // Başlığı anahtar olarak kullanıp siliyoruz (Basit mantık)
+        String baslik = (String) model.getValueAt(r, 1);
 
-        // Tablodan konuyu al (1. sütun)
-        String konu = (String) model.getValueAt(seciliSatir, 1);
-
-        int onay = JOptionPane.showConfirmDialog(this,
-                "'" + konu + "' başlıklı duyuruyu silmek istediğinize emin misiniz?",
-                "Silme Onayı", JOptionPane.YES_NO_OPTION);
-
-        if (onay == JOptionPane.YES_OPTION) {
+        int c = JOptionPane.showConfirmDialog(this, "Bu duyuru kaldırılsın mı?", "Onay", JOptionPane.YES_NO_OPTION);
+        if(c == JOptionPane.YES_OPTION) {
             try {
-                boolean sonuc = DosyaIslemleri.duyuruSil(konu);
-                if (sonuc) {
-                    JOptionPane.showMessageDialog(this, "Duyuru silindi.");
-                    verileriYukle(); // Listeyi yenile
-                } else {
-                    JOptionPane.showMessageDialog(this, "Hata: Duyuru dosyada bulunamadı.");
-                }
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Bir hata oluştu: " + ex.getMessage());
-            }
+                DosyaIslemleri.duyuruSil(baslik);
+                yukle();
+            } catch(Exception ex) { ex.printStackTrace(); }
         }
     }
 }

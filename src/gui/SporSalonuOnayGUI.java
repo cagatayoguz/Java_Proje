@@ -2,6 +2,7 @@ package gui;
 
 import service.DosyaIslemleri;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
@@ -12,74 +13,101 @@ public class SporSalonuOnayGUI extends JFrame {
     private JTable table;
 
     public SporSalonuOnayGUI() {
-        setTitle("Spor Salonu - Üyelik Onay İşlemleri");
-        setSize(800, 500);
+        setTitle("Spor Salonu - Başvuru Onay Ekranı");
+        setSize(850, 500);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setLayout(new BorderLayout());
+        setLocationRelativeTo(null);
 
-        JLabel lblInfo = new JLabel("Onay Bekleyen Üyelik Talepleri", SwingConstants.CENTER);
-        lblInfo.setFont(new Font("Arial", Font.BOLD, 16));
-        lblInfo.setBorder(BorderFactory.createEmptyBorder(10,0,10,0));
-        add(lblInfo, BorderLayout.NORTH);
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.setBackground(Color.WHITE);
+        setContentPane(mainPanel);
 
-        String[] kolonlar = {"Ad Soyad", "Öğrenci No", "Üyelik Tipi", "Ücret", "Durum"};
-        model = new DefaultTableModel(kolonlar, 0);
+        // --- Başlık ---
+        JPanel header = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        header.setBackground(new Color(248, 249, 250));
+        header.setBorder(new EmptyBorder(15, 20, 15, 20));
+        JLabel lblTitle = new JLabel(" Onay Bekleyen Başvurular");
+        lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 18));
+        header.add(lblTitle);
+        mainPanel.add(header, BorderLayout.NORTH);
+
+        // --- Tablo ---
+        String[] cols = {"Ad Soyad", "Öğrenci No", "Üyelik Tipi", "Ücret", "Durum"};
+        model = new DefaultTableModel(cols, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) { return false; }
+        };
+
         table = new JTable(model);
+        table.setRowHeight(30);
+        table.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        table.setSelectionBackground(new Color(255, 243, 205)); // Sarımsı seçim
+        table.setSelectionForeground(Color.BLACK);
+
+        JScrollPane sp = new JScrollPane(table);
+        sp.setBorder(new EmptyBorder(10, 20, 10, 20));
+        sp.getViewport().setBackground(Color.WHITE);
+        mainPanel.add(sp, BorderLayout.CENTER);
 
         verileriYukle();
-        add(new JScrollPane(table), BorderLayout.CENTER);
 
-        JPanel btnPanel = new JPanel();
-        JButton btnOnayla = new JButton("Üyeliği Onayla");
-        btnOnayla.setBackground(new Color(200, 255, 200));
+        // --- Butonlar ---
+        JPanel footer = new JPanel(new FlowLayout(FlowLayout.RIGHT, 20, 20));
+        footer.setBackground(Color.WHITE);
 
-        JButton btnReddet = new JButton("Reddet");
-        btnReddet.setBackground(new Color(255, 200, 200));
+        JButton btnRed = new JButton("Reddet (Sil)");
+        btnRed.setBackground(new Color(220, 53, 69)); // Kırmızı
+        btnRed.setForeground(Color.WHITE);
+        btnRed.setFont(new Font("Segoe UI", Font.BOLD, 14));
 
-        btnOnayla.addActionListener(e -> islemYap(true));
-        btnReddet.addActionListener(e -> islemYap(false));
+        JButton btnOnay = new JButton("Onayla (Aktif Et)");
+        btnOnay.setBackground(new Color(25, 135, 84)); // Yeşil
+        btnOnay.setForeground(Color.WHITE);
+        btnOnay.setFont(new Font("Segoe UI", Font.BOLD, 14));
 
-        btnPanel.add(btnOnayla);
-        btnPanel.add(btnReddet);
-        add(btnPanel, BorderLayout.SOUTH);
+        btnRed.addActionListener(e -> islemYap(false));
+        btnOnay.addActionListener(e -> islemYap(true));
 
-        setLocationRelativeTo(null);
+        footer.add(btnRed);
+        footer.add(btnOnay);
+        mainPanel.add(footer, BorderLayout.SOUTH);
     }
 
     private void verileriYukle() {
         model.setRowCount(0);
-        List<String[]> uyelikler = DosyaIslemleri.sporUyelikleriOku();
-        boolean bekleyenVar = false;
-
-        for (String[] u : uyelikler) {
+        List<String[]> list = DosyaIslemleri.sporUyelikleriOku();
+        for (String[] u : list) {
             // Sadece "Bekliyor" durumundakileri göster
-            if (u[4].equals("Bekliyor")) {
+            if ("Bekliyor".equals(u[4])) {
                 model.addRow(u);
-                bekleyenVar = true;
             }
-        }
-
-        if (!bekleyenVar) {
-            model.addRow(new Object[]{"Bekleyen talep yok.", "-", "-", "-", "-"});
         }
     }
 
-    private void islemYap(boolean onaylandi) {
+    private void islemYap(boolean onay) {
         int row = table.getSelectedRow();
-        if (row == -1 || model.getValueAt(row, 1).equals("-")) {
-            JOptionPane.showMessageDialog(this, "Lütfen listeden geçerli bir talep seçin.");
+        if (row == -1) {
+            JOptionPane.showMessageDialog(this, "Lütfen bir başvuru seçin.");
             return;
         }
 
-        String ogrenciNo = (String) model.getValueAt(row, 1);
+        String ogrNo = (String) model.getValueAt(row, 1);
+        String ad = (String) model.getValueAt(row, 0);
 
         try {
-            DosyaIslemleri.sporUyelikGuncelle(ogrenciNo, onaylandi);
-            if (onaylandi) JOptionPane.showMessageDialog(this, "Üyelik onaylandı ve aktif edildi.");
-            else JOptionPane.showMessageDialog(this, "Üyelik talebi reddedildi (silindi).");
-            verileriYukle();
+            if (onay) {
+                // Durumu "Aktif" yap
+                DosyaIslemleri.sporUyelikGuncelle(ogrNo, "Aktif");
+                JOptionPane.showMessageDialog(this, ad + " isimli üye onaylandı.");
+            } else {
+                // Kaydı sil
+                DosyaIslemleri.sporUyelikSil(ogrNo);
+                JOptionPane.showMessageDialog(this, "Başvuru reddedildi ve silindi.");
+            }
+            verileriYukle(); // Tabloyu yenile
         } catch (Exception ex) {
             ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "İşlem hatası: " + ex.getMessage());
         }
     }
 }

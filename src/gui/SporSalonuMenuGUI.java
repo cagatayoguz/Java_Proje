@@ -1,35 +1,84 @@
 package gui;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class SporSalonuMenuGUI extends JFrame {
 
     public SporSalonuMenuGUI() {
         setTitle("Spor Salonu");
-        setSize(350, 200); // Küçük ve kompakt boyut
+        setSize(600, 400);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(null);
 
-        // Düzen (Layout): Dikey olarak sıralanmış, ortalanmış
-        JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(2, 1, 10, 20)); // 2 Satır, 1 Sütun, Aralarda boşluk
-        panel.setBorder(BorderFactory.createEmptyBorder(30, 40, 30, 40)); // Kenarlardan boşluk
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.setBackground(new Color(248, 249, 250));
+        setContentPane(mainPanel);
 
-        // Buton 1: Çalışma Saatleri
-        JButton btnSaatler = new JButton("Çalışma Saatleri");
-        btnSaatler.setFont(new Font("Arial", Font.BOLD, 14));
-        // Tıklanınca Saatler Tablosunu Aç
-        btnSaatler.addActionListener(e -> new SporSalonuSaatlerGUI().setVisible(true));
+        // Başlık
+        JPanel headerPanel = new JPanel(new BorderLayout());
+        headerPanel.setBackground(new Color(248, 249, 250));
+        headerPanel.setBorder(new EmptyBorder(30, 40, 10, 40));
+        JLabel lblTitle = new JLabel("Spor Salonu");
+        lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 24));
+        headerPanel.add(lblTitle, BorderLayout.NORTH);
+        mainPanel.add(headerPanel, BorderLayout.NORTH);
 
-        // Buton 2: Aylık Üyelik
-        JButton btnUyelik = new JButton("Aylık Üyelik");
-        btnUyelik.setFont(new Font("Arial", Font.BOLD, 14));
-        // Üyelik işlemleri için buraya kod eklenebilir, şimdilik mesaj verelim
-        btnUyelik.addActionListener(e -> new SporSalonuUyelikGUI().setVisible(true));
-        panel.add(btnSaatler);
-        panel.add(btnUyelik);
+        // Kartlar
+        JPanel gridPanel = new JPanel(new GridLayout(1, 2, 20, 20));
+        gridPanel.setBackground(new Color(248, 249, 250));
+        gridPanel.setBorder(new EmptyBorder(20, 40, 40, 40));
 
-        add(panel);
-        setLocationRelativeTo(null); // Ekranın ortasında açılsın
+        // Başvuru Kartı
+        gridPanel.add(createCard("Üyelik Başvurusu", "Aylık/Yıllık kayıt ol.", "📝",
+                e -> new SporSalonuUyelikGUI().setVisible(true)));
+
+        // Saatler Kartı (Basit Dialog)
+        // Saatler Kartı (Artık Tablo Açıyor)
+        gridPanel.add(createCard("Çalışma Saatleri", "Haftalık programı gör.", "⏰",
+                e -> new SporSalonuSaatlerGUI().setVisible(true)));
+
+        mainPanel.add(gridPanel, BorderLayout.CENTER);
+    }
+
+    private JPanel createCard(String title, String desc, String icon, java.awt.event.ActionListener action) {
+        JPanel card = new JPanel(new BorderLayout());
+        card.setBackground(Color.WHITE);
+        card.setBorder(BorderFactory.createCompoundBorder(
+                new LineBorder(new Color(230, 230, 230), 1),
+                new EmptyBorder(20, 20, 20, 20)
+        ));
+        card.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        JLabel lblIcon = new JLabel(icon);
+        lblIcon.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 32));
+        lblIcon.setBorder(new EmptyBorder(0, 0, 0, 15));
+        card.add(lblIcon, BorderLayout.WEST);
+
+        JPanel textPanel = new JPanel(new GridLayout(2, 1));
+        textPanel.setBackground(Color.WHITE);
+        JLabel lblT = new JLabel(title);
+        lblT.setFont(new Font("Segoe UI", Font.BOLD, 16));
+        JLabel lblD = new JLabel(desc);
+        lblD.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        lblD.setForeground(Color.GRAY);
+        textPanel.add(lblT);
+        textPanel.add(lblD);
+        card.add(textPanel, BorderLayout.CENTER);
+
+        card.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) { action.actionPerformed(null); }
+            public void mouseEntered(MouseEvent e) {
+                card.setBorder(new LineBorder(new Color(46, 204, 113), 1)); // Yeşil vurgu
+            }
+            public void mouseExited(MouseEvent e) {
+                card.setBorder(new LineBorder(new Color(230, 230, 230), 1));
+            }
+        });
+        return card;
     }
 }

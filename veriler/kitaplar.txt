@@ -47,4 +47,3 @@ Kitap Adı 46,Yazar 1,978-605-12345-46,Musait,-,-
 Kitap Adı 47,Yazar 2,978-605-12345-47,Musait,-,-
 Kitap Adı 48,Yazar 3,978-605-12345-48,Musait,-,-
 Kitap Adı 49,Yazar 4,978-605-12345-49,Musait,-,-
-Kitap Adı 50,Yazar 0,978-605-12345-50,Musait,-,-
