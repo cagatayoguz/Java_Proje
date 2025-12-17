@@ -344,4 +344,22 @@ public class DosyaIslemleri {
             }
         }
     }
+    public static boolean sporUyelikSil(String silinecekNo) throws IOException {
+        List<String[]> liste = sporUyelikleriOku();
+        File dosya = new File(SPOR_DOSYASI);
+        boolean bulundu = false;
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(dosya, false))) {
+            for (String[] u : liste) {
+                // u[1] = Öğrenci No
+                if (u[1].equals(silinecekNo)) {
+                    bulundu = true; // Bu satırı yazmıyoruz (siliyoruz)
+                } else {
+                    writer.write(String.join(",", u));
+                    writer.newLine();
+                }
+            }
+        }
+        return bulundu;
+    }
 }

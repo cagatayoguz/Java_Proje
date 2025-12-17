@@ -7,18 +7,25 @@ public class SporSalonuYonetimMenuGUI extends JFrame {
 
     public SporSalonuYonetimMenuGUI() {
         setTitle("Spor Salonu Yönetimi");
-        setSize(300, 200);
+        setSize(350, 250); // Boyutu biraz büyüttük
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setLayout(new GridLayout(1, 1, 10, 10)); // Tek buton var şimdilik
-        ((JPanel)getContentPane()).setBorder(BorderFactory.createEmptyBorder(40, 40, 40, 40));
+        setLayout(new GridLayout(2, 1, 10, 10)); // 2 Buton alt alta
+        ((JPanel)getContentPane()).setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
 
-        JButton btnOnay = new JButton("Üyelik Onay İşlemleri");
+        // 1. Onay Bekleyenler Butonu
+        JButton btnOnay = new JButton("Onay Bekleyenler");
         btnOnay.setFont(new Font("Arial", Font.BOLD, 14));
-        btnOnay.setBackground(new Color(255, 255, 200));
-        // Onay Ekranını Aç
+        btnOnay.setBackground(new Color(255, 255, 200)); // Sarımsı
         btnOnay.addActionListener(e -> new SporSalonuOnayGUI().setVisible(true));
 
+        // 2. Üye Listesi ve Silme Butonu (YENİ)
+        JButton btnListe = new JButton("Üye Listesi / Silme");
+        btnListe.setFont(new Font("Arial", Font.BOLD, 14));
+        btnListe.addActionListener(e -> new SporSalonuUyeYonetimGUI().setVisible(true));
+
         add(btnOnay);
+        add(btnListe);
+
         setLocationRelativeTo(null);
     }
 }
