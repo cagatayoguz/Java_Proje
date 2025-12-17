@@ -16,7 +16,7 @@ public class SporSalonuSaatlerGUI extends JFrame {
         // Resimdeki turuncu uyarı yazısı
         JLabel lblUyari = new JLabel("Pazartesi günleri spor salonu kapalıdır.", SwingConstants.CENTER);
         lblUyari.setFont(new Font("Arial", Font.BOLD, 16));
-        lblUyari.setForeground(new Color(200, 100, 0)); // Turuncuya yakın renk
+        lblUyari.setForeground(Color.red); // Turuncuya yakın renk
         lblUyari.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0)); // Biraz boşluk
         add(lblUyari, BorderLayout.NORTH);
 

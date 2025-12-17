@@ -11,6 +11,7 @@ public class BolumSecimGUI extends JFrame {
         setTitle(fakulteAdi + " - Bölümler");
         setSize(400, 400);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(null);
 
         // Dinamik olarak buton ekleyeceğimiz için sayı belirsiz, dikey sıralama kullanıyoruz
         setLayout(new GridLayout(0, 1, 10, 10));

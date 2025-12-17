@@ -17,6 +17,7 @@ public class AkademisyenListeGUI extends JFrame {
         setSize(1000, 600); // Ekran görüntüsüne uygun genişlik
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
+        setLocationRelativeTo(null);
 
         // --- ÜST PANEL (Arama Çubuğu) ---
         JPanel ustPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));

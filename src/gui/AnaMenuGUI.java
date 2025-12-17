@@ -25,10 +25,10 @@ public class AnaMenuGUI extends JFrame {
 
         // --- 2. Üst Kısım (Başlık) ---
         JLabel lblBaslik = new JLabel("Üniversite Bilgi ve Yönetim Sistemi", SwingConstants.CENTER);
-        lblBaslik.setFont(new Font("SansSerif", Font.BOLD, 36));
+        lblBaslik.setFont(new Font("SansSerif", Font.BOLD, 25));
         lblBaslik.setForeground(new Color(42, 15, 31));
         // Yazıya hafif gölge efekti (Okunabilirlik için)
-        lblBaslik.setBorder(new EmptyBorder(15, 0, 0, 0));
+        lblBaslik.setBorder(new EmptyBorder(5, 0, 0, 0));
         backgroundPanel.add(lblBaslik, BorderLayout.NORTH);
 
         // --- 3. Alt Kısım (Butonlar) ---

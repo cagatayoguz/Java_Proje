@@ -10,6 +10,7 @@ public class FakulteSecimGUI extends JFrame {
         setSize(400, 300);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new GridLayout(3, 1, 10, 10)); // 3 Satır, aralarda 10px boşluk
+        setLocationRelativeTo(null);
 
         // Butonları Oluştur
         JButton btnTeknoloji = new JButton("Teknoloji Fakültesi");

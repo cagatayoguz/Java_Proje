@@ -11,6 +11,7 @@ public class BilgiMenuGUI extends JFrame {
         setSize(400, 600);
         setLayout(new GridLayout(9, 1)); // En az 8 maddeli menüye uygun (Bölüm 11)
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(null);
 
         // Menü maddeleri:
         JButton btnOgrenci = new JButton("Öğrenci Bilgi Sistemi");
