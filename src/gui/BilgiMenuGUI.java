@@ -33,10 +33,6 @@ public class BilgiMenuGUI extends JFrame {
         btnKutuphane.addActionListener(e -> new KutuphaneListeGUI().setVisible(true)); // Kütüphane listesini aç
         add(btnKutuphane);
 
-        JButton btnOgrenciYonetim = new JButton("Öğrenci Yönetimi");
-        btnOgrenciYonetim.addActionListener(e -> new OgrenciYonetimMenuGUI().setVisible(true));
-        add(btnOgrenciYonetim);
-
         JButton btnSporSalonu = new JButton("Spor Salonu");
         btnSporSalonu.addActionListener(e -> new SporSalonuMenuGUI().setVisible(true));
         add(btnSporSalonu);
