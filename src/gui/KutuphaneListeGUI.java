@@ -1,74 +1,134 @@
 package gui;
 
+import service.DosyaIslemleri;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import main.KampusUygulamasi;
-import model.Kitap;
+import javax.swing.table.TableRowSorter;
 import java.awt.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.List;
 
 public class KutuphaneListeGUI extends JFrame {
 
-    private JTable kitapTable;
-    private DefaultTableModel tableModel;
+    private DefaultTableModel model;
+    private JTable table;
+    private TableRowSorter<DefaultTableModel> sorter;
 
     public KutuphaneListeGUI() {
-        setTitle("Kütüphane Kitap Listesi");
-        setSize(800, 500);
+        setTitle("Kütüphane - Kitap Listesi");
+        setSize(1000, 600);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        String[] kolonBasliklari = {"Kitap Adı", "Yazar", "ISBN", "Müsait"};
-        tableModel = new DefaultTableModel(kolonBasliklari, 0);
-        kitapTable = new JTable(tableModel);
+        // --- ÜST PANEL ---
+        JPanel ustPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        ustPanel.add(new JLabel("Kitap Ara: "));
+        JTextField txtAra = new JTextField(20);
+        ustPanel.add(txtAra);
+        add(ustPanel, BorderLayout.NORTH);
 
-        add(new JScrollPane(kitapTable), BorderLayout.CENTER);
+        // --- TABLO ---
+        // Yeni sütunlar: İade Tarihi eklendi
+        String[] kolonlar = {"Kitap Adı", "Yazar", "ISBN", "Durum", "İade Tarihi"};
+        model = new DefaultTableModel(kolonlar, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) { return false; }
+        };
 
-        // Verileri Yükle
-        kitaplariYukle(KampusUygulamasi.getKutuphaneServisi().tumKitaplariGetir());
+        table = new JTable(model);
+        table.setRowHeight(25);
+        sorter = new TableRowSorter<>(model);
+        table.setRowSorter(sorter);
 
-        // Buton Paneli (Ödünç Al, İade Et, vb.)
-        JPanel butonPanel = new JPanel(new FlowLayout());
-        // Ödünç alma butonu, müsaitlik kontrolü yapmalı (Polimorfik Durum Kontrolü)
-        JButton btnOduncAl = new JButton("Ödünç Al");
-        btnOduncAl.addActionListener(e -> oduncAlAction());
-        butonPanel.add(btnOduncAl);
+        verileriYukle();
+        add(new JScrollPane(table), BorderLayout.CENTER);
 
-        // ... (Diğer butonlar)
-        add(butonPanel, BorderLayout.SOUTH);
+        txtAra.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                String text = txtAra.getText();
+                if (text.trim().length() == 0) sorter.setRowFilter(null);
+                else sorter.setRowFilter(RowFilter.regexFilter("(?i)" + text));
+            }
+        });
+
+        // --- BUTONLAR ---
+        JPanel altPanel = new JPanel();
+
+        JButton btnTalep = new JButton("Ödünç Talep Et");
+        btnTalep.setBackground(new Color(200, 230, 255)); // Açık Mavi
+
+        JButton btnIade = new JButton("İade Et");
+        btnIade.setBackground(new Color(255, 200, 200)); // Açık Kırmızı
+
+        btnTalep.addActionListener(e -> talepEtAction());
+        btnIade.addActionListener(e -> iadeEtAction());
+
+        altPanel.add(btnTalep);
+        altPanel.add(btnIade);
+        add(altPanel, BorderLayout.SOUTH);
+
+        setLocationRelativeTo(null);
     }
 
-    private void kitaplariYukle(List<Kitap> kitaplar) {
-        tableModel.setRowCount(0); // Tabloyu temizle
-        for (Kitap kitap : kitaplar) {
-            // Tüm kitapları listeler (Dosyadan okunan ve eklenen kitaplar)
-            tableModel.addRow(new Object[]{
-                    kitap.getKitapAdi(),
-                    kitap.getYazarAdi(),
-                    kitap.getIsbn(),
-                    kitap.isMusaitMi() ? "Müsait" : "Ödünçte"
-            });
+    private void verileriYukle() {
+        model.setRowCount(0);
+        List<String[]> kitaplar = DosyaIslemleri.kitaplariOkuDetayli();
+        for (String[] k : kitaplar) {
+            // Durum Türkçeleştirme ve Görsellik
+            String durumGoster = k[3];
+            if(k[3].equals("Bekliyor")) durumGoster = "Onay Bekliyor";
+            else if(k[3].equals("Oduncte")) durumGoster = "Ödünçte";
+            else durumGoster = "Müsait";
+
+            model.addRow(new Object[]{k[0], k[1], k[2], durumGoster, k[4]});
         }
     }
 
-    private void oduncAlAction() {
-        int seciliSatir = kitapTable.getSelectedRow();
-        if (seciliSatir == -1) {
-            JOptionPane.showMessageDialog(this, "Lütfen bir kitap seçin.");
+    private void talepEtAction() {
+        int row = table.getSelectedRow();
+        if (row == -1) {
+            JOptionPane.showMessageDialog(this, "Kitap seçiniz.");
+            return;
+        }
+        int modelRow = table.convertRowIndexToModel(row);
+
+        String durum = (String) model.getValueAt(modelRow, 3);
+        String isbn = (String) model.getValueAt(modelRow, 2);
+
+        if (!durum.equals("Müsait")) {
+            JOptionPane.showMessageDialog(this, "Bu kitap şu an müsait değil (Ödünçte veya Onay Bekliyor).");
             return;
         }
 
-        String isbn = (String) tableModel.getValueAt(seciliSatir, 2);
+        String ogrenciAd = JOptionPane.showInputDialog(this, "Adınız Soyadınız:");
+        if (ogrenciAd != null && !ogrenciAd.trim().isEmpty()) {
+            try {
+                DosyaIslemleri.kitapTalepEt(isbn, ogrenciAd);
+                JOptionPane.showMessageDialog(this, "Talep oluşturuldu! Yönetici onayı bekleniyor.");
+                verileriYukle();
+            } catch (Exception ex) { ex.printStackTrace(); }
+        }
+    }
 
-        // Kütüphane servisi üzerinden ödünç alma işlemini çağır
-        if (KampusUygulamasi.getKutuphaneServisi().kitapOduncAl(isbn)) {
-            JOptionPane.showMessageDialog(this, "Kitap başarıyla ödünç alındı.");
-        } else {
-            // Müsait değil uyarısı (Ödünç alınan bir kitabı tekrar ödünç almama)
-            JOptionPane.showMessageDialog(this, "Kitap müsait değil veya hata oluştu!", "Uyarı", JOptionPane.WARNING_MESSAGE);
+    private void iadeEtAction() {
+        int row = table.getSelectedRow();
+        if (row == -1) return;
+
+        int modelRow = table.convertRowIndexToModel(row);
+        String isbn = (String) model.getValueAt(modelRow, 2);
+        String durum = (String) model.getValueAt(modelRow, 3);
+
+        if (durum.equals("Müsait")) {
+            JOptionPane.showMessageDialog(this, "Bu kitap zaten kütüphanede.");
+            return;
         }
 
-        // Listeyi yenile
-        kitaplariYukle(KampusUygulamasi.getKutuphaneServisi().tumKitaplariGetir());
+        try {
+            DosyaIslemleri.kitapIadeEt(isbn); // İade edince boşa çıkar
+            JOptionPane.showMessageDialog(this, "Kitap iade alındı.");
+            verileriYukle();
+        } catch (Exception ex) { ex.printStackTrace(); }
     }
 }

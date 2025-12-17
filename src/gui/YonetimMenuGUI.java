@@ -24,17 +24,21 @@ public class YonetimMenuGUI extends JFrame {
         // 2. Kütüphane Yönetimi Butonu
         JButton btnKutuphaneYonetim = new JButton("Kütüphane Yönetimi");
         btnKutuphaneYonetim.setFont(new Font("Arial", Font.BOLD, 14));
+        btnKutuphaneYonetim.addActionListener(e -> new KutuphaneYonetimMenuGUI().setVisible(true));
         add(btnKutuphaneYonetim);
 
         // 3. Spor Salonu Yönetimi Butonu
+        // YonetimMenuGUI.java içinde btnSporYonetim butonunu bul ve değiştir:
         JButton btnSporYonetim = new JButton("Spor Salonu Yönetimi");
         btnSporYonetim.setFont(new Font("Arial", Font.BOLD, 14));
+        btnSporYonetim.addActionListener(e -> new SporSalonuYonetimMenuGUI().setVisible(true));
         add(btnSporYonetim);
 
         // 4. Duyuru Ekleme Butonu
-        JButton btnDuyuruEkle = new JButton("Duyuru Ekle");
-        btnDuyuruEkle.setFont(new Font("Arial", Font.BOLD, 14));
-        add(btnDuyuruEkle);
+        JButton btnDuyuruYonetim = new JButton("Duyuru Yönetimi"); // İsmi değişti
+        btnDuyuruYonetim.setFont(new Font("Arial", Font.BOLD, 14));
+        btnDuyuruYonetim.addActionListener(e -> new DuyuruYonetimMenuGUI().setVisible(true));
+        add(btnDuyuruYonetim);
 
         setLocationRelativeTo(null); // Ekranın ortasında açılsın
     }
