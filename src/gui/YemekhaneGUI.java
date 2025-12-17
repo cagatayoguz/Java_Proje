@@ -58,7 +58,7 @@ public class YemekhaneGUI extends JFrame {
         btnYemekListesi.setFont(new Font("Arial", Font.BOLD, 14));
         btnYemekListesi.setPreferredSize(new Dimension(150, 40));
 
-        btnYemekListesi.addActionListener(e -> resimPenceresiAc("Yemek Listesi", "veriler/resimler/menu_aylik.jpg"));
+        btnYemekListesi.addActionListener(e -> resimPenceresiAc("Yemek Listesi", "C:\\Users\\cagat\\Downloads\\yemek listesi.png"));
 
         altPanel.add(btnGununMenusu);
         altPanel.add(btnYemekListesi);
