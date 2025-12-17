@@ -69,12 +69,14 @@ public class SporSalonuUyelikGUI extends JFrame {
         }
 
         try {
-            // YENİ KISIM: Dosyaya Kaydet
-            DosyaIslemleri.sporUyelikTalepEt(
+            // DÜZELTME: sporUyelikTalepEt yerine mevcut olan sporUyelikEkle metodunu kullandık
+            // ve son parametre olarak "Bekliyor" durumunu ekledik.
+            DosyaIslemleri.sporUyelikEkle(
                     txtAdSoyad.getText(),
                     txtOgrenciNo.getText(),
                     (String) cmbUyelikTipi.getSelectedItem(),
-                    lblUcret.getText()
+                    lblUcret.getText(),
+                    "Bekliyor"
             );
 
             String mesaj = "Sayın " + txtAdSoyad.getText() + ",\n" +
