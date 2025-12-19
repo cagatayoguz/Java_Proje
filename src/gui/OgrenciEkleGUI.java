@@ -1,11 +1,14 @@
 package gui;
 
 import service.DosyaIslemleri;
+import model.LisansOgrenci; // Yeni oluşturduğumuz sınıf
+import model.Ogrenci;       // Abstract sınıfımız
+import exception.GecersizGirisBilgisiException;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
-import exception.GecersizGirisBilgisiException;
 
 public class OgrenciEkleGUI extends JFrame {
 
@@ -49,81 +52,78 @@ public class OgrenciEkleGUI extends JFrame {
         addLabeledField(cardPanel, "Öğrenci No:", txtNo);
         addLabeledField(cardPanel, "Bölümü:", txtBolum);
         addLabeledField(cardPanel, "Sınıfı:", txtSinif);
-        addLabeledField(cardPanel, "Ortalama (Örn: 3.50):", txtOrt);
+        addLabeledField(cardPanel, "Ortalama:", txtOrt);
 
         // Kaydet Butonu
         JButton btnKaydet = new JButton("Kaydet");
         btnKaydet.setFont(new Font("Segoe UI", Font.BOLD, 15));
         btnKaydet.setForeground(Color.WHITE);
-        btnKaydet.setBackground(new Color(13, 110, 253)); // Mavi
+        btnKaydet.setBackground(new Color(13, 110, 253));
         btnKaydet.setFocusPainted(false);
         btnKaydet.setAlignmentX(Component.CENTER_ALIGNMENT);
         btnKaydet.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
         btnKaydet.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        // --- BUTON TIKLAMA VE AYRI AYRI KONTROLLER ---
-        // --- GÜNCELLENMİŞ BUTON KODU (OOP KULLANAN HALİ) ---
-                btnKaydet.addActionListener(e -> {
-                    try {
-                        // Önce basit boşluk kontrollerini yapalım
-                        if (txtAd.getText().trim().isEmpty() || txtNo.getText().trim().isEmpty()) {
-                            throw new GecersizGirisBilgisiException("Ad ve Numara zorunludur.");
-                        }
+        // --- OOP ENTEGRASYONU YAPILAN KISIM ---
+        btnKaydet.addActionListener(e -> {
+            try {
+                // 1. Temel Boşluk Kontrolleri
+                if (txtAd.getText().trim().isEmpty()) throw new GecersizGirisBilgisiException("Ad boş olamaz.");
+                if (txtSoyad.getText().trim().isEmpty()) throw new GecersizGirisBilgisiException("Soyad boş olamaz.");
+                if (txtNo.getText().trim().isEmpty()) throw new GecersizGirisBilgisiException("Öğrenci No boş olamaz.");
+                if (txtBolum.getText().trim().isEmpty()) throw new GecersizGirisBilgisiException("Bölüm boş olamaz.");
 
-                        // --- İŞTE BURADA SENİN SINIFINI KULLANIYORUZ ---
+                // 2. NESNE OLUŞTURMA (Polimorfizm Kullanımı)
+                // LisansOgrenci üretiyoruz ama Ogrenci referansında tutuyoruz.
+                Ogrenci yeniOgrenci = new LisansOgrenci(
+                        txtAd.getText().trim(),
+                        txtSoyad.getText().trim(),
+                        txtNo.getText().trim(),
+                        txtBolum.getText().trim()
+                );
 
-                        // 1. Nesne Oluştur (Polimorfizm)
-                        // LisansOgrenci oluşturuyoruz ama Ogrenci referansında tutabiliriz
-                        model.Ogrenci yeniOgrenci = new model.LisansOgrenci(
-                                txtAd.getText().trim(),
-                                txtSoyad.getText().trim(),
-                                txtNo.getText().trim(),
-                                txtBolum.getText().trim()
-                        );
+                // 3. SETTER METOTLARI İLE VALIDATION (Sınıf Kurallarını Çalıştır)
+                // Bölüm kontrolünü sınıf üzerinden yapıyoruz
+                yeniOgrenci.setBolum(txtBolum.getText().trim());
 
-                        // 2. Setter Metotlarını Kullan (Senin yazdığın kurallar çalışsın)
-                        // Sınıf bilgisini setleyelim (Senin modelde sınıf yoktu ama GUI'de var, o yüzden es geçmiyoruz)
-                        // yeniOgrenci.setSinif(txtSinif.getText()); // Eğer modele eklersen açarsın
+                // Not Ortalaması Kontrolü (Sınıfın içindeki 0-100 kuralı burada çalışacak)
+                if (txtOrt.getText().trim().isEmpty()) throw new GecersizGirisBilgisiException("Ortalama boş olamaz.");
+                try {
+                    int ortDeger = Integer.parseInt(txtOrt.getText().trim());
+                    // BURASI KRİTİK: Eğer 101 girilirse Ogrenci sınıfı hata fırlatacak
+                    yeniOgrenci.setNotOrtalamasi(ortDeger);
+                } catch (NumberFormatException nfe) {
+                    throw new GecersizGirisBilgisiException("Ortalama sayısal bir değer olmalıdır.");
+                }
 
-                        // Not Ortalamasını ata (Burada senin yazdığın 0-100 kontrolü devreye girer!)
-                        try {
-                            int notOrt = Integer.parseInt(txtOrt.getText().trim());
-                            yeniOgrenci.setNotOrtalamasi(notOrt); // Hata varsa GecersizGirisBilgisiException fırlatır
-                        } catch (NumberFormatException nfe) {
-                            throw new GecersizGirisBilgisiException("Ortalama sayısal bir değer olmalıdır.");
-                        }
+                // 4. DOSYAYA KAYDETME
+                // Verileri artık doğrulanmış nesneden (yeniOgrenci) alıyoruz
+                DosyaIslemleri.ogrenciEkle(
+                        yeniOgrenci.getAd(),
+                        yeniOgrenci.getSoyad(),
+                        yeniOgrenci.getBolum(),
+                        yeniOgrenci.getOgrenciNo(),
+                        txtSinif.getText().trim(), // Sınıf bilgisi modelde olmadığı için direkt alıyoruz
+                        String.valueOf(txtOrt.getText().trim())
+                );
 
-                        // --- MODEL DOĞRULAMASI BİTTİ, ŞİMDİ KAYDET ---
+                // İsteğe bağlı: Polimorfizm örneği olarak konsola rapor basabilirsin
+                System.out.println(yeniOgrenci.detayliRaporOlustur());
 
-                        DosyaIslemleri.ogrenciEkle(
-                                yeniOgrenci.getAd(),      // Nesneden alıyoruz
-                                yeniOgrenci.getSoyad(),
-                                yeniOgrenci.getBolum(),
-                                yeniOgrenci.getOgrenciNo(),
-                                txtSinif.getText(),       // Modelde olmadığı için direkt textfield'dan
-                                String.valueOf(txtOrt.getText())
-                        );
+                JOptionPane.showMessageDialog(this, "Öğrenci başarıyla eklendi.");
+                this.dispose();
 
-                        // Override ettiğin metodu konsolda hocaya göstermek için:
-                        yeniOgrenci.bilgiSistemiErisim();
-                        System.out.println(yeniOgrenci.detayliRaporOlustur());
-
-                        JOptionPane.showMessageDialog(this, "Öğrenci OOP kurallarına uygun şekilde eklendi.");
-                        this.dispose();
-
-                    } catch (GecersizGirisBilgisiException ex) {
-                        // Senin model sınıfında fırlattığın hatalar burada yakalanır
-                        JOptionPane.showMessageDialog(this, ex.getMessage(), "Geçersiz İşlem", JOptionPane.WARNING_MESSAGE);
-
-                    } catch (Exception ex) {
-                        ex.printStackTrace();
-                        JOptionPane.showMessageDialog(this, "Hata: " + ex.getMessage());
-                    }
-                });;
+            } catch (GecersizGirisBilgisiException ex) {
+                // Ogrenci sınıfından gelen hatalar (örn: "Not 0-100 arasında olmalı") burada yakalanır
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "Geçersiz İşlem", JOptionPane.WARNING_MESSAGE);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Hata: " + ex.getMessage(), "Sistem Hatası", JOptionPane.ERROR_MESSAGE);
+            }
+        });
 
         cardPanel.add(Box.createVerticalStrut(20));
         cardPanel.add(btnKaydet);
-
         mainPanel.add(cardPanel);
     }
 
@@ -140,9 +140,6 @@ public class OgrenciEkleGUI extends JFrame {
         JLabel l = new JLabel(labelText);
         l.setFont(new Font("Segoe UI", Font.PLAIN, 13));
         l.setAlignmentX(Component.LEFT_ALIGNMENT);
-        p.add(l);
-        p.add(Box.createVerticalStrut(5));
-        p.add(field);
-        p.add(Box.createVerticalStrut(10));
+        p.add(l); p.add(Box.createVerticalStrut(5)); p.add(field); p.add(Box.createVerticalStrut(10));
     }
 }

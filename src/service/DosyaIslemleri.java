@@ -63,15 +63,21 @@ public class DosyaIslemleri {
 
     // --- KİTAP İŞLEMLERİ ---
 
-    public static void kitapEkle(String ad, String yazar, String isbn, String durum, String yil) throws IOException {
+    // ... Sınıfın diğer kısıımları aynı ...
+
+    // YIL PARAMETRESİ KALDIRILDI
+    public static void kitapEkle(String KitapAdi, String yazar, String isbn, String durum) throws IOException {
         File file = new File(KITAP_DOSYASI);
         if (file.getParentFile() != null) file.getParentFile().mkdirs();
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, true))) {
-            writer.write(ad + "," + yazar + "," + isbn + "," + durum + "," + yil);
+            // Sadece 4 veri yazıyoruz
+            writer.write(KitapAdi + "," + yazar + "," + isbn + "," + durum);
             writer.newLine();
         }
     }
+
+    // ... Diğer metotlar ...
 
     // *** BU METODU EKLEDİK (HATAYI ÇÖZEN KISIM) ***
     // Eski kodlar "kitaplariOku" diye çağırıyorsa, onları yeni metoda yönlendiriyoruz.

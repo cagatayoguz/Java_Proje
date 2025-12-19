@@ -1,16 +1,22 @@
 package gui;
 
+import model.Kitap;
+import model.Kutuphane;
 import service.DosyaIslemleri;
+import service.KutuphaneServisi;
+import exception.GecersizGirisBilgisiException;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.util.List;
 
 public class KitapEkleGUI extends JFrame {
 
     public KitapEkleGUI() {
-        setTitle("Yeni Kitap Ekle");
-        setSize(450, 500);
+        setTitle("Hızlı Kitap Ekle");
+        setSize(400, 450); // Boyutu biraz küçülttük, daha sade oldu
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
@@ -18,58 +24,100 @@ public class KitapEkleGUI extends JFrame {
         mainPanel.setBackground(new Color(248, 249, 250));
         setContentPane(mainPanel);
 
-        JPanel cardPanel = new JPanel();
-        cardPanel.setLayout(new BoxLayout(cardPanel, BoxLayout.Y_AXIS));
-        cardPanel.setBackground(Color.WHITE);
-        cardPanel.setBorder(BorderFactory.createCompoundBorder(
-                new LineBorder(new Color(230, 230, 230), 1), new EmptyBorder(30, 30, 30, 30)));
+        // Kart Paneli
+        JPanel card = new JPanel();
+        card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
+        card.setBackground(Color.WHITE);
+        card.setBorder(BorderFactory.createCompoundBorder(
+                new LineBorder(new Color(230, 230, 230), 1),
+                new EmptyBorder(30, 30, 30, 30)
+        ));
 
-        JLabel lblTitle = new JLabel("Kitap Bilgileri");
+        JLabel lblTitle = new JLabel("Kitap Kaydı");
         lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 20));
         lblTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
-        cardPanel.add(lblTitle);
-        cardPanel.add(Box.createVerticalStrut(20));
+        card.add(lblTitle);
+        card.add(Box.createVerticalStrut(20));
 
+        // Form Alanları (Yıl Kalktı)
         JTextField txtAd = createField();
         JTextField txtYazar = createField();
         JTextField txtIsbn = createField();
-        JTextField txtYil = createField();
 
-        addLabel(cardPanel, "Kitap Adı:", txtAd);
-        addLabel(cardPanel, "Yazar:", txtYazar);
-        addLabel(cardPanel, "ISBN:", txtIsbn);
-        addLabel(cardPanel, "Basım Yılı:", txtYil);
+        addLabel(card, "Kitap Adı:", txtAd);
+        addLabel(card, "Yazar:", txtYazar);
+        addLabel(card, "ISBN No:", txtIsbn);
 
-        JButton btnEkle = new JButton("Kitabı Kaydet");
-        btnEkle.setBackground(new Color(13, 110, 253));
-        btnEkle.setForeground(Color.WHITE);
-        btnEkle.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        btnEkle.setAlignmentX(Component.CENTER_ALIGNMENT);
-        btnEkle.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+        // Kaydet Butonu
+        JButton btnKaydet = new JButton("Kaydet");
+        btnKaydet.setBackground(new Color(13, 110, 253));
+        btnKaydet.setForeground(Color.WHITE);
+        btnKaydet.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        btnKaydet.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btnKaydet.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
 
-        btnEkle.addActionListener(e -> {
+        // BUTON İŞLEMİ (Sadeleştirilmiş OOP Mantığı)
+        btnKaydet.addActionListener(e -> {
             try {
-                DosyaIslemleri.kitapEkle(txtAd.getText(), txtYazar.getText(), txtIsbn.getText(), "Müsait", txtYil.getText());
-                JOptionPane.showMessageDialog(this, "Kitap eklendi.");
+                // 1. Boşluk Kontrolü
+                if (txtAd.getText().trim().isEmpty() || txtIsbn.getText().trim().isEmpty()) {
+                    throw new GecersizGirisBilgisiException("Kitap Adı ve ISBN zorunludur.");
+                }
+
+                // 2. OOP Kontrolü: Kutuphane Sınıfını Kullan
+                Kutuphane raf = new Kutuphane("Sanal Raf", 100); // 100 Kapasite
+
+                // Mevcut kitapları yükle (Çift ISBN kontrolü için)
+                KutuphaneServisi servis = new KutuphaneServisi();
+                raf.mevcutKitaplariYukle(servis.tumKitaplariGetir());
+
+                // Yeni Kitap Oluştur (Yıl Yok)
+                Kitap yeniKitap = new Kitap(
+                        txtAd.getText().trim(),
+                        txtYazar.getText().trim(),
+                        txtIsbn.getText().trim(),
+                        true
+                );
+
+                // Ekleme Denemesi (Hata varsa catch'e düşer)
+                raf.kitapEkle(yeniKitap);
+
+                // 3. Dosyaya Yaz (Yıl Yok)
+                DosyaIslemleri.kitapEkle(
+                        yeniKitap.getKitapAdi(),
+                        yeniKitap.getYazarAdi(),
+                        yeniKitap.getIsbn(),
+                        "Müsait"
+                );
+
+                JOptionPane.showMessageDialog(this, "Kitap başarıyla eklendi.");
                 this.dispose();
-            } catch (Exception ex) { ex.printStackTrace(); }
+
+            } catch (GecersizGirisBilgisiException ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "Uyarı", JOptionPane.WARNING_MESSAGE);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
         });
 
-        cardPanel.add(Box.createVerticalStrut(10));
-        cardPanel.add(btnEkle);
-        mainPanel.add(cardPanel);
+        card.add(Box.createVerticalStrut(20));
+        card.add(btnKaydet);
+        mainPanel.add(card);
     }
 
+    // Yardımcı Metotlar
     private JTextField createField() {
-        JTextField t = new JTextField(15);
-        t.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        t.setMaximumSize(new Dimension(Integer.MAX_VALUE, 35));
-        return t;
+        JTextField tf = new JTextField(15);
+        tf.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
+        return tf;
     }
-    private void addLabel(JPanel p, String txt, JTextField f) {
-        JLabel l = new JLabel(txt);
-        l.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+
+    private void addLabel(JPanel p, String text, JTextField field) {
+        JLabel l = new JLabel(text);
         l.setAlignmentX(Component.LEFT_ALIGNMENT);
-        p.add(l); p.add(Box.createVerticalStrut(5)); p.add(f); p.add(Box.createVerticalStrut(10));
+        p.add(l);
+        p.add(Box.createVerticalStrut(5));
+        p.add(field);
+        p.add(Box.createVerticalStrut(10));
     }
 }
