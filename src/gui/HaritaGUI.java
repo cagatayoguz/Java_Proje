@@ -1,0 +1,46 @@
+package gui;
+
+import javax.swing.*;
+import java.awt.*;
+import java.io.File;
+
+public class HaritaGUI extends JFrame {
+
+    public HaritaGUI() {
+        setTitle("Kampüs Haritası");
+        setSize(1000, 800);
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setLocationRelativeTo(null);
+
+        // Resim Dosyası Yolu
+        // Senin atacağın SS'in adı "kampus_harita.jpg" olmalı ve veriler/resimler klasöründe olmalı.
+        String dosyaYolu = "C:\\Users\\cagat\\Downloads\\gazi kampüs harita.jpg";
+
+        JLabel lblResim = new JLabel();
+        lblResim.setHorizontalAlignment(SwingConstants.CENTER);
+        lblResim.setVerticalAlignment(SwingConstants.CENTER);
+
+        File dosya = new File(dosyaYolu);
+        if (dosya.exists()) {
+            // Resmi yükle
+            ImageIcon icon = new ImageIcon(dosyaYolu);
+
+            // Eğer resim çok büyükse biraz küçültelim (Opsiyonel)
+            // Image img = icon.getImage().getScaledInstance(950, 750, Image.SCALE_SMOOTH);
+            // lblResim.setIcon(new ImageIcon(img));
+
+            lblResim.setIcon(icon);
+        } else {
+            lblResim.setText("<html><center><h2>Harita Görseli Bulunamadı!</h2><br>" +
+                    "Lütfen 'kampus_harita.jpg' dosyasını<br>" +
+                    "'veriler/resimler/' klasörüne ekleyiniz.</center></html>");
+            lblResim.setForeground(Color.RED);
+        }
+
+        // ScrollPane ekleyelim ki resim büyükse kaydırılabilsin
+        JScrollPane scrollPane = new JScrollPane(lblResim);
+        scrollPane.getViewport().setBackground(Color.WHITE);
+
+        add(scrollPane);
+    }
+}

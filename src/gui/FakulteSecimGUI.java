@@ -44,7 +44,7 @@ public class FakulteSecimGUI extends JFrame {
                 e -> new BolumSecimGUI("Mühendislik Fakültesi").setVisible(true)));
 
         // 3. Tıp Fakültesi
-        gridPanel.add(createCard("Fen Fakültesi", "Matematik,Fizik...", "⚕️",
+        gridPanel.add(createCard("Fen Fakültesi", "Matematik,Fizik...", "⚛\uFE0F",
                 e -> new BolumSecimGUI("Fen Fakültesi").setVisible(true)));
 
         // 4. Eğitim Fakültesi

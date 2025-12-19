@@ -116,6 +116,25 @@ public class BilgiMenuGUI extends JFrame {
                 "📢",
                 e -> new DuyuruListeGUI().setVisible(true)
         ));
+        // ... (Önceki kodlar: Duyurular vs.)
+
+        // 9. Not Hesaplama (YENİ)
+        gridPanel.add(createCard(
+                "Not Hesapla",
+                "Vize/Final ortalaması ve GNO hesapla.",
+                "🧮",
+                e -> new NotHesaplamaGUI().setVisible(true)
+        ));
+
+        // 10. Kampüs Haritası (YENİ)
+        gridPanel.add(createCard(
+                "Kampüs Haritası",
+                "Yerleşke planı ve bina konumları.",
+                "🗺️",
+                e -> new HaritaGUI().setVisible(true)
+        ));
+
+        // ... (Sonraki kodlar: mainPanel.add(gridPanel... )
 
         mainPanel.add(gridPanel, BorderLayout.CENTER);
 

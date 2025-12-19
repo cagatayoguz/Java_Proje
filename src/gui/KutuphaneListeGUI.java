@@ -10,6 +10,7 @@ import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.List;
+import java.util.Map;
 
 public class KutuphaneListeGUI extends JFrame {
 
@@ -21,8 +22,8 @@ public class KutuphaneListeGUI extends JFrame {
     private final Color ACCENT_BLUE = new Color(13, 110, 253);
 
     public KutuphaneListeGUI() {
-        setTitle("Kütüphane Sistemi");
-        setSize(1000, 650);
+        setTitle("Kütüphane Sistemi - Kitap İşlemleri");
+        setSize(1100, 650);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
@@ -39,7 +40,7 @@ public class KutuphaneListeGUI extends JFrame {
         titlePanel.setBackground(BG_COLOR);
         JLabel lblTitle = new JLabel("Kütüphane Arşivi");
         lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 26));
-        JLabel lblSub = new JLabel("Kitap durumunu sorgula ve işlem yap.");
+        JLabel lblSub = new JLabel("Kitabı kimin aldığını gör, iade al veya talep et.");
         lblSub.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         lblSub.setForeground(Color.GRAY);
         titlePanel.add(lblTitle);
@@ -54,7 +55,7 @@ public class KutuphaneListeGUI extends JFrame {
 
         JPanel searchPanel = new JPanel(new BorderLayout());
         searchPanel.setBackground(BG_COLOR);
-        JLabel lblSearchIcon = new JLabel("🔍 Kitap Ara:  ");
+        JLabel lblSearchIcon = new JLabel("🔍 Kitap/Öğrenci Ara:  ");
         lblSearchIcon.setFont(new Font("Segoe UI", Font.BOLD, 14));
         searchPanel.add(lblSearchIcon, BorderLayout.WEST);
         searchPanel.add(txtAra, BorderLayout.CENTER);
@@ -65,7 +66,9 @@ public class KutuphaneListeGUI extends JFrame {
         mainPanel.add(headerPanel, BorderLayout.NORTH);
 
         // --- 2. TABLO ---
-        String[] kolonlar = {"Kitap Adı", "Yazar", "ISBN", "Durum", "Hangi tarihe kadar ödünç alındı"};
+        // Sütunlar: 0:Ad, 1:Yazar, 2:ISBN, 3:Durum, 4:Tarih, 5:Alan Kişi
+        String[] kolonlar = {"Kitap Adı", "Yazar", "ISBN", "Durum", "İade Tarihi", "Alan Öğrenci"};
+
         model = new DefaultTableModel(kolonlar, 0) {
             @Override
             public boolean isCellEditable(int row, int column) { return false; }
@@ -93,6 +96,7 @@ public class KutuphaneListeGUI extends JFrame {
 
         verileriYukle();
 
+        // Arama Kutusu Dinleyici
         txtAra.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
@@ -107,8 +111,8 @@ public class KutuphaneListeGUI extends JFrame {
         footerPanel.setBackground(BG_COLOR);
         footerPanel.setBorder(new EmptyBorder(0, 40, 0, 40));
 
-        JButton btnTalep = createActionButton("Ödünç Talep Et", ACCENT_BLUE);
-        JButton btnIade = createActionButton("İade Et", new Color(220, 53, 69));
+        JButton btnTalep = createActionButton("Ödünç Al", ACCENT_BLUE);
+        JButton btnIade = createActionButton("İade Ver", new Color(25, 135, 84));
 
         btnTalep.addActionListener(e -> talepEtAction());
         btnIade.addActionListener(e -> iadeEtAction());
@@ -137,19 +141,22 @@ public class KutuphaneListeGUI extends JFrame {
             String hamDurum = k[3];
             String durumGoster = hamDurum;
 
-            // Görsel düzeltme: Musait -> Müsait
-            if(hamDurum.equalsIgnoreCase("Musait") || hamDurum.equalsIgnoreCase("Müsait")) {
+            if(hamDurum.toLowerCase().contains("usait") || hamDurum.toLowerCase().contains("üsait")) {
                 durumGoster = "Müsait";
-            } else if(hamDurum.equals("Bekliyor")) {
-                durumGoster = "Onay Bekliyor";
             } else if(hamDurum.equals("Oduncte")) {
                 durumGoster = "Ödünçte";
             }
 
-            model.addRow(new Object[]{k[0], k[1], k[2], durumGoster, k[4]});
+            // k[4] -> Tarih, k[5] -> Alan Kişi
+            // Eğer kitap müsaitse tarih ve alan kişiyi tire (-) gösterelim ki temiz dursun
+            String tarih = (k.length > 4 && !durumGoster.equals("Müsait")) ? k[4] : "-";
+            String alanKisi = (k.length > 5 && !durumGoster.equals("Müsait")) ? k[5] : "-";
+
+            model.addRow(new Object[]{k[0], k[1], k[2], durumGoster, tarih, alanKisi});
         }
     }
 
+    // --- 1. ÖDÜNÇ VERME İŞLEMİ (Öğrenci No ile) ---
     private void talepEtAction() {
         int row = table.getSelectedRow();
         if (row == -1) { JOptionPane.showMessageDialog(this, "Lütfen bir kitap seçiniz."); return; }
@@ -157,40 +164,102 @@ public class KutuphaneListeGUI extends JFrame {
 
         String durum = (String) model.getValueAt(modelRow, 3);
         String isbn = (String) model.getValueAt(modelRow, 2);
+        String kitapAdi = (String) model.getValueAt(modelRow, 0);
 
-        // --- HATA ÇÖZÜMÜ BURADA ---
-        // Hem "Müsait" hem de "Musait" yazısını kabul edecek şekilde esnetildi
+        // Kitap zaten verilmişse uyarı ver
         if (!durum.equalsIgnoreCase("Müsait") && !durum.equalsIgnoreCase("Musait")) {
             JOptionPane.showMessageDialog(this, "Bu kitap şu an müsait değil (" + durum + ").");
             return;
         }
 
-        String ogrenciAd = JOptionPane.showInputDialog(this, "Öğrenci Adı Soyadı:");
-        if (ogrenciAd != null && !ogrenciAd.trim().isEmpty()) {
-            try {
-                DosyaIslemleri.kitapTalepEt(isbn, ogrenciAd);
-                JOptionPane.showMessageDialog(this, "Talep yöneticiye iletildi.");
-                verileriYukle();
-            } catch (Exception ex) { ex.printStackTrace(); }
+        String ogrenciNo = JOptionPane.showInputDialog(this, "Ödünç alacak öğrencinin numarasını giriniz:");
+
+        if (ogrenciNo != null && !ogrenciNo.trim().isEmpty()) {
+
+            // Öğrenci listesini çek ve kontrol et
+            Map<String, String[]> ogrenciler = DosyaIslemleri.ogrencileriOku();
+
+            if (ogrenciler.containsKey(ogrenciNo)) {
+                String[] bilgiler = ogrenciler.get(ogrenciNo);
+                String tamAd = bilgiler[0] + " " + bilgiler[1];
+
+                try {
+                    // Dosyaya yaz (Bu metot otomatik tarih atıyor)
+                    DosyaIslemleri.kitapTalepEt(isbn, tamAd);
+
+                    JOptionPane.showMessageDialog(this,
+                            "İşlem Başarılı!\n" +
+                                    "Kitap: " + kitapAdi + "\n" +
+                                    "Alan: " + tamAd + "\n" +
+                                    "Teslim Tarihi: Otomatik (2 Hafta Sonrası)");
+
+                    verileriYukle(); // Tabloyu yenile ki tarih görünsün
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(this, "Hata: " + ex.getMessage());
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "HATA: Bu numaraya kayıtlı öğrenci bulunamadı!", "Hata", JOptionPane.ERROR_MESSAGE);
+            }
         }
     }
 
+    // --- 2. İADE ALMA İŞLEMİ (Öğrenci No ile Doğrulama) ---
     private void iadeEtAction() {
         int row = table.getSelectedRow();
-        if (row == -1) { JOptionPane.showMessageDialog(this, "Lütfen bir kitap seçiniz."); return; }
+        if (row == -1) { JOptionPane.showMessageDialog(this, "Lütfen iade edilecek kitabı seçiniz."); return; }
         int modelRow = table.convertRowIndexToModel(row);
 
+        String kitapAdi = (String) model.getValueAt(modelRow, 0);
         String isbn = (String) model.getValueAt(modelRow, 2);
         String durum = (String) model.getValueAt(modelRow, 3);
+        String kitapAlanKisi = (String) model.getValueAt(modelRow, 5); // Tabloda yazan isim
 
+        // Kitap zaten kütüphanedeyse işlem yapma
         if (durum.equalsIgnoreCase("Müsait") || durum.equalsIgnoreCase("Musait")) {
-            JOptionPane.showMessageDialog(this, "Bu kitap zaten kütüphanede.");
+            JOptionPane.showMessageDialog(this, "Bu kitap zaten kütüphanede (Müsait).");
             return;
         }
-        try {
-            DosyaIslemleri.kitapIadeEt(isbn);
-            JOptionPane.showMessageDialog(this, "Kitap iade alındı.");
-            verileriYukle();
-        } catch (Exception ex) { ex.printStackTrace(); }
+
+        // İade edecek kişinin numarasını sor
+        String ogrenciNo = JOptionPane.showInputDialog(this, "İade eden öğrencinin numarasını giriniz:");
+
+        if (ogrenciNo != null && !ogrenciNo.trim().isEmpty()) {
+
+            // Numaradan isimi bul
+            Map<String, String[]> ogrenciler = DosyaIslemleri.ogrencileriOku();
+
+            if (ogrenciler.containsKey(ogrenciNo)) {
+                String[] bilgiler = ogrenciler.get(ogrenciNo);
+                String iadeEdenIsim = bilgiler[0] + " " + bilgiler[1]; // Girilen numaraya ait isim
+
+                // Tablodaki isim ile Girilen numaranın ismi eşleşiyor mu?
+                // Not: trim() boşlukları siler, equalsIgnoreCase büyük/küçük harfe takılmaz
+                if (kitapAlanKisi.trim().equalsIgnoreCase(iadeEdenIsim.trim())) {
+
+                    int onay = JOptionPane.showConfirmDialog(this,
+                            "İade Eden: " + iadeEdenIsim + "\nKitap: " + kitapAdi + "\n\nOnaylıyor musunuz?",
+                            "İade Onayı", JOptionPane.YES_NO_OPTION);
+
+                    if (onay == JOptionPane.YES_OPTION) {
+                        try {
+                            DosyaIslemleri.kitapIadeEt(isbn);
+                            JOptionPane.showMessageDialog(this, "İade alındı. Kitap rafa kaldırıldı.");
+                            verileriYukle();
+                        } catch (Exception ex) { ex.printStackTrace(); }
+                    }
+
+                } else {
+                    JOptionPane.showMessageDialog(this,
+                            "HATA: İade yetkisi yok!\n\n" +
+                                    "Bu kitabı alan: " + kitapAlanKisi + "\n" +
+                                    "Girilen numara sahibi: " + iadeEdenIsim,
+                            "Güvenlik Uyarısı", JOptionPane.ERROR_MESSAGE);
+                }
+
+            } else {
+                JOptionPane.showMessageDialog(this, "Bu numaraya ait öğrenci kaydı bulunamadı.", "Hata", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }
 }
