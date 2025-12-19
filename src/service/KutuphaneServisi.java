@@ -40,7 +40,7 @@ public class KutuphaneServisi {
                     // Veri formatı: [Ad, Yazar, ISBN, Durum, Yıl]
                     if (veri.length >= 4) {
                         boolean musaitMi = "Müsait".equals(veri[3]);
-                        Kitap k = new Kitap(veri[0], veri[1], veri[2], musaitMi);
+                        Kitap k = new Kitap(veri[0], veri[1], veri[2],musaitMi);
                         kitapKatalogu.put(k.getIsbn(), k);
                     }
                 }

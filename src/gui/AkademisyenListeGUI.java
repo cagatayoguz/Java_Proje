@@ -47,7 +47,9 @@ public class AkademisyenListeGUI extends JFrame {
                 {"Öğr. Gör.", "Fatma Yıldız", "Yabancı Diller Y.O.", "fatma.yildiz@uni.edu.tr"},
                 {"Arş. Gör.", "Ali Veli", "İnşaat Mühendisliği", "ali.veli@uni.edu.tr"},
                 {"Arş. Gör.", "Burak Can", "Endüstri Mühendisliği", "burak.can@uni.edu.tr"},
-                {"Arş. Gör.", "Elif Polat", "Hukuk Fakültesi", "elif.polat@uni.edu.tr"}
+                {"Arş. Gör.", "Elif Polat", "Hukuk Fakültesi", "elif.polat@uni.edu.tr"},
+                {"Prof. Dr", "İsmail Onur Koru", "Diş Fakültesi", "ismailkoru@uni.edu.tr"}
+
         };
 
         // Tablo Modeli (Hücreler düzenlenemez olsun)

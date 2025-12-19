@@ -69,7 +69,7 @@ public class KutuphaneListeGUI extends JFrame {
 
         // --- 2. TABLO TASARIMI ---
         // Yeni yapıya uygun sütunlar (Yıl eklendi)
-        String[] kolonlar = {"Kitap Adı", "Yazar", "ISBN", "Durum", "Basım Yılı"};
+        String[] kolonlar = {"Kitap Adı", "Yazar", "ISBN", "Durum", "Hangi tarihe kadar ödünç alındı"};
         model = new DefaultTableModel(kolonlar, 0) {
             @Override
             public boolean isCellEditable(int row, int column) { return false; }

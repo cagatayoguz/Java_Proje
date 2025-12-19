@@ -18,6 +18,7 @@ public class Kitap implements Raporlanabilir { // Sadece Interface implemente et
         this.musaitMi = musaitMi;
     }
 
+
     // Getterlar ve Setterlar
     public String getKitapAdi() { return kitapAdi; }
     public String getYazarAdi() { return yazarAdi; }

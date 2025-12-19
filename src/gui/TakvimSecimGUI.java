@@ -7,6 +7,9 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.awt.Desktop; // Bu importu ekle
+
+import java.io.IOException;
 
 public class TakvimSecimGUI extends JFrame {
 
@@ -35,10 +38,10 @@ public class TakvimSecimGUI extends JFrame {
         gridPanel.setBorder(new EmptyBorder(20, 40, 40, 40));
 
         gridPanel.add(createCard("Akademik Takvim", "Yıl içi planı görüntüle.", "📅",
-                e -> resimAc("veriler/resimler/akademik_takvim.jpg")));
+                e -> dosyaAc("C:\\Users\\cagat\\Downloads\\akademik takvim.pdf")));
 
         gridPanel.add(createCard("Sınav Takvimi", "Vize ve final tarihleri.", "📝",
-                e -> resimAc("veriler/resimler/sinav_takvimi.jpg")));
+                e -> dosyaAc("veriler/resimler/sinav_takvimi.jpg")));
 
         mainPanel.add(gridPanel, BorderLayout.CENTER);
     }
@@ -80,15 +83,26 @@ public class TakvimSecimGUI extends JFrame {
         return card;
     }
 
-    private void resimAc(String path) {
-        JDialog d = new JDialog(this, "Takvim Görüntüleyici", true);
-        d.setSize(600, 800);
-        JLabel l = new JLabel();
-        l.setHorizontalAlignment(SwingConstants.CENTER);
-        if(new File(path).exists()) l.setIcon(new ImageIcon(path));
-        else l.setText("Dosya bulunamadı: " + path);
-        d.add(new JScrollPane(l));
-        d.setLocationRelativeTo(this);
-        d.setVisible(true);
+
+    private void dosyaAc(String path) {
+        try {
+            File file = new File(path);
+
+            if (!file.exists()) {
+                JOptionPane.showMessageDialog(this, "Dosya bulunamadı: " + path);
+                return;
+            }
+
+            // Desktop sınıfı, işletim sisteminin varsayılan programını kullanır
+            if (Desktop.isDesktopSupported()) {
+                Desktop.getDesktop().open(file);
+            } else {
+                JOptionPane.showMessageDialog(this, "Bu özellik sisteminizde desteklenmiyor.");
+            }
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Dosya açılırken hata oluştu: " + ex.getMessage());
+        }
     }
 }

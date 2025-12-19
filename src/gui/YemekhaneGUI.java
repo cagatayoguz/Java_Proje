@@ -52,7 +52,7 @@ public class YemekhaneGUI extends JFrame {
         });
 
         JButton btnList = createActionButton("Aylık Liste", new Color(108, 117, 125));
-        btnList.addActionListener(e -> resimAc("veriler/resimler/menu_aylik.jpg"));
+        btnList.addActionListener(e -> resimAc("C:\\Users\\cagat\\Downloads\\yemek listesi.png"));
 
         footerPanel.add(btnMenu);
         footerPanel.add(btnList);
