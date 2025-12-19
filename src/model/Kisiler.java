@@ -2,7 +2,7 @@ package model;
 
 import java.time.LocalDate;
 
-public abstract class Kisiler implements Raporlanabilir { // Bir interface implemente etti
+public abstract class Kisiler implements Yazdirilabilir { // Bir interface implemente etti
 
     private String ad;
     private String soyad;

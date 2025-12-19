@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import exception.GecersizGirisBilgisiException;
 
 // Hem abstract sınıfı kalıtıyor hem de interface'i implemente ediyor
-public abstract class Ogrenci extends Kisiler implements Yonetilebilir {
+public abstract class Ogrenci extends Kisiler implements Kaydedilebilir {
 
     private String ogrenciNo;
     private String bolum;

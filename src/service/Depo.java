@@ -2,12 +2,12 @@ package service;
 
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Collections; // Collections.sort kullanımı
-import model.Yonetilebilir;
+
+import model.Kaydedilebilir;
 
 // Generic sınıf tanımı <T> (Bölüm 5.1 gereksinimi)
 // Burada T, Yonetilebilir arayüzünü implemente eden bir tip olmalıdır.
-public class Depo<T extends Yonetilebilir> { // Wildcard kullanımı: <? extends Yonetilebilir> (Dolaylı olarak extends)
+public class Depo<T extends Kaydedilebilir> { // Wildcard kullanımı: <? extends Yonetilebilir> (Dolaylı olarak extends)
 
     private List<T> liste; // List arayüzü referans tipi olarak kullanıldı (Bölüm 5.2 gereksinimi)
 

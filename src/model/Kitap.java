@@ -1,6 +1,6 @@
 package model;
 
-public class Kitap implements Raporlanabilir {
+public class Kitap implements Yazdirilabilir, Kaydedilebilir {
 
     private String kitapAdi;
     private String yazarAdi;
@@ -40,5 +40,20 @@ public class Kitap implements Raporlanabilir {
     // Dosya yazımı için sade format
     public String toCsvString() {
         return String.format("%s,%s,%s,%b", kitapAdi, yazarAdi, isbn, musaitMi);
+    }
+
+    @Override
+    public boolean kaydet() {
+        return false;
+    }
+
+    @Override
+    public boolean sil(String id) {
+        return false;
+    }
+
+    @Override
+    public boolean guncelle() {
+        return false;
     }
 }
