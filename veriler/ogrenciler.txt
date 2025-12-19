@@ -1,0 +1,12 @@
+202100101,Ahmet,Yılmaz,Bilgisayar Müh.,3. Sınıf,3.45
+202100102,Ayşe,Kaya,Elektrik-Elektronik,2. Sınıf,2.90
+202200205,Mehmet,Demir,Makine Müh.,1. Sınıf,3.10
+202000301,Fatma,Çelik,Endüstri Müh.,4. Sınıf,3.85
+202100155,Ali,Şahin,Bilgisayar Müh.,3. Sınıf,2.50
+202200402,Zeynep,Yıldız,Mimarlık,2. Sınıf,3.20
+202300100,Can,Öztürk,İnşaat Müh.,1. Sınıf,2.80
+202000505,Elif,Arslan,Tıp Fakültesi,5. Sınıf,3.95
+202100303,Burak,Polat,Hukuk,3. Sınıf,3.00
+202200606,Selin,Koç,Diş Hekimliği,2. Sınıf,3.50
+24181616060,çağatay,oğuz,bilgisayar müh,2,3
+24181616013,Osmancan,Küçdemir,Bilgisayar Müh,2,3

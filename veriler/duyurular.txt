@@ -1,0 +1,14 @@
+01.09.2023|Akademik Yıl Açılışı|2023-2024 Akademik yılı açılış töreni rektörlük binasında yapılacaktır.
+15.09.2023|Ders Kayıtları|Güz dönemi ders kayıtları sistem üzerinden başlamıştır.
+29.10.2023|Cumhuriyet Bayramı|29 Ekim Cumhuriyet Bayramı kutlamaları stadyumda gerçekleşecektir.
+10.11.2023|10 Kasım Töreni|Atatürk'ü anma programı saat 09:05'te saygı duruşu ile başlayacaktır.
+20.11.2023|Vize Sınav Takvimi|Fakültelerin vize sınav programları web sitesinde yayınlanmıştır.
+15.12.2023|Kış Festivali|Öğrenci kulüplerinin düzenlediği Kış Festivali kampüs alanında yapılacaktır.
+01.01.2024|Yılbaşı Tatili|1 Ocak Pazartesi günü resmi tatil nedeniyle ders yapılmayacaktır.
+10.01.2024|Final Sınavları|Güz dönemi final sınavları başlamıştır. Tüm öğrencilere başarılar dileriz.
+20.01.2024|Yemekhane Menüsü|Yemekhane menüsünde öğrencilerimizin isteği üzerine güncelleme yapılmıştır.
+15.02.2024|Bahar Dönemi|Bahar dönemi ders başlangıç tarihi 20 Şubat olarak güncellenmiştir.
+17.12.2025|osmal codenames oynayamıyor|1234
+17.12.2025|ismal|berkmal
+2025-12-17::deneme::deneme yapılıyor
+2025-12-18::yeni deneme::tarih denemesi
