@@ -16,4 +16,9 @@ public class LisansOgrenci extends Ogrenci {
     public boolean durumKontrol() {
         return true; // Öğrenci sistemde aktif kabul edilir
     }
+
+    @Override
+    public void ciktiAl() {
+
+    }
 }

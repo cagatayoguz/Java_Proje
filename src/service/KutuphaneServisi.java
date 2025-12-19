@@ -2,76 +2,77 @@ package service;
 
 import model.Kitap;
 import model.KitapBaslangicVerisi;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class KutuphaneServisi {
 
-    private Map<String, Kitap> kitapKatalogu;
+    // Ödev Gereksinimi: Generic Sınıf Kullanımı (Depo<T>)
+    private Depo<Kitap> kitapDeposu;
 
     public KutuphaneServisi() {
-        this.kitapKatalogu = new HashMap<>();
+        // Depo nesnesini oluşturuyoruz
+        this.kitapDeposu = new Depo<>();
         baslangicVerisiYukle();
     }
 
     private void baslangicVerisiYukle() {
         try {
-            List<String[]> dosyaVerileri = DosyaIslemleri.kitaplariOku();
+            // Dosyadan verileri detaylı okuyoruz (6 sütunlu yapı için)
+            List<String[]> dosyaVerileri = DosyaIslemleri.kitaplariOkuDetayli();
 
             if (dosyaVerileri.isEmpty()) {
-                // Dosya boşsa varsayılanları yükle
+                // DURUM 1: Dosya boşsa varsayılan 50 kitabı yükle
                 List<Kitap> baslangicKitaplari = KitapBaslangicVerisi.get50Kitap();
+
                 for (Kitap k : baslangicKitaplari) {
-                    kitapKatalogu.put(k.getIsbn(), k);
-                    // Varsayılan formatta kaydet
-                    String durum = k.isMusaitMi() ? "Musait" : "Oduncte";
-                    DosyaIslemleri.kitapEkle(k.getKitapAdi(), k.getYazarAdi(), k.getIsbn(), durum);                }
+                    // 1. Depoya (RAM) ekle
+                    kitapDeposu.ekle(k);
+
+                    // 2. Dosyaya kalıcı olarak kaydet (Interface metodu üzerinden)
+                    k.kaydet();
+                }
             } else {
-                // Dosyadan verileri oku
+                // DURUM 2: Dosyada veri varsa onları RAM'e (Depo'ya) al
                 for (String[] veri : dosyaVerileri) {
-                    // Veri formatı: [Ad, Yazar, ISBN, Durum, ...]
-                    if (veri.length >= 4) {
+                    if (veri.length >= 3) { // En az Ad, Yazar, ISBN olmalı
 
-                        // --- KESİN ÇÖZÜM BURASI ---
-                        // Kelimeyi küçük harfe çevirip içinde 'usait' veya 'üsait' arıyoruz.
-                        // Böylece başında gizli BOM karakteri, boşluk veya harf hatası olsa bile yakalar.
-                        String okunanDurum = veri[3].toLowerCase();
+                        // --- KESİN ÇÖZÜM (Karakter Hatası Kontrolü) ---
+                        String okunanDurum = (veri.length > 3) ? veri[3].toLowerCase() : "musait";
 
+                        // İçinde "usait" veya "üsait" geçiyorsa Müsait kabul et
                         boolean musaitMi = okunanDurum.contains("usait") || okunanDurum.contains("üsait");
 
-                        // Eğer satırda "Oduncte" veya "odun" geçiyorsa kesinlikle müsait değildir.
-                        if (okunanDurum.contains("odun")) {
+                        // Ancak "odun" veya "odün" geçiyorsa kesinlikle Müsait değildir
+                        if (okunanDurum.contains("odun") || okunanDurum.contains("ödün")) {
                             musaitMi = false;
                         }
 
+                        // Kitap nesnesini oluştur
                         Kitap k = new Kitap(veri[0], veri[1], veri[2], musaitMi);
-                        kitapKatalogu.put(k.getIsbn(), k);
+
+                        // Generic Depo'ya ekle
+                        kitapDeposu.ekle(k);
                     }
                 }
             }
 
         } catch (Exception e) {
-            System.err.println("Veri yukleme hatasi: " + e.getMessage());
+            System.err.println("Veri yükleme hatası: " + e.getMessage());
             e.printStackTrace();
         }
     }
 
-    public Kitap isbnIleBul(String isbn) {
-        return kitapKatalogu.get(isbn);
+    // Ödev Gereksinimi: Listeyi Sıralı Getirme (Collections.sort)
+    public List<Kitap> getSiraliKitapListesi() {
+        // Depo içindeki sıralama metodunu tetikliyoruz
+        kitapDeposu.ismeGoreSirala();
+
+        // Sıralanmış listeyi döndürüyoruz
+        return kitapDeposu.getListe();
     }
 
-    public boolean kitapOduncAl(String isbn) {
-        Kitap kitap = kitapKatalogu.get(isbn);
-        if (kitap != null && kitap.isMusaitMi()) {
-            kitap.setMusaitMi(false);
-            return true;
-        }
-        return false;
-    }
-
+    // Eski kodlarla uyumluluk için (Sıralı olmayan veya direkt liste)
     public List<Kitap> tumKitaplariGetir() {
-        return new ArrayList<>(kitapKatalogu.values());
+        return kitapDeposu.getListe();
     }
 }

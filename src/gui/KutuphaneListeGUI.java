@@ -137,52 +137,80 @@ public class KutuphaneListeGUI extends JFrame {
     }
 
     // --- GÜVENLİ İADE METODU ---
+    // --- 2. İADE ALMA (TAM VE HATASIZ HALİ) ---
     private void iadeEtAction() {
+        // 1. Satır Seçili mi?
         int row = table.getSelectedRow();
-        if (row == -1) { JOptionPane.showMessageDialog(this, "Lütfen iade edilecek kitabı seçiniz."); return; }
+        if (row == -1) {
+            JOptionPane.showMessageDialog(this, "Lütfen iade edilecek kitabı seçiniz.");
+            return;
+        }
+
+        // 2. Tablodan Verileri Çek (DEĞİŞKENLER BURADA TANIMLANIYOR)
         int modelRow = table.convertRowIndexToModel(row);
 
-        String isbn = (String) model.getValueAt(modelRow, 2);
+        String kitapAdi = (String) model.getValueAt(modelRow, 0); // kitapAdi burada tanımlandı
+        String isbn = (String) model.getValueAt(modelRow, 2);     // isbn burada tanımlandı
         String durum = (String) model.getValueAt(modelRow, 3);
-        String alanKisi = (String) model.getValueAt(modelRow, 5); // Kitabı alan kişinin adı
+        String kitapAlanKisi = (String) model.getValueAt(modelRow, 5);
 
-        // Sadece "Ödünçte" olan kitap iade edilebilir
-        if (!durum.equals("Ödünçte")) {
-            JOptionPane.showMessageDialog(this, "Bu kitap şu an ödünçte değil (Durum: " + durum + ").");
+        // 3. Kitap zaten müsait mi?
+        if (durum.equalsIgnoreCase("Müsait") || durum.equalsIgnoreCase("Musait")) {
+            JOptionPane.showMessageDialog(this, "Bu kitap zaten kütüphanede.");
             return;
         }
 
-        // 1. Öğrenci Numarasını İste
-        String ogrenciNo = JOptionPane.showInputDialog(this, "İade işlemi için Öğrenci Numaranızı giriniz:");
-        if (ogrenciNo == null || ogrenciNo.trim().isEmpty()) return;
+        // 4. Değişkeni baştan tanımlıyoruz (Senin hatan buradaydı)
+        boolean islemYapilsin = false;
 
-        // 2. Numarayı Kontrol Et
-        Map<String, String[]> ogrenciler = DosyaIslemleri.ogrencileriOku();
-        if (!ogrenciler.containsKey(ogrenciNo)) {
-            JOptionPane.showMessageDialog(this, "HATA: Girilen numara sistemde kayıtlı değil!", "Hata", JOptionPane.ERROR_MESSAGE);
-            return;
+        // 5. Öğrenci Kontrolü
+        String ogrenciNo = JOptionPane.showInputDialog(this, "İade eden öğrencinin numarasını giriniz:");
+
+        if (ogrenciNo != null && !ogrenciNo.trim().isEmpty()) {
+            java.util.Map<String, String[]> ogrenciler = service.DosyaIslemleri.ogrencileriOku();
+
+            if (ogrenciler.containsKey(ogrenciNo)) {
+                String[] bilgiler = ogrenciler.get(ogrenciNo);
+                String iadeEdenIsim = bilgiler[0] + " " + bilgiler[1]; // Ad + Soyad
+
+                // İsimler Uyuşuyor mu?
+                boolean isimlerAyni = kitapAlanKisi.trim().equalsIgnoreCase(iadeEdenIsim.trim());
+
+                if (isimlerAyni) {
+                    // İsimler tutuyorsa normal onay iste
+                    int onay = JOptionPane.showConfirmDialog(this,
+                            "Kitap: " + kitapAdi + "\nİade Eden: " + iadeEdenIsim + "\n\nOnaylıyor musunuz?",
+                            "İade Onayı", JOptionPane.YES_NO_OPTION);
+                    if (onay == JOptionPane.YES_OPTION) islemYapilsin = true;
+                } else {
+                    // İsimler tutmuyorsa UYARI ver
+                    int zorlaOnay = JOptionPane.showConfirmDialog(this,
+                            "İsim uyuşmuyor! Yine de iade almak istiyor musunuz?",
+                            "Güvenlik Uyarısı", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+                    if (zorlaOnay == JOptionPane.YES_OPTION) islemYapilsin = true;
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Öğrenci bulunamadı!", "Hata", JOptionPane.ERROR_MESSAGE);
+            }
         }
 
-        // 3. İsimleri Karşılaştır
-        String[] bilgiler = ogrenciler.get(ogrenciNo);
-        String iadeEdenIsim = bilgiler[0] + " " + bilgiler[1]; // Ad + Soyad
-
-        // Not: Küçük/büyük harf duyarsız ve boşlukları temizleyerek kontrol et
-        if (alanKisi.trim().equalsIgnoreCase(iadeEdenIsim.trim())) {
-            // Eşleşme Başarılı -> İadeyi Yap
+        // --- 6. İŞLEM KISMI (GÜNCELLE METODUNU KULLANAN KISIM) ---
+        if (islemYapilsin) {
             try {
-                DosyaIslemleri.kitapIadeEt(isbn);
-                JOptionPane.showMessageDialog(this, "Teşekkürler " + iadeEdenIsim + ", kitap iade alındı.");
-                verileriYukle();
-            } catch(Exception e) { e.printStackTrace(); }
-        } else {
-            // Eşleşme Başarısız -> Hata Ver
-            JOptionPane.showMessageDialog(this,
-                    "HATA: Yetkisiz İşlem!\n\n" +
-                            "Bu kitabı alan kişi: " + alanKisi + "\n" +
-                            "Sizin isminiz: " + iadeEdenIsim + "\n\n" +
-                            "Kitabı sadece alan kişi iade edebilir.",
-                    "Güvenlik Uyarısı", JOptionPane.ERROR_MESSAGE);
+                // Tablodan Yazar Adını al (Nesne oluşturmak için lazım)
+                String yazarAdi = (String) model.getValueAt(modelRow, 1);
+
+                // Geçici bir Kitap nesnesi oluşturuyoruz (Durumu: Müsait = true yapıyoruz)
+                model.Kitap geciciKitap = new model.Kitap(kitapAdi, yazarAdi, isbn, true);
+
+                // Interface metodunu çağırıyoruz: "Kendini Güncelle"
+                geciciKitap.guncelle();
+
+                JOptionPane.showMessageDialog(this, "İade alındı (Interface Metodu ile).");
+                verileriYukle(); // Listeyi yenile
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
         }
     }
 }

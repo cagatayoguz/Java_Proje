@@ -12,7 +12,7 @@ public abstract class Ogrenci extends Kisiler implements Kaydedilebilir {
     // SADECE KULLANILAN CONSTRUCTOR (Kısmi Yapıcı)
     // TC ve Doğum Tarihi projede tutulmadığı için üst sınıfa (Kisiler) varsayılan değer gönderiyoruz.
     public Ogrenci(String ad, String soyad, String ogrenciNo, String bolum) {
-        super(ad, soyad, "00000000000", LocalDate.of(2000, 1, 1));
+        super(ad, soyad);
         this.ogrenciNo = ogrenciNo;
         this.bolum = bolum;
         this.notOrtalamasi = 0; // Varsayılan başlangıç
@@ -41,11 +41,6 @@ public abstract class Ogrenci extends Kisiler implements Kaydedilebilir {
     @Override
     public String getPozisyon() {
         return "Ogrenci - " + this.bolum;
-    }
-
-    @Override
-    public void bilgiSistemiErisim() {
-        System.out.println("Ogrenci bilgi sistemine erisildi.");
     }
 
     @Override

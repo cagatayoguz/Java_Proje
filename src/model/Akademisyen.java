@@ -9,15 +9,13 @@ public abstract class Akademisyen extends Kisiler {
 
     public Akademisyen(String ad, String soyad, String tcKimlikNo, LocalDate dogumTarihi,
                        String unvan, String uzmanlikAlani) {
-        super(ad, soyad, tcKimlikNo, dogumTarihi);
+        super(ad, soyad);
         this.unvan = unvan;
         this.uzmanlikAlani = uzmanlikAlani;
     }
 
     @Override
     public String getPozisyon() { return unvan + " - " + uzmanlikAlani; }
-    @Override
-    public void bilgiSistemiErisim() { System.out.println("Akademisyen sistemine erisildi."); }
 
     // Getterlar
     public String getUnvan() { return unvan; }

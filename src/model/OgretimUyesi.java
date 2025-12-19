@@ -25,4 +25,9 @@ public class OgretimUyesi extends Akademisyen {
     public boolean durumKontrol() {
         return false;
     }
+
+    @Override
+    public void ciktiAl() {
+
+    }
 }

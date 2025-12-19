@@ -1,44 +1,41 @@
 package model;
 
-import java.time.LocalDate;
-
-public abstract class Kisiler implements Yazdirilabilir { // Bir interface implemente etti
+public abstract class Kisiler implements Yazdirilabilir {
 
     private String ad;
     private String soyad;
-    private String tcKimlikNo;
-    private LocalDate dogumTarihi; // LocalDate kullanımı (Bölüm 6)
 
-    public Kisiler(String ad, String soyad, String tcKimlikNo, LocalDate dogumTarihi) {
+    // SADECE GEREKLİ OLAN CONSTRUCTOR
+    public Kisiler(String ad, String soyad) {
         this.ad = ad;
         this.soyad = soyad;
-        this.tcKimlikNo = tcKimlikNo;
-        this.dogumTarihi = dogumTarihi;
     }
 
-    // Abstract metotlar
-    public abstract String getPozisyon();
-    public abstract void bilgiSistemiErisim();
-
-    // Somut metotlar
+    // Ortak Metotlar
     public String tamAdGetir() {
         return this.ad + " " + this.soyad;
     }
 
-    // Tarih üzerinde basit hesaplama (Bölüm 6 gereksinimi)
-    public int yasHesapla() {
-        return LocalDate.now().getYear() - this.dogumTarihi.getYear();
-    }
-
-    // Getterlar (Encapsulation)
+    // Getterlar
     public String getAd() { return ad; }
     public String getSoyad() { return soyad; }
-    // Setterlar (Öğrenci sınıfında detaylıca kontrol edildiği için burada atlandı)
 
-    // Raporlanabilir Interface Metotları
+    // --- INTERFACE METOTLARI ---
+
+    // Alt sınıflar (Ogrenci, Akademisyen) bunu kendine göre dolduracak
+    public abstract String getPozisyon();
+
     @Override
     public String bilgiRaporuOlustur() {
-        return "Ad: " + tamAdGetir() + ", Pozisyon: " + getPozisyon();
+        return tamAdGetir();
     }
-    // Diğer rapor metotları alt sınıflarda override edilecek (Polimorfizm)
+
+    // Bu metodu burada tanımlıyoruz, alt sınıflar otomatik sahip oluyor
+    @Override
+    public void ciktiAl() {
+        System.out.println("------------------------------------");
+        System.out.println("👤 KİŞİ BİLGİ KARTI");
+        System.out.println(this.detayliRaporOlustur());
+        System.out.println("------------------------------------");
+    }
 }

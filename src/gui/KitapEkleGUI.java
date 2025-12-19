@@ -2,7 +2,6 @@ package gui;
 
 import model.Kitap;
 import model.Kutuphane;
-import service.DosyaIslemleri;
 import service.KutuphaneServisi;
 import exception.GecersizGirisBilgisiException;
 
@@ -10,13 +9,12 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.util.List;
 
 public class KitapEkleGUI extends JFrame {
 
     public KitapEkleGUI() {
         setTitle("Hızlı Kitap Ekle");
-        setSize(400, 450); // Boyutu biraz küçülttük, daha sade oldu
+        setSize(400, 450);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
@@ -39,7 +37,7 @@ public class KitapEkleGUI extends JFrame {
         card.add(lblTitle);
         card.add(Box.createVerticalStrut(20));
 
-        // Form Alanları (Yıl Kalktı)
+        // Form Alanları
         JTextField txtAd = createField();
         JTextField txtYazar = createField();
         JTextField txtIsbn = createField();
@@ -56,7 +54,7 @@ public class KitapEkleGUI extends JFrame {
         btnKaydet.setAlignmentX(Component.CENTER_ALIGNMENT);
         btnKaydet.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
 
-        // BUTON İŞLEMİ (Sadeleştirilmiş OOP Mantığı)
+        // --- BUTON İŞLEMİ (DÜZELTİLDİ) ---
         btnKaydet.addActionListener(e -> {
             try {
                 // 1. Boşluk Kontrolü
@@ -65,13 +63,14 @@ public class KitapEkleGUI extends JFrame {
                 }
 
                 // 2. OOP Kontrolü: Kutuphane Sınıfını Kullan
-                Kutuphane raf = new Kutuphane("Sanal Raf", 100); // 100 Kapasite
+                // HATA BURADAYDI: "100" parametresini sildik. Artık sadece isim istiyor.
+                Kutuphane raf = new Kutuphane("Sanal Raf");
 
                 // Mevcut kitapları yükle (Çift ISBN kontrolü için)
                 KutuphaneServisi servis = new KutuphaneServisi();
-                raf.mevcutKitaplariYukle(servis.tumKitaplariGetir());
+                raf.mevcutKitaplariYukle(servis.tumKitaplariGetir()); // Servisten kitapları alıp rafa koyuyoruz
 
-                // Yeni Kitap Oluştur (Yıl Yok)
+                // Yeni Kitap Oluştur
                 Kitap yeniKitap = new Kitap(
                         txtAd.getText().trim(),
                         txtYazar.getText().trim(),
@@ -79,19 +78,17 @@ public class KitapEkleGUI extends JFrame {
                         true
                 );
 
-                // Ekleme Denemesi (Hata varsa catch'e düşer)
+                // Ekleme Denemesi (Aynı ISBN varsa raf.kitapEkle hata fırlatır)
                 raf.kitapEkle(yeniKitap);
 
-                // 3. Dosyaya Yaz (Yıl Yok)
-                DosyaIslemleri.kitapEkle(
-                        yeniKitap.getKitapAdi(),
-                        yeniKitap.getYazarAdi(),
-                        yeniKitap.getIsbn(),
-                        "Müsait"
-                );
-
-                JOptionPane.showMessageDialog(this, "Kitap başarıyla eklendi.");
-                this.dispose();
+                // 3. Dosyaya Yaz
+                // Nesneye "Kendini Kaydet" diyoruz.
+                if (yeniKitap.kaydet()) {
+                    JOptionPane.showMessageDialog(this, "Kitap başarıyla eklendi.");
+                    this.dispose(); // Pencereyi kapat
+                } else {
+                    JOptionPane.showMessageDialog(this, "Kayıt sırasında hata oluştu!", "Hata", JOptionPane.ERROR_MESSAGE);
+                }
 
             } catch (GecersizGirisBilgisiException ex) {
                 JOptionPane.showMessageDialog(this, ex.getMessage(), "Uyarı", JOptionPane.WARNING_MESSAGE);

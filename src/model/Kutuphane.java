@@ -4,52 +4,41 @@ import java.util.ArrayList;
 import java.util.List;
 import exception.GecersizGirisBilgisiException;
 
-// Kütüphane, fiziksel bir 'Alan'dır ve içinde kitaplar barındırır.
-public class Kutuphane extends Alan {
+// Kütüphane, fiziksel bir 'Alan'dır, içinde kitaplar barındırır ve Kaydedilebilir.
+public class Kutuphane extends Alan implements Kaydedilebilir {
 
-    private List<Kitap> kitapListesi; // Kütüphanedeki kitaplar
+    private List<Kitap> kitapListesi;
 
-    public Kutuphane(String adi, int kapasite) {
-        super(adi, kapasite);
+    public Kutuphane(String adi) {
+        super(adi, 99999); // Sembolik kapasite
         this.kitapListesi = new ArrayList<>();
     }
 
-    // --- ÖNEMLİ: Alan Sınıfından Gelen Metotların Mantığını Değiştirdik ---
-
+    // --- ALAN SINIFINDAN GELEN METOTLAR ---
     @Override
     public String kullanimAmaci() {
         return "Kitap arşivleme ve ödünç verme hizmetleri.";
     }
 
-    // Kapasite kontrolü: "İçerideki insan sayısı" değil, "Raf kapasitesi" kontrolü
-    // Polimorfizm örneği: Üst sınıfın metodunu kendi ihtiyacımıza göre eziyoruz.
     @Override
-    public boolean kapasiteKontrol(int eklenecekKitapSayisi) {
-        // Mevcut kitap sayısı + yeni eklenecekler > Kapasite ise FALSE döner
-        return (kitapListesi.size() + eklenecekKitapSayisi) <= getKapasite();
+    public boolean kapasiteKontrol(int sayi) {
+        return true;
     }
 
-    // --- YENİ METOT: Kitap Ekleme İşlemi (Kontrollü) ---
+    // --- KİTAP YÖNETİM METOTLARI ---
     public void kitapEkle(Kitap kitap) throws GecersizGirisBilgisiException {
-        // 1. Kapasite Kontrolü (Alan sınıfının metodu)
-        if (!kapasiteKontrol(1)) {
-            throw new GecersizGirisBilgisiException("Kütüphane kapasitesi DOLU! (" + getKapasite() + " kitaplık yer var)");
-        }
-
-        // 2. Mantıksal Kontrol (Daha önce aynı ISBN var mı?)
+        // HATA ÇÖZÜMÜ BURADA YAPILDI:
         for (Kitap k : kitapListesi) {
-            if (k.getIsbn().equals(kitap.getIsbn())) {
-                throw new GecersizGirisBilgisiException("Bu ISBN (" + kitap.getIsbn() + ") numarasına sahip kitap zaten var!");
+            // NullPointerException önlemi:
+            // Eğer listedeki kitabın ISBN'i null ise veya yeni kitabın ISBN'i null ise hata vermesin diye kontrol ekledik.
+            if (k.getIsbn() != null && kitap.getIsbn() != null && k.getIsbn().equals(kitap.getIsbn())) {
+                throw new GecersizGirisBilgisiException("Bu ISBN numarasına sahip kitap zaten var!");
             }
         }
-
-        // Sorun yoksa listeye ekle
         kitapListesi.add(kitap);
     }
 
-    // Listeyi dışarıdan doldurmak için (Dosyadan okuyunca buraya yükleyeceğiz)
     public void mevcutKitaplariYukle(List<Kitap> kitaplar) {
-        // Listeyi sıfırlayıp yüklemek daha güvenlidir, tekrarı önler
         this.kitapListesi.clear();
         this.kitapListesi.addAll(kitaplar);
     }
@@ -57,4 +46,26 @@ public class Kutuphane extends Alan {
     public int mevcutKitapSayisi() {
         return kitapListesi.size();
     }
+
+    public List<Kitap> getKitapListesi() {
+        return kitapListesi;
+    }
+
+    // --- KAYDEDİLEBİLİR INTERFACE METOTLARI ---
+    @Override
+    public boolean kaydet() {
+        boolean hepsiBasarili = true;
+        for (Kitap k : kitapListesi) {
+            if (!k.kaydet()) {
+                hepsiBasarili = false;
+            }
+        }
+        return hepsiBasarili;
+    }
+
+    @Override
+    public boolean sil(String id) { return true; }
+
+    @Override
+    public boolean guncelle() { return true; }
 }
