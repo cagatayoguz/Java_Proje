@@ -6,6 +6,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 import java.util.Map;
+import exception.OgrenciBulunamadiException;
+
 
 public class OgrenciBilgiSistemiGUI extends JFrame {
 
@@ -58,22 +60,23 @@ public class OgrenciBilgiSistemiGUI extends JFrame {
         btnSorgula.setFocusPainted(false);
         btnSorgula.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        // Buton Aksiyonu
-        btnSorgula.addActionListener(e -> {
-            String ogrNo = txtNo.getText().trim();
-            if (ogrNo.isEmpty()) return;
+//        // Buton Aksiyonu
+//        btnSorgula.addActionListener(e -> {
+//            String ogrNo = txtNo.getText().trim();
+//            if (ogrNo.isEmpty()) return;
+//
+//            Map<String, String[]> ogrenciler = DosyaIslemleri.ogrencileriOku();
+//            if (ogrenciler.containsKey(ogrNo)) {
+//                String[] bilgiler = ogrenciler.get(ogrNo);
+//                String mesaj = String.format(
+//                        "Ad: %s\nSoyad: %s\nBölüm: %s\nSınıf: %s\nOrtalama: %s",
+//                        bilgiler[0], bilgiler[1], bilgiler[2], bilgiler[3], bilgiler[4]);
+//                JOptionPane.showMessageDialog(this, mesaj, "Öğrenci Bulundu", JOptionPane.INFORMATION_MESSAGE);
+//            } else {
+//                JOptionPane.showMessageDialog(this, "Öğrenci bulunamadı!", "Hata", JOptionPane.ERROR_MESSAGE);
+//            }
+//        });
 
-            Map<String, String[]> ogrenciler = DosyaIslemleri.ogrencileriOku();
-            if (ogrenciler.containsKey(ogrNo)) {
-                String[] bilgiler = ogrenciler.get(ogrNo);
-                String mesaj = String.format(
-                        "Ad: %s\nSoyad: %s\nBölüm: %s\nSınıf: %s\nOrtalama: %s",
-                        bilgiler[0], bilgiler[1], bilgiler[2], bilgiler[3], bilgiler[4]);
-                JOptionPane.showMessageDialog(this, mesaj, "Öğrenci Bulundu", JOptionPane.INFORMATION_MESSAGE);
-            } else {
-                JOptionPane.showMessageDialog(this, "Öğrenci bulunamadı!", "Hata", JOptionPane.ERROR_MESSAGE);
-            }
-        });
 
         // Bileşenleri Karta Ekle
         cardPanel.add(lblTitle);
@@ -86,5 +89,27 @@ public class OgrenciBilgiSistemiGUI extends JFrame {
         cardPanel.add(btnSorgula);
 
         mainPanel.add(cardPanel);
+
+        btnSorgula.addActionListener(e -> {
+            String ogrNo = txtNo.getText().trim();
+            if (ogrNo.isEmpty()) return;
+
+            try {
+                // Yeni yazdığımız metodu çağırıyoruz.
+                // Eğer öğrenci yoksa bu satır hata fırlatır ve aşağıdaki kodlar çalışmaz.
+                String[] bilgiler = DosyaIslemleri.ogrenciGetir(ogrNo);
+
+                String mesaj = String.format(
+                        "Ad: %s\nSoyad: %s\nBölüm: %s\nSınıf: %s\nOrtalama: %s",
+                        bilgiler[0], bilgiler[1], bilgiler[2], bilgiler[3], bilgiler[4]);
+
+                JOptionPane.showMessageDialog(this, mesaj, "Öğrenci Bulundu", JOptionPane.INFORMATION_MESSAGE);
+
+            } catch (OgrenciBulunamadiException ex) { //
+                // Hata yakalandığında, Exception sınıfı içindeki mesajı kullanıcıya gösteriyoruz.
+                // ex.getMessage() otomatik olarak "Belirtilen ogrenci numarasi (...) sistemde kayitli degildir." döner.
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "Hata", JOptionPane.ERROR_MESSAGE);
+            }
+        });
     }
 }

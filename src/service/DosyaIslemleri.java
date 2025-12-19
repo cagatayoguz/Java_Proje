@@ -4,6 +4,7 @@ import java.io.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import exception.OgrenciBulunamadiException;
 
 public class DosyaIslemleri {
 
@@ -242,5 +243,15 @@ public class DosyaIslemleri {
             }
         }
         return bulundu;
+    }
+    public static String[] ogrenciGetir(String ogrNo) throws OgrenciBulunamadiException {
+        Map<String, String[]> ogrenciler = DosyaIslemleri.ogrencileriOku();
+
+        if (!ogrenciler.containsKey(ogrNo)) {
+            // Öğrenci yoksa hata nesnesini fırlatıyoruz
+            throw new OgrenciBulunamadiException(ogrNo); //
+        }
+
+        return ogrenciler.get(ogrNo);
     }
 }

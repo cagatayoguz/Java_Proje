@@ -1,5 +1,4 @@
 package main;
-//YORUMSATIRIEKLENDİ
 import service.KutuphaneServisi;
 import gui.AnaMenuGUI;
 import java.io.IOException;
