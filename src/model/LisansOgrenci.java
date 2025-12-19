@@ -1,21 +1,19 @@
 package model;
 
-import java.time.LocalDate;
-
 public class LisansOgrenci extends Ogrenci {
 
-    public LisansOgrenci(String ad, String soyad, String tcKimlikNo, LocalDate dogumTarihi,
-                         String ogrenciNo, String bolum, int notOrtalamasi, Integer mezuniyetYili) {
-        super(ad, soyad, tcKimlikNo, dogumTarihi, ogrenciNo, bolum, notOrtalamasi, mezuniyetYili);
-    }
+    // Uzun ve kullanılmayan constructor SİLİNDİ.
+    // Gereksiz importlar (LocalDate vb.) TEMİZLENDİ.
 
-    // Sadece kayıt yaparken kullanılan basit yapıcı
+    // TEK VE GEREKLİ CONSTRUCTOR
+    // GUI'den gelen verileri alıp üst sınıf olan Ogrenci'ye iletir.
     public LisansOgrenci(String ad, String soyad, String ogrenciNo, String bolum) {
         super(ad, soyad, ogrenciNo, bolum);
     }
 
+    // Raporlanabilir Interface'inden gelen metot
     @Override
     public boolean durumKontrol() {
-        return false;
+        return true; // Öğrenci sistemde aktif kabul edilir
     }
 }

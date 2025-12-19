@@ -3,34 +3,24 @@ package model;
 import java.time.LocalDate;
 import exception.GecersizGirisBilgisiException;
 
-// Hem abstract sınıfı kalıtıyor hem de interface'i implemente ediyor
 public abstract class Ogrenci extends Kisiler implements Kaydedilebilir {
 
     private String ogrenciNo;
     private String bolum;
     private int notOrtalamasi;
-    private Integer mezuniyetYili;
 
-    // Constructor 1: Ana Yapıcı
-    public Ogrenci(String ad, String soyad, String tcKimlikNo, LocalDate dogumTarihi,
-                   String ogrenciNo, String bolum, int notOrtalamasi, Integer mezuniyetYili) {
-        super(ad, soyad, tcKimlikNo, dogumTarihi);
-        this.ogrenciNo = ogrenciNo;
-        this.bolum = bolum;
-        this.notOrtalamasi = notOrtalamasi;
-        this.mezuniyetYili = mezuniyetYili;
-    }
-
-    // Constructor 2: Kısmi Yapıcı
+    // SADECE KULLANILAN CONSTRUCTOR (Kısmi Yapıcı)
+    // TC ve Doğum Tarihi projede tutulmadığı için üst sınıfa (Kisiler) varsayılan değer gönderiyoruz.
     public Ogrenci(String ad, String soyad, String ogrenciNo, String bolum) {
         super(ad, soyad, "00000000000", LocalDate.of(2000, 1, 1));
         this.ogrenciNo = ogrenciNo;
         this.bolum = bolum;
-        this.notOrtalamasi = 0;
-        this.mezuniyetYili = null;
+        this.notOrtalamasi = 0; // Varsayılan başlangıç
     }
 
-    // Setter Kontrolleri
+    // --- SETTER METOTLARI (Validation İçin Kullanılıyor) ---
+
+    // OgrenciEkleGUI'de kullanılıyor
     public void setBolum(String bolum) throws GecersizGirisBilgisiException {
         if (bolum == null || bolum.trim().isEmpty()) {
             throw new GecersizGirisBilgisiException("Bolum alani bos birakilamaz.");
@@ -38,6 +28,7 @@ public abstract class Ogrenci extends Kisiler implements Kaydedilebilir {
         this.bolum = bolum;
     }
 
+    // OgrenciEkleGUI'de kullanılıyor
     public void setNotOrtalamasi(int notOrtalamasi) throws GecersizGirisBilgisiException {
         if (notOrtalamasi < 0 || notOrtalamasi > 100) {
             throw new GecersizGirisBilgisiException("Not ortalamasi 0 ile 100 arasinda olmalidir.");
@@ -45,11 +36,8 @@ public abstract class Ogrenci extends Kisiler implements Kaydedilebilir {
         this.notOrtalamasi = notOrtalamasi;
     }
 
-    public void setOgrenciNo(String ogrenciNo) {
-        this.ogrenciNo = ogrenciNo;
-    }
+    // --- OVERRIDE METOTLAR ---
 
-    // Override Edilen Metotlar
     @Override
     public String getPozisyon() {
         return "Ogrenci - " + this.bolum;
@@ -62,12 +50,12 @@ public abstract class Ogrenci extends Kisiler implements Kaydedilebilir {
 
     @Override
     public String detayliRaporOlustur() {
-        String durum = (mezuniyetYili == null) ? "Aktif" : "Mezun";
-        return String.format("Ogr No: %s | Bolum: %s | Ortalama: %d | Durum: %s",
-                ogrenciNo.toLowerCase(), bolum, notOrtalamasi, durum);
+        // Mezuniyet yılı kalktığı için burayı sadeleştirdik
+        return String.format("Ogr No: %s | Bolum: %s | Ortalama: %d | Durum: Aktif",
+                ogrenciNo, bolum, notOrtalamasi);
     }
 
-    // Interface Metotları
+    // --- INTERFACE METOTLARI (Depo sınıfı için gerekli) ---
     @Override
     public boolean kaydet() { return true; }
 
@@ -77,10 +65,10 @@ public abstract class Ogrenci extends Kisiler implements Kaydedilebilir {
     @Override
     public boolean guncelle() { return true; }
 
-    // Getterlar
+    // --- GETTER METOTLARI (DosyaIslemleri için gerekli) ---
     public String getOgrenciNo() { return ogrenciNo; }
+
     public String getBolum() { return bolum; }
 
-    // DÜZELTME: Object yerine int döndürmeli
     public int getNotOrtalamasi() { return notOrtalamasi; }
 }
