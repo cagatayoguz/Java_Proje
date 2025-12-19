@@ -15,8 +15,12 @@ import java.util.List;
 
 public class AkademisyenListeGUI extends JFrame {
 
-    // Tabloyu filtrelemek için gerekli araç
     private TableRowSorter<DefaultTableModel> sorter;
+    private JTable table;
+    private DefaultTableModel model;
+
+    // Hoca nesnelerini burada tutuyoruz ki butonla erişebilelim
+    private List<OgretimUyesi> hocaListesi;
 
     public AkademisyenListeGUI() {
         setTitle("Akademik Kadro");
@@ -33,107 +37,101 @@ public class AkademisyenListeGUI extends JFrame {
         topPanel.setBackground(new Color(248, 249, 250));
         topPanel.setBorder(new EmptyBorder(20, 30, 20, 30));
 
-        // Başlık
         JLabel lblTitle = new JLabel("Akademik Personel Listesi");
         lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 24));
-        lblTitle.setForeground(new Color(33, 37, 41));
         topPanel.add(lblTitle, BorderLayout.WEST);
 
-        // Arama Kısmı (Sağ Tarafta)
+        // Arama Kısmı
         JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         searchPanel.setBackground(new Color(248, 249, 250));
-
-        JLabel lblAra = new JLabel("İsimle Ara: ");
-        lblAra.setFont(new Font("Segoe UI", Font.BOLD, 14));
-
         JTextField txtAra = new JTextField(15);
-        txtAra.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        txtAra.setBorder(BorderFactory.createCompoundBorder(
-                new LineBorder(Color.LIGHT_GRAY, 1),
-                new EmptyBorder(5, 5, 5, 5)
-        ));
-
-        searchPanel.add(lblAra);
+        searchPanel.add(new JLabel("İsimle Ara: "));
         searchPanel.add(txtAra);
         topPanel.add(searchPanel, BorderLayout.EAST);
-
         mainPanel.add(topPanel, BorderLayout.NORTH);
 
         // --- 2. TABLO KISMI ---
-
         String[] kolonlar = {"Unvan", "Ad Soyad", "Uzmanlık Alanı", "E-Posta"};
-        DefaultTableModel model = new DefaultTableModel(kolonlar, 0) {
+        model = new DefaultTableModel(kolonlar, 0) {
             @Override
             public boolean isCellEditable(int row, int column) { return false; }
         };
 
-        // Verileri Yükle
-        List<OgretimUyesi> hocalar = AkademisyenVerisi.getAkademisyenListesi();
-        for (OgretimUyesi hoca : hocalar) {
-            Object[] satir = {
+        // Verileri Çek ve Listeye Ata
+        hocaListesi = AkademisyenVerisi.getAkademisyenListesi();
+
+        // Tabloyu Doldur
+        for (OgretimUyesi hoca : hocaListesi) {
+            model.addRow(new Object[]{
                     hoca.getUnvan(),
-                    hoca.getAd() + " " + hoca.getSoyad(),
+                    hoca.tamAdGetir(),
                     hoca.getUzmanlikAlani(),
                     hoca.getEposta()
-            };
-            model.addRow(satir);
+            });
         }
 
-        JTable table = new JTable(model);
-
-        // --- SIRALAMA VE FİLTRELEME (GENERIC KULLANIMI) ---
+        table = new JTable(model);
         sorter = new TableRowSorter<>(model);
         table.setRowSorter(sorter);
 
-        // Arama Kutusu Dinleyicisi (Her tuşa basıldığında çalışır)
+        // Tablo Tasarımı
+        table.setRowHeight(30);
+        table.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        table.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 14));
+
+        JScrollPane scrollPane = new JScrollPane(table);
+        scrollPane.setBorder(new EmptyBorder(10, 30, 10, 30));
+        scrollPane.getViewport().setBackground(Color.WHITE);
+        mainPanel.add(scrollPane, BorderLayout.CENTER);
+
+        // Arama Fonksiyonu
         txtAra.getDocument().addDocumentListener(new DocumentListener() {
             public void insertUpdate(DocumentEvent e) { filtrele(); }
             public void removeUpdate(DocumentEvent e) { filtrele(); }
             public void changedUpdate(DocumentEvent e) { filtrele(); }
-
             private void filtrele() {
                 String text = txtAra.getText();
-                if (text.trim().length() == 0) {
-                    sorter.setRowFilter(null);
-                } else {
-                    // (?i) büyük/küçük harf duyarsız arama yapar. 1. sütun (Ad Soyad) taranır.
-                    try {
-                        sorter.setRowFilter(RowFilter.regexFilter("(?i)" + text, 1));
-                    } catch (Exception ex) {
-                        // Regex hatası olursa yoksay
-                    }
-                }
+                if (text.trim().length() == 0) sorter.setRowFilter(null);
+                else sorter.setRowFilter(RowFilter.regexFilter("(?i)" + text, 1));
             }
         });
 
-        // Tablo Görsel Ayarları
-        table.setRowHeight(30);
-        table.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        table.setShowVerticalLines(false);
-        table.setIntercellSpacing(new Dimension(0, 0));
-        table.setSelectionBackground(new Color(232, 240, 254));
-        table.setSelectionForeground(Color.BLACK);
+        // --- 3. ALT PANEL (YAZDIR BUTONU BURADA) ---
+        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 30, 20));
+        bottomPanel.setBackground(Color.WHITE);
 
-        table.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 14));
-        table.getTableHeader().setBackground(new Color(240, 240, 240));
-
-        // Sütun Genişlikleri
-        table.getColumnModel().getColumn(0).setPreferredWidth(100);
-        table.getColumnModel().getColumn(1).setPreferredWidth(200);
-        table.getColumnModel().getColumn(2).setPreferredWidth(200);
-        table.getColumnModel().getColumn(3).setPreferredWidth(200);
-
-        JScrollPane scrollPane = new JScrollPane(table);
-        scrollPane.setBorder(new EmptyBorder(10, 30, 30, 30));
-        scrollPane.getViewport().setBackground(Color.WHITE);
-
-        mainPanel.add(scrollPane, BorderLayout.CENTER);
-
-        // Alt Bilgi (Toplam Sayı)
-        JLabel lblToplam = new JLabel("Toplam Akademisyen Sayısı: " + hocalar.size() + "   ");
-        lblToplam.setHorizontalAlignment(SwingConstants.RIGHT);
+        // Toplam Sayı
+        JLabel lblToplam = new JLabel("Toplam: " + hocaListesi.size() + " Akademisyen");
         lblToplam.setFont(new Font("Segoe UI", Font.ITALIC, 12));
-        lblToplam.setBorder(new EmptyBorder(5,0,10,30));
-        mainPanel.add(lblToplam, BorderLayout.SOUTH);
+
+        // İŞTE O BUTON: Yazdır
+        JButton btnYazdir = new JButton("Seçili Hocayı Yazdır (Konsol)");
+        btnYazdir.setBackground(new Color(13, 110, 253));
+        btnYazdir.setForeground(Color.WHITE);
+        btnYazdir.setFont(new Font("Segoe UI", Font.BOLD, 14));
+
+        // Butonun Olayı: ciktiAl() Metodunu Çağırmak
+        btnYazdir.addActionListener(e -> {
+            int viewRow = table.getSelectedRow();
+            if (viewRow == -1) {
+                JOptionPane.showMessageDialog(this, "Lütfen listeden bir hoca seçiniz.");
+                return;
+            }
+
+            // Sıralama/Filtreleme varsa gerçek satır numarasını bul
+            int modelRow = table.convertRowIndexToModel(viewRow);
+
+            // Listeden ilgili nesneyi al
+            OgretimUyesi secilenHoca = hocaListesi.get(modelRow);
+
+            // --- METODU BURADA KULLANIYORUZ ---
+            secilenHoca.ciktiAl();
+
+            JOptionPane.showMessageDialog(this, "Bilgiler aşağıdaki siyah ekrana (Konsol) yazdırıldı!");
+        });
+
+        bottomPanel.add(lblToplam);
+        bottomPanel.add(btnYazdir);
+        mainPanel.add(bottomPanel, BorderLayout.SOUTH);
     }
 }

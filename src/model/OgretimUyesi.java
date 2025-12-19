@@ -26,8 +26,4 @@ public class OgretimUyesi extends Akademisyen {
         return false;
     }
 
-    @Override
-    public void ciktiAl() {
-
-    }
 }
