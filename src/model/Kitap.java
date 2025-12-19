@@ -63,6 +63,7 @@ public class Kitap implements Yazdirilabilir, Kaydedilebilir {
     public String toString() { return kitapAdi; }
     // ... Diğer kodların en altına, class bitmeden hemen önceye ...
 
+
     @Override
     public void ciktiAl() {
         // Mevcut metodu kullanarak konsola havalı bir çıktı verir
