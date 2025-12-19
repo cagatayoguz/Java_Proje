@@ -150,7 +150,7 @@ public class BolumSecimGUI extends JFrame {
         // --- TIKLAMA OLAYI ---
         card.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                String dosyaYolu = "veriler/resimler/" + title + ".jpg";
+                String dosyaYolu = "veriler/resimler.pdf/" + title + ".jpg";
                 resimAc(dosyaYolu, title);
             }
 

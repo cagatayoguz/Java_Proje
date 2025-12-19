@@ -48,7 +48,7 @@ public class SinavBolumSecimGUI extends JFrame {
     private void dosyayiAc(String dosyaAdi) {
         try {
             // Sınav takvimleri için ayrı bir klasör yolu
-            String yol = "veriler/sinav_takvimleri/" + dosyaAdi;
+            String yol = "veriler/Sınıf/" + dosyaAdi;
             File dosya = new File(yol);
 
             if (dosya.exists()) {

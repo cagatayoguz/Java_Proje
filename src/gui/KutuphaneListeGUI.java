@@ -141,7 +141,7 @@ public class KutuphaneListeGUI extends JFrame {
             String hamDurum = k[3];
             String durumGoster = hamDurum;
 
-            if(hamDurum.toLowerCase().contains("usait") || hamDurum.toLowerCase().contains("üsait")) {
+            if(hamDurum.toLowerCase().contains("true") || hamDurum.toLowerCase().contains("true")) {
                 durumGoster = "Müsait";
             } else if(hamDurum.equals("Oduncte")) {
                 durumGoster = "Ödünçte";
