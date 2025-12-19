@@ -106,8 +106,8 @@ public class BolumSecimGUI extends JFrame {
             panel.add(createCard("Endüstri Mühendisliği", "Verimlilik, Yönetim...", "🏭"));
             panel.add(createCard("İnşaat Mühendisliği", "Yapı, Statik...", "🏗️"));
         }
-        else if (fakulte.contains("Tıp")) {
-            panel.add(createCard("Temel Tıp Bilimleri", "Anatomi, Fizyoloji...", "🧬"));
+        else if (fakulte.contains("Fen")) {
+            panel.add(createCard("Matematik", "Anatomi, Fizyoloji...", "🧬"));
             panel.add(createCard("Cerrahi Tıp Bilimleri", "Genel Cerrahi...", "🏥"));
         }
         else if (fakulte.contains("Eğitim")) {

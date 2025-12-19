@@ -27,8 +27,7 @@ public class KutuphaneServisi {
                     kitapKatalogu.put(k.getIsbn(), k);
                     // Varsayılan formatta kaydet
                     String durum = k.isMusaitMi() ? "Musait" : "Oduncte";
-                    DosyaIslemleri.kitapEkle(k.getKitapAdi(), k.getYazarAdi(), k.getIsbn(), durum);
-                }
+                    DosyaIslemleri.kitapEkle(k.getKitapAdi(), k.getYazarAdi(), k.getIsbn(), durum);                }
             } else {
                 // Dosyadan verileri oku
                 for (String[] veri : dosyaVerileri) {

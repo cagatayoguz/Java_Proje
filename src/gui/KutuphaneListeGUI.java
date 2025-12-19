@@ -17,7 +17,6 @@ public class KutuphaneListeGUI extends JFrame {
     private JTable table;
     private TableRowSorter<DefaultTableModel> sorter;
 
-    // Renk Paleti
     private final Color BG_COLOR = new Color(248, 249, 250);
     private final Color ACCENT_BLUE = new Color(13, 110, 253);
 
@@ -31,12 +30,11 @@ public class KutuphaneListeGUI extends JFrame {
         mainPanel.setBackground(BG_COLOR);
         setContentPane(mainPanel);
 
-        // --- 1. ÜST BAŞLIK ve ARAMA ---
+        // --- 1. ÜST PANEL ---
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(BG_COLOR);
         headerPanel.setBorder(new EmptyBorder(30, 40, 20, 40));
 
-        // Başlıklar
         JPanel titlePanel = new JPanel(new GridLayout(2, 1));
         titlePanel.setBackground(BG_COLOR);
         JLabel lblTitle = new JLabel("Kütüphane Arşivi");
@@ -47,7 +45,6 @@ public class KutuphaneListeGUI extends JFrame {
         titlePanel.add(lblTitle);
         titlePanel.add(lblSub);
 
-        // Arama Çubuğu
         JTextField txtAra = new JTextField(20);
         txtAra.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         txtAra.setBorder(BorderFactory.createCompoundBorder(
@@ -67,8 +64,7 @@ public class KutuphaneListeGUI extends JFrame {
         headerPanel.add(searchPanel, BorderLayout.SOUTH);
         mainPanel.add(headerPanel, BorderLayout.NORTH);
 
-        // --- 2. TABLO TASARIMI ---
-        // Yeni yapıya uygun sütunlar (Yıl eklendi)
+        // --- 2. TABLO ---
         String[] kolonlar = {"Kitap Adı", "Yazar", "ISBN", "Durum", "Hangi tarihe kadar ödünç alındı"};
         model = new DefaultTableModel(kolonlar, 0) {
             @Override
@@ -83,12 +79,10 @@ public class KutuphaneListeGUI extends JFrame {
         table.setShowVerticalLines(false);
         table.setIntercellSpacing(new Dimension(0, 0));
 
-        // Tablo Başlığı
         table.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 14));
         table.getTableHeader().setBackground(Color.WHITE);
         table.getTableHeader().setBorder(new LineBorder(new Color(230,230,230)));
 
-        // Sıralama ve Filtreleme
         sorter = new TableRowSorter<>(model);
         table.setRowSorter(sorter);
 
@@ -97,10 +91,8 @@ public class KutuphaneListeGUI extends JFrame {
         scrollPane.setBorder(new EmptyBorder(0, 40, 0, 40));
         mainPanel.add(scrollPane, BorderLayout.CENTER);
 
-        // Verileri Yükle
         verileriYukle();
 
-        // Arama Fonksiyonu
         txtAra.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
@@ -110,7 +102,7 @@ public class KutuphaneListeGUI extends JFrame {
             }
         });
 
-        // --- 3. ALT AKSİYON BUTONLARI ---
+        // --- 3. ALT BUTONLAR ---
         JPanel footerPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 20, 30));
         footerPanel.setBackground(BG_COLOR);
         footerPanel.setBorder(new EmptyBorder(0, 40, 0, 40));
@@ -139,17 +131,21 @@ public class KutuphaneListeGUI extends JFrame {
 
     private void verileriYukle() {
         model.setRowCount(0);
-        // Yeni metodumuz kitaplariOkuDetayli'yi kullanıyoruz
         List<String[]> kitaplar = DosyaIslemleri.kitaplariOkuDetayli();
 
         for (String[] k : kitaplar) {
-            String durumGoster = k[3];
-            // Durum metnini güzelleştir
-            if(k[3].equals("Bekliyor")) durumGoster = "Onay Bekliyor";
-            else if(k[3].equals("Oduncte")) durumGoster = "Ödünçte";
-            else if(k[3].equals("Müsait")) durumGoster = "Müsait";
+            String hamDurum = k[3];
+            String durumGoster = hamDurum;
 
-            // Tabloya 5 veri ekliyoruz (Ad, Yazar, ISBN, Durum, Yıl)
+            // Görsel düzeltme: Musait -> Müsait
+            if(hamDurum.equalsIgnoreCase("Musait") || hamDurum.equalsIgnoreCase("Müsait")) {
+                durumGoster = "Müsait";
+            } else if(hamDurum.equals("Bekliyor")) {
+                durumGoster = "Onay Bekliyor";
+            } else if(hamDurum.equals("Oduncte")) {
+                durumGoster = "Ödünçte";
+            }
+
             model.addRow(new Object[]{k[0], k[1], k[2], durumGoster, k[4]});
         }
     }
@@ -162,8 +158,10 @@ public class KutuphaneListeGUI extends JFrame {
         String durum = (String) model.getValueAt(modelRow, 3);
         String isbn = (String) model.getValueAt(modelRow, 2);
 
-        if (!durum.equals("Müsait")) {
-            JOptionPane.showMessageDialog(this, "Bu kitap şu an müsait değil.");
+        // --- HATA ÇÖZÜMÜ BURADA ---
+        // Hem "Müsait" hem de "Musait" yazısını kabul edecek şekilde esnetildi
+        if (!durum.equalsIgnoreCase("Müsait") && !durum.equalsIgnoreCase("Musait")) {
+            JOptionPane.showMessageDialog(this, "Bu kitap şu an müsait değil (" + durum + ").");
             return;
         }
 
@@ -185,7 +183,7 @@ public class KutuphaneListeGUI extends JFrame {
         String isbn = (String) model.getValueAt(modelRow, 2);
         String durum = (String) model.getValueAt(modelRow, 3);
 
-        if (durum.equals("Müsait")) {
+        if (durum.equalsIgnoreCase("Müsait") || durum.equalsIgnoreCase("Musait")) {
             JOptionPane.showMessageDialog(this, "Bu kitap zaten kütüphanede.");
             return;
         }
