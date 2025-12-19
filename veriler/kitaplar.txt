@@ -1,11 +1,11 @@
-Suç ve Ceza,Dostoyevski,978-605-7798-01-1,Oduncte,31.12.2025,-
+Suç ve Ceza,Dostoyevski,978-605-7798-01-1,Müsait,-,-
 Kürk Mantolu Madonna,Sabahattin Ali,978-975-07-2720-0,Oduncte,15.01.2026,-
 1984,George Orwell,978-975-07-3531-1,Müsait,-,-
 Sefiller,Victor Hugo,978-605-360-951-4,Oduncte,-,-
 Nutuk,Mustafa Kemal Atatürk,978-975-16-1681-3,Müsait,-,-
-Tutunamayanlar,Oğuz Atay,978-975-07-0683-0,Oduncte,02.01.2026,çağatay oğuz
-Çalıkuşu,Reşat Nuri Güntekin,978-975-10-2187-5,Oduncte,02.01.2026,çağatay oğuz
-İnce Memed,Yaşar Kemal,978-975-08-0775-9,Oduncte,05.03.2026,-
+Tutunamayanlar,Oğuz Atay,978-975-07-0683-0,Müsait,-,-
+Çalıkuşu,Reşat Nuri Güntekin,978-975-10-2187-5,Müsait,-,-
+İnce Memed,Yaşar Kemal,978-975-08-0775-9,Müsait,-,-
 Saatleri Ayarlama Enstitüsü,Ahmet Hamdi Tanpınar,978-975-08-0056-9,Musait,-,-
 Medeniyetler Çatışması,Samuel P. Huntington,978-605-4764-58-1,Musait,-,-
 Hayvan Çiftliği,George Orwell,978-975-07-2723-1,Oduncte,20.01.2026,-
