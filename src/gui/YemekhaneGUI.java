@@ -32,8 +32,8 @@ public class YemekhaneGUI extends JFrame {
         gridPanel.setBackground(new Color(248, 249, 250));
         gridPanel.setBorder(new EmptyBorder(20, 40, 20, 40));
 
-        gridPanel.add(createYemekhaneCard("Merkez Yemekhane", "Kapasite: 800 | Doluluk: %45", "veriler/resimler/merkez.jpg"));
-        gridPanel.add(createYemekhaneCard("Dökümhane Yemekhane", "Kapasite: 600 | Doluluk: %70", "veriler/resimler/dokumhane.jpg"));
+        gridPanel.add(createYemekhaneCard("Merkez Yemekhane", "Kapasite: 800 | Doluluk: %45", "C:\\Users\\cagat\\Downloads\\Merkez yemekhane.jpg"));
+        gridPanel.add(createYemekhaneCard("Dökümhane Yemekhane", "Kapasite: 600 | Doluluk: %70", "C:\\Users\\cagat\\Downloads\\dökümhane yemekhane.jpg"));
 
         mainPanel.add(gridPanel, BorderLayout.CENTER);
 

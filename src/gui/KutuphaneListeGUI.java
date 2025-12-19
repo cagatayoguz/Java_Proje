@@ -66,7 +66,6 @@ public class KutuphaneListeGUI extends JFrame {
         mainPanel.add(headerPanel, BorderLayout.NORTH);
 
         // --- 2. TABLO ---
-        // Sütunlar: 0:Ad, 1:Yazar, 2:ISBN, 3:Durum, 4:Tarih, 5:Alan Kişi
         String[] kolonlar = {"Kitap Adı", "Yazar", "ISBN", "Durum", "İade Tarihi", "Alan Öğrenci"};
 
         model = new DefaultTableModel(kolonlar, 0) {
@@ -96,7 +95,7 @@ public class KutuphaneListeGUI extends JFrame {
 
         verileriYukle();
 
-        // Arama Kutusu Dinleyici
+        // Arama Kutusu
         txtAra.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
@@ -111,8 +110,8 @@ public class KutuphaneListeGUI extends JFrame {
         footerPanel.setBackground(BG_COLOR);
         footerPanel.setBorder(new EmptyBorder(0, 40, 0, 40));
 
-        JButton btnTalep = createActionButton("Ödünç Al", ACCENT_BLUE);
-        JButton btnIade = createActionButton("İade Ver", new Color(25, 135, 84));
+        JButton btnTalep = createActionButton("Ödünç Ver", ACCENT_BLUE);
+        JButton btnIade = createActionButton("İade Al", new Color(25, 135, 84));
 
         btnTalep.addActionListener(e -> talepEtAction());
         btnIade.addActionListener(e -> iadeEtAction());
@@ -147,8 +146,7 @@ public class KutuphaneListeGUI extends JFrame {
                 durumGoster = "Ödünçte";
             }
 
-            // k[4] -> Tarih, k[5] -> Alan Kişi
-            // Eğer kitap müsaitse tarih ve alan kişiyi tire (-) gösterelim ki temiz dursun
+            // Müsaitse tarih ve kişiyi gösterme
             String tarih = (k.length > 4 && !durumGoster.equals("Müsait")) ? k[4] : "-";
             String alanKisi = (k.length > 5 && !durumGoster.equals("Müsait")) ? k[5] : "-";
 
@@ -156,7 +154,7 @@ public class KutuphaneListeGUI extends JFrame {
         }
     }
 
-    // --- 1. ÖDÜNÇ VERME İŞLEMİ (Öğrenci No ile) ---
+    // --- 1. ÖDÜNÇ VERME ---
     private void talepEtAction() {
         int row = table.getSelectedRow();
         if (row == -1) { JOptionPane.showMessageDialog(this, "Lütfen bir kitap seçiniz."); return; }
@@ -166,7 +164,6 @@ public class KutuphaneListeGUI extends JFrame {
         String isbn = (String) model.getValueAt(modelRow, 2);
         String kitapAdi = (String) model.getValueAt(modelRow, 0);
 
-        // Kitap zaten verilmişse uyarı ver
         if (!durum.equalsIgnoreCase("Müsait") && !durum.equalsIgnoreCase("Musait")) {
             JOptionPane.showMessageDialog(this, "Bu kitap şu an müsait değil (" + durum + ").");
             return;
@@ -175,8 +172,6 @@ public class KutuphaneListeGUI extends JFrame {
         String ogrenciNo = JOptionPane.showInputDialog(this, "Ödünç alacak öğrencinin numarasını giriniz:");
 
         if (ogrenciNo != null && !ogrenciNo.trim().isEmpty()) {
-
-            // Öğrenci listesini çek ve kontrol et
             Map<String, String[]> ogrenciler = DosyaIslemleri.ogrencileriOku();
 
             if (ogrenciler.containsKey(ogrenciNo)) {
@@ -184,27 +179,19 @@ public class KutuphaneListeGUI extends JFrame {
                 String tamAd = bilgiler[0] + " " + bilgiler[1];
 
                 try {
-                    // Dosyaya yaz (Bu metot otomatik tarih atıyor)
                     DosyaIslemleri.kitapTalepEt(isbn, tamAd);
-
-                    JOptionPane.showMessageDialog(this,
-                            "İşlem Başarılı!\n" +
-                                    "Kitap: " + kitapAdi + "\n" +
-                                    "Alan: " + tamAd + "\n" +
-                                    "Teslim Tarihi: Otomatik (2 Hafta Sonrası)");
-
-                    verileriYukle(); // Tabloyu yenile ki tarih görünsün
+                    JOptionPane.showMessageDialog(this, "İşlem Başarılı!\nKitap: " + kitapAdi + "\nAlan: " + tamAd);
+                    verileriYukle();
                 } catch (Exception ex) {
-                    ex.printStackTrace();
                     JOptionPane.showMessageDialog(this, "Hata: " + ex.getMessage());
                 }
             } else {
-                JOptionPane.showMessageDialog(this, "HATA: Bu numaraya kayıtlı öğrenci bulunamadı!", "Hata", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Öğrenci bulunamadı!", "Hata", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
 
-    // --- 2. İADE ALMA İŞLEMİ (Öğrenci No ile Doğrulama) ---
+    // --- 2. İADE ALMA (HATA DÜZELTİLEN KISIM) ---
     private void iadeEtAction() {
         int row = table.getSelectedRow();
         if (row == -1) { JOptionPane.showMessageDialog(this, "Lütfen iade edilecek kitabı seçiniz."); return; }
@@ -213,53 +200,59 @@ public class KutuphaneListeGUI extends JFrame {
         String kitapAdi = (String) model.getValueAt(modelRow, 0);
         String isbn = (String) model.getValueAt(modelRow, 2);
         String durum = (String) model.getValueAt(modelRow, 3);
-        String kitapAlanKisi = (String) model.getValueAt(modelRow, 5); // Tabloda yazan isim
+        String kitapAlanKisi = (String) model.getValueAt(modelRow, 5); // Tablodaki İsim
 
-        // Kitap zaten kütüphanedeyse işlem yapma
         if (durum.equalsIgnoreCase("Müsait") || durum.equalsIgnoreCase("Musait")) {
-            JOptionPane.showMessageDialog(this, "Bu kitap zaten kütüphanede (Müsait).");
+            JOptionPane.showMessageDialog(this, "Bu kitap zaten kütüphanede.");
             return;
         }
 
-        // İade edecek kişinin numarasını sor
         String ogrenciNo = JOptionPane.showInputDialog(this, "İade eden öğrencinin numarasını giriniz:");
 
         if (ogrenciNo != null && !ogrenciNo.trim().isEmpty()) {
-
-            // Numaradan isimi bul
             Map<String, String[]> ogrenciler = DosyaIslemleri.ogrencileriOku();
 
             if (ogrenciler.containsKey(ogrenciNo)) {
                 String[] bilgiler = ogrenciler.get(ogrenciNo);
-                String iadeEdenIsim = bilgiler[0] + " " + bilgiler[1]; // Girilen numaraya ait isim
+                String iadeEdenIsim = bilgiler[0] + " " + bilgiler[1];
 
-                // Tablodaki isim ile Girilen numaranın ismi eşleşiyor mu?
-                // Not: trim() boşlukları siler, equalsIgnoreCase büyük/küçük harfe takılmaz
-                if (kitapAlanKisi.trim().equalsIgnoreCase(iadeEdenIsim.trim())) {
+                // İsimler Uyuşuyor mu?
+                boolean isimlerAyni = kitapAlanKisi.trim().equalsIgnoreCase(iadeEdenIsim.trim());
 
+                if (isimlerAyni) {
+                    // 1. Durum: İsimler Eşleşti -> Direkt Onay İste
                     int onay = JOptionPane.showConfirmDialog(this,
-                            "İade Eden: " + iadeEdenIsim + "\nKitap: " + kitapAdi + "\n\nOnaylıyor musunuz?",
+                            "Kitap: " + kitapAdi + "\nİade Eden: " + iadeEdenIsim + "\n\nOnaylıyor musunuz?",
                             "İade Onayı", JOptionPane.YES_NO_OPTION);
 
-                    if (onay == JOptionPane.YES_OPTION) {
-                        try {
-                            DosyaIslemleri.kitapIadeEt(isbn);
-                            JOptionPane.showMessageDialog(this, "İade alındı. Kitap rafa kaldırıldı.");
-                            verileriYukle();
-                        } catch (Exception ex) { ex.printStackTrace(); }
-                    }
+                    if (onay == JOptionPane.YES_OPTION) iadeyiTamamla(isbn);
 
                 } else {
-                    JOptionPane.showMessageDialog(this,
-                            "HATA: İade yetkisi yok!\n\n" +
-                                    "Bu kitabı alan: " + kitapAlanKisi + "\n" +
-                                    "Girilen numara sahibi: " + iadeEdenIsim,
-                            "Güvenlik Uyarısı", JOptionPane.ERROR_MESSAGE);
+                    // 2. Durum: İsimler Eşleşmedi -> Yöneticiye Sor (ZORLA İADE)
+                    // Kullanıcının işi tıkanmasın diye "Yine de iade al" seçeneği sunuyoruz.
+                    String hataMesaji = "<html><body style='width: 300px'>" +
+                            "<h3 style='color:red'>⚠️ İsim Uyuşmazlığı</h3>" +
+                            "<p><b>Kitabı Alan:</b> " + kitapAlanKisi + "</p>" +
+                            "<p><b>Numara Sahibi:</b> " + iadeEdenIsim + "</p><br>" +
+                            "<p>Kişiler farklı görünüyor. <b>Yine de iade almak istiyor musunuz?</b></p>" +
+                            "</body></html>";
+
+                    int zorlaOnay = JOptionPane.showConfirmDialog(this, hataMesaji, "Güvenlik Uyarısı", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
+
+                    if (zorlaOnay == JOptionPane.YES_OPTION) iadeyiTamamla(isbn);
                 }
 
             } else {
-                JOptionPane.showMessageDialog(this, "Bu numaraya ait öğrenci kaydı bulunamadı.", "Hata", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Öğrenci bulunamadı.", "Hata", JOptionPane.ERROR_MESSAGE);
             }
         }
+    }
+
+    private void iadeyiTamamla(String isbn) {
+        try {
+            DosyaIslemleri.kitapIadeEt(isbn);
+            JOptionPane.showMessageDialog(this, "İade başarıyla alındı.");
+            verileriYukle();
+        } catch (Exception ex) { ex.printStackTrace(); }
     }
 }

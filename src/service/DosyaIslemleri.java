@@ -1,6 +1,8 @@
 package service;
 
 import java.io.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class DosyaIslemleri {
@@ -10,7 +12,7 @@ public class DosyaIslemleri {
     private static final String SPOR_DOSYASI = "veriler/spor_uyelikleri.txt";
     private static final String DUYURU_DOSYASI = "veriler/duyurular.txt";
 
-    // --- ÖĞRENCİ İŞLEMLERİ ---
+    // --- ÖĞRENCİ İŞLEMLERİ (AYNEN KORUNDU) ---
     public static void ogrenciEkle(String ad, String soyad, String bolum, String no, String sinif, String ort) throws IOException {
         File file = new File(OGRENCI_DOSYASI);
         if (file.getParentFile() != null) file.getParentFile().mkdirs();
@@ -61,26 +63,19 @@ public class DosyaIslemleri {
         }
     }
 
-    // --- KİTAP İŞLEMLERİ ---
+    // --- KİTAP İŞLEMLERİ (DÜZELTİLDİ) ---
 
-    // ... Sınıfın diğer kısıımları aynı ...
-
-    // YIL PARAMETRESİ KALDIRILDI
     public static void kitapEkle(String KitapAdi, String yazar, String isbn, String durum) throws IOException {
         File file = new File(KITAP_DOSYASI);
         if (file.getParentFile() != null) file.getParentFile().mkdirs();
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, true))) {
-            // Sadece 4 veri yazıyoruz
-            writer.write(KitapAdi + "," + yazar + "," + isbn + "," + durum);
+            // Kitabı 6 sütunlu olarak başlatıyoruz (Tarih ve Alan Kişi boş)
+            writer.write(KitapAdi + "," + yazar + "," + isbn + "," + durum + ",-,-");
             writer.newLine();
         }
     }
 
-    // ... Diğer metotlar ...
-
-    // *** BU METODU EKLEDİK (HATAYI ÇÖZEN KISIM) ***
-    // Eski kodlar "kitaplariOku" diye çağırıyorsa, onları yeni metoda yönlendiriyoruz.
     public static List<String[]> kitaplariOku() {
         return kitaplariOkuDetayli();
     }
@@ -99,9 +94,11 @@ public class DosyaIslemleri {
                     String yazar = parts[1];
                     String isbn = parts[2];
                     String durum = (parts.length > 3) ? parts[3] : "Müsait";
-                    String yil = (parts.length > 4) ? parts[4] : "-";
+                    // Tarih ve Alan Kişi (yoksa tire)
+                    String tarih = (parts.length > 4) ? parts[4] : "-";
+                    String alan = (parts.length > 5) ? parts[5] : "-";
 
-                    list.add(new String[]{ad, yazar, isbn, durum, yil});
+                    list.add(new String[]{ad, yazar, isbn, durum, tarih, alan});
                 }
             }
         } catch (IOException e) { e.printStackTrace(); }
@@ -115,23 +112,45 @@ public class DosyaIslemleri {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, false))) {
             for (String[] k : kitaplar) {
                 if (!k[2].equals(silinecekISBN)) {
-                    writer.write(k[0] + "," + k[1] + "," + k[2] + "," + k[3] + "," + k[4]);
+                    // Silinmeyenleri yazarken 6 sütunu da koru
+                    String d3 = (k.length > 3) ? k[3] : "Müsait";
+                    String d4 = (k.length > 4) ? k[4] : "-";
+                    String d5 = (k.length > 5) ? k[5] : "-";
+                    writer.write(k[0] + "," + k[1] + "," + k[2] + "," + d3 + "," + d4 + "," + d5);
                     writer.newLine();
                 }
             }
         }
     }
 
+    // GÜNCELLENEN TALEP METODU: İsmi ve Tarihi Kaydeder
     public static void kitapTalepEt(String isbn, String ogrenciAd) throws IOException {
         List<String[]> kitaplar = kitaplariOkuDetayli();
         File file = new File(KITAP_DOSYASI);
 
+        // Otomatik 2 hafta sonrasını hesapla
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+        String tarihStr = LocalDate.now().plusWeeks(2).format(format);
+
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, false))) {
             for (String[] k : kitaplar) {
-                if (k[2].equals(isbn)) {
-                    k[3] = "Bekliyor";
+                // Diziyi 6 elemanlı yap (Eğer eski veri kısaysa)
+                if (k.length < 6) {
+                    String[] yeniK = new String[6];
+                    System.arraycopy(k, 0, yeniK, 0, k.length);
+                    if(yeniK[4] == null) yeniK[4] = "-";
+                    if(yeniK[5] == null) yeniK[5] = "-";
+                    k = yeniK;
                 }
-                writer.write(k[0] + "," + k[1] + "," + k[2] + "," + k[3] + "," + k[4]);
+
+                if (k[2].equals(isbn)) {
+                    k[3] = "Oduncte";  // Durumu "Ödünçte" yap
+                    k[4] = tarihStr;   // İade Tarihini yaz
+                    k[5] = ogrenciAd;  // Alan Öğrenciyi yaz
+                }
+
+                // Dosyaya Yaz
+                writer.write(k[0] + "," + k[1] + "," + k[2] + "," + k[3] + "," + k[4] + "," + k[5]);
                 writer.newLine();
             }
         }
@@ -143,16 +162,26 @@ public class DosyaIslemleri {
 
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, false))) {
             for (String[] k : kitaplar) {
+                if (k.length < 6) {
+                    String[] yeniK = new String[6];
+                    System.arraycopy(k, 0, yeniK, 0, k.length);
+                    if(yeniK[4] == null) yeniK[4] = "-";
+                    if(yeniK[5] == null) yeniK[5] = "-";
+                    k = yeniK;
+                }
+
                 if (k[2].equals(isbn)) {
                     k[3] = "Müsait";
+                    k[4] = "-"; // Tarihi temizle
+                    k[5] = "-"; // İsmi temizle
                 }
-                writer.write(k[0] + "," + k[1] + "," + k[2] + "," + k[3] + "," + k[4]);
+                writer.write(k[0] + "," + k[1] + "," + k[2] + "," + k[3] + "," + k[4] + "," + k[5]);
                 writer.newLine();
             }
         }
     }
 
-    // --- DUYURU İŞLEMLERİ ---
+    // --- DUYURU İŞLEMLERİ (AYNEN KORUNDU) ---
     public static void duyuruEkle(String tarih, String baslik, String icerik) throws IOException {
         File file = new File(DUYURU_DOSYASI);
         if (file.getParentFile() != null) file.getParentFile().mkdirs();
@@ -196,7 +225,7 @@ public class DosyaIslemleri {
         }
     }
 
-    // --- SPOR SALONU İŞLEMLERİ ---
+    // --- SPOR SALONU İŞLEMLERİ (AYNEN KORUNDU) ---
     public static void sporUyelikEkle(String ad, String no, String tip, String ucret, String durum) throws IOException {
         File file = new File(SPOR_DOSYASI);
         if (file.getParentFile() != null) file.getParentFile().mkdirs();

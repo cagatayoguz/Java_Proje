@@ -7,11 +7,12 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.io.IOException;
 
 public class BolumSecimGUI extends JFrame {
 
     public BolumSecimGUI(String fakulteAdi) {
-        setTitle(fakulteAdi + " - Bölümler");
+        setTitle(fakulteAdi + " - Ders Programları");
         setSize(900, 600);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -20,7 +21,7 @@ public class BolumSecimGUI extends JFrame {
         mainPanel.setBackground(new Color(248, 249, 250));
         setContentPane(mainPanel);
 
-        // --- 1. Başlık ve Üst Panel ---
+        // --- 1. Başlık ---
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(new Color(248, 249, 250));
         headerPanel.setBorder(new EmptyBorder(30, 40, 10, 40));
@@ -30,95 +31,121 @@ public class BolumSecimGUI extends JFrame {
         lblTitle.setForeground(new Color(33, 37, 41));
         headerPanel.add(lblTitle, BorderLayout.WEST);
 
-        // --- ÖZELLEŞTİRİLMİŞ GERİ DÖN BUTONU ---
         JButton btnBack = new JButton("← Geri Dön");
-        btnBack.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        btnBack.setForeground(new Color(100, 100, 100)); // Koyu gri yazı
-        btnBack.setBackground(Color.WHITE); // Beyaz arka plan
-        btnBack.setFocusPainted(false);
-        btnBack.setCursor(new Cursor(Cursor.HAND_CURSOR));
-
-        // Şık Çerçeve ve İç Boşluk
-        btnBack.setBorder(BorderFactory.createCompoundBorder(
-                new LineBorder(new Color(220, 220, 220), 1, true), // Yuvarlatılmış ince gri kenar
-                new EmptyBorder(8, 20, 8, 20) // İç dolgu (Padding)
-        ));
-
-        // Hover Efekti (Üzerine gelince)
-        btnBack.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                btnBack.setBackground(new Color(240, 240, 240)); // Hafif grileşir
-                btnBack.setForeground(new Color(50, 50, 50)); // Yazı koyulaşır
-                btnBack.setBorder(BorderFactory.createCompoundBorder(
-                        new LineBorder(new Color(180, 180, 180), 1, true),
-                        new EmptyBorder(8, 20, 8, 20)
-                ));
-            }
-
-            @Override
-            public void mouseExited(MouseEvent e) {
-                btnBack.setBackground(Color.WHITE); // Normale dön
-                btnBack.setForeground(new Color(100, 100, 100));
-                btnBack.setBorder(BorderFactory.createCompoundBorder(
-                        new LineBorder(new Color(220, 220, 220), 1, true),
-                        new EmptyBorder(8, 20, 8, 20)
-                ));
-            }
-        });
-
+        styleButton(btnBack);
         btnBack.addActionListener(e -> this.dispose());
         headerPanel.add(btnBack, BorderLayout.EAST);
 
         mainPanel.add(headerPanel, BorderLayout.NORTH);
 
-        // --- 2. Bölümleri Listeleme (Grid) ---
-        // ScrollPane ekleyelim ki bölüm sayısı artarsa taşmasın
-        JPanel gridPanel = new JPanel(new GridLayout(0, 2, 20, 20)); // 2 Sütun, Satır otomatik
+        // --- 2. Bölüm Listesi ---
+        JPanel gridPanel = new JPanel(new GridLayout(0, 2, 20, 20));
         gridPanel.setBackground(new Color(248, 249, 250));
         gridPanel.setBorder(new EmptyBorder(20, 40, 40, 40));
 
-        // Fakülteye göre bölümleri ekle
+        // Fakülteye göre özel metodları çağır
         bolumleriYukle(fakulteAdi, gridPanel);
 
-        // Grid Paneli yukarı yaslamak için wrapper panel
         JPanel wrapperPanel = new JPanel(new BorderLayout());
         wrapperPanel.setBackground(new Color(248, 249, 250));
         wrapperPanel.add(gridPanel, BorderLayout.NORTH);
 
         JScrollPane scrollPane = new JScrollPane(wrapperPanel);
-        scrollPane.setBorder(null); // Çerçevesiz scroll
-        scrollPane.getVerticalScrollBar().setUnitIncrement(16); // Hızlı kaydırma
-
+        scrollPane.setBorder(null);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
         mainPanel.add(scrollPane, BorderLayout.CENTER);
     }
 
     private void bolumleriYukle(String fakulte, JPanel panel) {
+
+        // ---------------------------------------------------------
+        // TEKNOLOJİ FAKÜLTESİ
+        // ---------------------------------------------------------
+        // ---------------------------------------------------------
+        // TEKNOLOJİ FAKÜLTESİ
+        // ---------------------------------------------------------
         if (fakulte.contains("Teknoloji")) {
-            panel.add(createCard("Yazılım Mühendisliği", "Uygulama, Geliştirme...", "💾"));
-            panel.add(createCard("Mekatronik Mühendisliği", "Robotik, Otomasyon...", "🤖"));
-            panel.add(createCard("Enerji Sistemleri Müh.", "Yenilenebilir Enerji...", "⚡"));
-            panel.add(createCard("Otomotiv Mühendisliği", "Araç Teknolojileri...", "🚗"));
+
+            panel.add(createCard("Yazılım Mühendisliği", "Uygulama, Geliştirme...", "💾", () -> {
+                dosyaAc("C:\\Users\\cagat\\Downloads\\teknoloji bilgisayar.xls");
+            }));
+
+            // MEKATRONİK YERİNE ELEKTRİK-ELEKTRONİK GELDİ
+            panel.add(createCard("Elektrik-Elektronik Müh.", "Devreler, Sinyaller...", "⚡", () -> {
+                dosyaAc("C:\\Users\\cagat\\Downloads\\teknoloji elektrik.pdf");
+            }));
+
+            // ENERJİ LOGOSU PİL OLDU (🔋)
+            panel.add(createCard("Enerji Sistemleri Müh.", "Yenilenebilir Enerji...", "🔋", () -> {
+                dosyaAc("C:\\Users\\cagat\\Downloads\\Enerji Sistemleri teknoloji.xlsx");
+            }));
+
+            panel.add(createCard("Otomotiv Mühendisliği", "Araç Teknolojileri...", "🚗", () -> {
+                dosyaAc("C:\\Users\\cagat\\Downloads\\teknoloji otomotiv.pdf");
+            }));
         }
+
+        // ---------------------------------------------------------
+        // MÜHENDİSLİK FAKÜLTESİ
+        // ---------------------------------------------------------
         else if (fakulte.contains("Mühendislik")) {
-            panel.add(createCard("Bilgisayar Mühendisliği", "Donanım, Algoritma...", "💻"));
-            panel.add(createCard("Elektrik-Elektronik Müh.", "Devreler, Sinyaller...", "⚡"));
-            panel.add(createCard("Endüstri Mühendisliği", "Verimlilik, Yönetim...", "🏭"));
-            panel.add(createCard("İnşaat Mühendisliği", "Yapı, Statik...", "🏗️"));
+
+            panel.add(createCard("Bilgisayar Mühendisliği", "Donanım, Algoritma...", "💻", () -> {
+                dosyaAc("C:\\Users\\cagat\\Downloads\\Mühendislik Bilgisayar.pdf"); // Mesela bu PDF olabilir
+            }));
+
+            panel.add(createCard("Elektrik-Elektronik Müh.", "Devreler...", "⚡", () -> {
+                dosyaAc("C:\\Users\\cagat\\Downloads\\mühendislik elektrik.pdf");
+            }));
+
+            panel.add(createCard("Endüstri Mühendisliği", "Verimlilik...", "🏭", () -> {
+                dosyaAc("C:\\Users\\cagat\\Downloads\\Mühendislik endüstri.pdf");
+            }));
+
+            panel.add(createCard("İnşaat Mühendisliği", "Yapı, Statik...", "🏗️", () -> {
+                dosyaAc("C:\\Users\\cagat\\Downloads\\İNŞAAT MÜHENDİSLİĞİ Mühendislik.pdf");
+            }));
         }
-        else if (fakulte.contains("Fen")) { // TIP YERİNE FEN GELDİ
-            panel.add(createCard("Matematik", "Analiz, Cebir...", "📐"));
-            panel.add(createCard("Fizik", "Kuantum, Optik...", "⚛️"));
-            panel.add(createCard("Kimya", "Organik, Analitik...", "🧪"));
+
+        // ---------------------------------------------------------
+        // FEN FAKÜLTESİ
+        // ---------------------------------------------------------
+        else if (fakulte.contains("Fen")) {
+
+            panel.add(createCard("Matematik", "Analiz, Cebir...", "📐", () -> {
+                dosyaAc("C:\\Users\\cagat\\Downloads\\mat ders pro.pdf");
+            }));
+
+            panel.add(createCard("Fizik", "Kuantum, Optik...", "⚛️", () -> {
+                dosyaAc("C:\\Users\\cagat\\Downloads\\fizik ders pro.pdf");
+            }));
+
+            panel.add(createCard("Kimya", "Organik, Analitik...", "🧪", () -> {
+                dosyaAc("C:\\Users\\cagat\\Downloads\\kimya ders pro.pdf");
+            }));
         }
+
+        // ---------------------------------------------------------
+        // EĞİTİM FAKÜLTESİ
+        // ---------------------------------------------------------
         else if (fakulte.contains("Eğitim")) {
-            panel.add(createCard("Sınıf Öğretmenliği", "İlköğretim...", "abc"));
-            panel.add(createCard("İngilizce Öğretmenliği", "Dil Eğitimi...", "🇬🇧"));
-            panel.add(createCard("Rehberlik ve PDR", "Psikolojik Danışma...", "🧠"));
+
+            panel.add(createCard("Sınıf Öğretmenliği", "İlköğretim...", "abc", () -> {
+                dosyaAc("C:\\Users\\cagat\\Downloads\\Sınıf öğretmenliği.pdf");
+            }));
+
+            panel.add(createCard("İngilizce Öğretmenliği", "Dil Eğitimi...", "🇬🇧", () -> {
+                dosyaAc("C:\\Users\\cagat\\Downloads\\İngilizce Öğretmenliği.pdf");
+            }));
+
+            panel.add(createCard("Rehberlik ve PDR", "Psikolojik Danışma...", "🧠", () -> {
+                dosyaAc("C:\\Users\\cagat\\Downloads\\REHBERLİK VE PSİKOLOJİK DANIŞMANLIK.pdf");
+            }));
         }
     }
 
-    private JPanel createCard(String title, String desc, String icon) {
+    // --- KART OLUŞTURMA METODU ---
+    private JPanel createCard(String title, String desc, String icon, Runnable onClickAction) {
         JPanel card = new JPanel(new BorderLayout());
         card.setBackground(Color.WHITE);
         card.setBorder(BorderFactory.createCompoundBorder(
@@ -126,7 +153,7 @@ public class BolumSecimGUI extends JFrame {
                 new EmptyBorder(20, 20, 20, 20)
         ));
         card.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        card.setPreferredSize(new Dimension(300, 100)); // Kart yüksekliğini sabitle
+        card.setPreferredSize(new Dimension(300, 100));
 
         JLabel lblIcon = new JLabel(icon);
         lblIcon.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 32));
@@ -147,46 +174,60 @@ public class BolumSecimGUI extends JFrame {
         textPanel.add(lblD);
         card.add(textPanel, BorderLayout.CENTER);
 
-        // --- TIKLAMA OLAYI ---
         card.addMouseListener(new MouseAdapter() {
+            @Override
             public void mouseClicked(MouseEvent e) {
-                String dosyaYolu = "veriler/resimler/" + title + ".jpg";
-                resimAc(dosyaYolu, title);
+                if (onClickAction != null) onClickAction.run();
             }
-
             public void mouseEntered(MouseEvent e) {
-                // Mavi Vurgu
                 card.setBorder(new LineBorder(new Color(13, 110, 253), 1));
                 lblT.setForeground(new Color(13, 110, 253));
             }
             public void mouseExited(MouseEvent e) {
-                // Normale Dön
                 card.setBorder(new LineBorder(new Color(230, 230, 230), 1));
                 lblT.setForeground(new Color(33, 37, 41));
             }
         });
-
         return card;
     }
 
-    private void resimAc(String path, String baslik) {
-        JDialog d = new JDialog(this, baslik + " - Haftalık Ders Programı", true);
-        d.setSize(700, 900);
+    // --- GENEL DOSYA AÇMA METODU (YENİ) ---
+    // Bu metot dosya ne olursa olsun (PDF, JPG, TXT) sistemin varsayılan uygulamasıyla açar.
+    private void dosyaAc(String path) {
+        File file = new File(path);
 
-        JLabel l = new JLabel();
-        l.setHorizontalAlignment(SwingConstants.CENTER);
-
-        File f = new File(path);
-        if(f.exists()) {
-            ImageIcon icon = new ImageIcon(new ImageIcon(path).getImage().getScaledInstance(680, 850, Image.SCALE_SMOOTH));
-            l.setIcon(icon);
-        } else {
-            l.setText("<html><center><h2>" + baslik + "</h2><br>Ders programı görseli henüz yüklenmemiş.<br>(" + path + ")</center></html>");
-            l.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        if (!file.exists()) {
+            JOptionPane.showMessageDialog(this,
+                    "Dosya bulunamadı!\nAranan yol: " + file.getAbsolutePath(),
+                    "Hata", JOptionPane.ERROR_MESSAGE);
+            return;
         }
 
-        d.add(new JScrollPane(l));
-        d.setLocationRelativeTo(this);
-        d.setVisible(true);
+        try {
+            // Masaüstü özelliği destekleniyor mu kontrol et
+            if (Desktop.isDesktopSupported()) {
+                Desktop desktop = Desktop.getDesktop();
+                if (file.exists()) {
+                    desktop.open(file); // BİLGİSAYARIN KENDİ UYGULAMASIYLA AÇAR
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "Sisteminiz dosya açma işlemini desteklemiyor.", "Hata", JOptionPane.WARNING_MESSAGE);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Dosya açılırken hata oluştu: " + e.getMessage());
+        }
+    }
+
+    private void styleButton(JButton btn) {
+        btn.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        btn.setForeground(new Color(100, 100, 100));
+        btn.setBackground(Color.WHITE);
+        btn.setFocusPainted(false);
+        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btn.setBorder(BorderFactory.createCompoundBorder(
+                new LineBorder(new Color(220, 220, 220), 1, true),
+                new EmptyBorder(8, 20, 8, 20)
+        ));
     }
 }
