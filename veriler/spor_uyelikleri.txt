@@ -1,0 +1,3 @@
+a,b,Aylık Üyelik,500 TL,Aktif
+Berkay,2418,Yıllık Üyelik,5000 TL,Aktif
+Emre Sekizsu,2419,Aylık Üyelik,500 TL,Aktif
