@@ -30,7 +30,7 @@ public class MedicoGUI extends JFrame {
 
         // --- VERİLER (Bölüm, İsim, Durum, SAATLER) ---
         String[][] doktorlar = {
-                {"Dahiliye", "Dr. Ahmet Yılmaz", "Müsait", "09:00 - 16:00"},
+                {"Dahiliye", "Dr. Ahmet Yılmaz", "Müsait", "09:00 - 17:00"},
                 {"Dahiliye", "Dr. Sevgi Kaya", "İzinli", "09:00 - 16:00"},
                 {"Diş Hekimliği", "Dt. Mehmet Öz", "Müsait", "08:30 - 17:00"},
                 {"Psikoloji", "Psk. Canan Çelik", "Dolu", "10:00 - 15:00"},
