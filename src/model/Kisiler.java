@@ -27,7 +27,8 @@ public abstract class Kisiler implements Yazdirilabilir {
 
     @Override
     public String bilgiRaporuOlustur() {
-        return tamAdGetir();
+        // Artık sadece isim değil, "Pozisyon: Ad Soyad" şeklinde daha dolu bir bilgi döner
+        return "[" + getPozisyon() + "] " + tamAdGetir();
     }
 
     // Bu metodu burada tanımlıyoruz, alt sınıflar otomatik sahip oluyor
@@ -35,6 +36,9 @@ public abstract class Kisiler implements Yazdirilabilir {
     public void ciktiAl() {
         System.out.println("------------------------------------");
         System.out.println("👤 KİŞİ BİLGİ KARTI");
+        System.out.print(getPozisyon()+" ");
+        System.out.print(getAd()+" ");
+        System.out.print(getSoyad());
         System.out.println(this.detayliRaporOlustur());
         System.out.println("------------------------------------");
     }

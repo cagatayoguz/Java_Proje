@@ -2,7 +2,6 @@ package service;
 
 import java.io.*;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import exception.OgrenciBulunamadiException;
 
@@ -96,12 +95,18 @@ public class DosyaIslemleri {
     }
 
     // 2. ADIM: ONAYLAMA (Durumu "Oduncte" yapar, Tarihi BUGÜN atar)
+    // 2. ADIM: ONAYLAMA (Durumu "Oduncte" yapar, Tarihi BUGÜN atar)
     public static void kitapOnayla(String isbn) throws IOException {
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-        String tarihStr = LocalDate.now().plusWeeks(2).format(format); // 2 Hafta süre
+
+        // --- BURASI DEĞİŞTİ: ARTIK SENİN FORMATLAYICI SINIFIN KULLANILIYOR ---
+        // LocalDate ile 2 hafta sonrasını hesaplıyoruz
+        LocalDate iadeTarihi = LocalDate.now().plusWeeks(2);
+
+        // TarihIslemleri sınıfındaki statik metodu çağırarak String'e çeviriyoruz
+        String tarihStr = TarihIslemleri.tarihFormatla(iadeTarihi);
+        // -------------------------------------------------------------------
 
         // İsmi dosyadan bulup korumamız lazım ama burada basitçe o anki satırı güncelleyen yardımcı metod kullanıyoruz
-        // Not: İsmi korumak için yardımcı metoda null geçmiyoruz, mevcut ismi koru diyoruz.
         degistirVeKaydet(isbn, "Oduncte", tarihStr, null);
     }
 

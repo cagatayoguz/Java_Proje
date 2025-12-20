@@ -13,7 +13,7 @@ Cesur Yeni Dünya,Aldous Huxley,978-975-07-1604-4,Musait,-,-
 Yüz Yıllık Yalnızlık,Gabriel García Márquez,978-975-07-2826-9,Musait,-,-
 Bülbülü Öldürmek,Harper Lee,978-975-07-2172-7,Oduncte,28.01.2026,-
 Dönüşüm,Franz Kafka,978-975-07-1011-0,Musait,-,-
-Anna Karenina,Lev Tolstoy,978-975-08-0897-8,Bekliyor,-,çağatay oğuz
+Anna Karenina,Lev Tolstoy,978-975-08-0897-8,Oduncte,03.01.2026,çağatay oğuz
 Savaş ve Barış,Lev Tolstoy,978-975-08-0898-5,Oduncte,12.02.2026,-
 Beyaz Diş,Jack London,978-975-08-0877-0,Musait,-,-
 Martin Eden,Jack London,978-975-08-0845-9,Musait,-,-
@@ -45,6 +45,6 @@ Oblomov,Ivan Gonçarov,978-975-07-2550-0,Musait,-,-
 Gurur ve Ceza,Jane Austen,978-975-07-2600-0,Musait,-,-
 İnsan Ne ile Yaşar,Lev Tolstoy,978-975-07-2650-0,Musait,-,-
 Körlük,José Saramago,978-975-07-2700-0,Musait,-,-
-a,a,f,Müsait,-,-
-a,a,y,Müsait,-,-
 Suç ve Ceza,Dostoyevski,978-605-7798-01-1,Müsait,-,-
+af,fg,yr,Müsait,-,-
+a,s,d,Müsait,-,-

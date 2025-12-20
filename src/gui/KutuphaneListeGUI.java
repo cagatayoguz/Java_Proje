@@ -197,10 +197,19 @@ public class KutuphaneListeGUI extends JFrame {
                         String yazarAdi = (String) model.getValueAt(modelRow, 1);
 
                         // Geçici bir Kitap nesnesi oluşturuyoruz (Durumu: Müsait = true yapıyoruz)
-                        model.Kitap geciciKitap = new model.Kitap(kitapAdi, yazarAdi, isbn, true);
+                        if (onay == JOptionPane.YES_OPTION) {
+                            try {
+                                // --- DEĞİŞİKLİK BURADA ---
+                                // Artık doğrudan yazdığın o metodu çağırıyoruz:
+                                service.DosyaIslemleri.kitapIadeEt(isbn);
 
-                        // Interface metodunu çağırıyoruz: "Kendini Güncelle"
-                        geciciKitap.guncelle();
+                                JOptionPane.showMessageDialog(this, "✅ İade başarıyla alındı.");
+                                verileriYukle(); // Listeyi ve sayacı güncelle
+                            } catch (Exception ex) {
+                                ex.printStackTrace();
+                                JOptionPane.showMessageDialog(this, "Hata: " + ex.getMessage());
+                            }
+                        }
 
                         JOptionPane.showMessageDialog(this, "✅ İade başarıyla alındı.");
                         verileriYukle(); // Listeyi yenile

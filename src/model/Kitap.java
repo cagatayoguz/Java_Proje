@@ -19,7 +19,6 @@ public class Kitap implements Yazdirilabilir, Kaydedilebilir {
     }
 
     // --- GETTERLAR ---
-    public String getKitapAdi() { return kitapAdi; }
     public String getYazarAdi() { return yazarAdi; }
     public String getIsbn() { return isbn; }
     public boolean isMusaitMi() { return musaitMi; }
@@ -64,12 +63,15 @@ public class Kitap implements Yazdirilabilir, Kaydedilebilir {
     // ... Diğer kodların en altına, class bitmeden hemen önceye ...
 
 
+    // Kitap.java içindeki ciktiAl metodu
     @Override
     public void ciktiAl() {
-        // Mevcut metodu kullanarak konsola havalı bir çıktı verir
         System.out.println("------------------------------------");
-        System.out.println("🖨️ YAZDIRMA İŞLEMİ BAŞLATILDI");
-        System.out.println(this.detayliRaporOlustur()); // Kendi detay metodunu çağırır
+        System.out.println("📚 KİTAP BİLGİ KARTI"); // Başlığı düzelttik
+        // Zaten detayliRaporOlustur() metodun isim ve ISBN döndürüyor,
+        // yazar adını da ekleyerek tek satırda tertemiz yazalım:
+        System.out.println("Kitap Detayı: " + this.detayliRaporOlustur() + " (Yazar: " + yazarAdi + ")");
+        System.out.println("Durum: " + (musaitMi ? "Rafta" : "Ödünç Verildi"));
         System.out.println("------------------------------------");
     }
 }
