@@ -8,6 +8,7 @@ import java.util.List;
 // Ödev Gereksinimi: Generic Sınıf <T>
 public class Depo<T extends Kaydedilebilir> {
 
+    
     private List<T> liste;
 
     public Depo() {

@@ -24,4 +24,18 @@ public class OgretimUyesi extends Akademisyen {
         return false;
     }
 
+    @Override
+    public boolean kaydet() {
+        return false;
+    }
+
+    @Override
+    public boolean sil(String id) {
+        return false;
+    }
+
+    @Override
+    public boolean guncelle() {
+        return false;
+    }
 }

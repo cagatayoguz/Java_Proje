@@ -1,6 +1,6 @@
 package model;
 
-public abstract class Kisiler implements Yazdirilabilir {
+public abstract class Kisiler implements Yazdirilabilir,Kaydedilebilir {
 
     private String ad;
     private String soyad;
