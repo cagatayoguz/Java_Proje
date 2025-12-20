@@ -16,7 +16,7 @@ public class BilgiMenuGUI extends JFrame {
 
     public BilgiMenuGUI() {
         setTitle("Bilgi Sistemi");
-        setSize(1000, 700); // Daha fazla içerik olduğu için geniş ekran
+        setSize(1000, 800); // Biraz daha uzattık
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
@@ -24,7 +24,7 @@ public class BilgiMenuGUI extends JFrame {
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.setBackground(BG_COLOR);
 
-        // İçerik çok olduğu için Scroll (Kaydırma) ekleyelim
+        // İçerik çok olduğu için Scroll (Kaydırma)
         JScrollPane scrollPane = new JScrollPane(mainPanel);
         scrollPane.setBorder(null);
         scrollPane.getVerticalScrollBar().setUnitIncrement(16); // Kaydırma hızı
@@ -48,8 +48,8 @@ public class BilgiMenuGUI extends JFrame {
         mainPanel.add(headerPanel, BorderLayout.NORTH);
 
         // --- 2. Kartlar Alanı (Grid) ---
-        // 4 Satır, 2 Sütun, Aralarda 25px boşluk
-        JPanel gridPanel = new JPanel(new GridLayout(4, 2, 25, 25));
+        // DİKKAT: (0, 2) yaptık. Yani "Satır sınırı yok, Sütun 2 olsun"
+        JPanel gridPanel = new JPanel(new GridLayout(0, 2, 25, 25));
         gridPanel.setBackground(BG_COLOR);
         gridPanel.setBorder(new EmptyBorder(10, 50, 50, 50));
 
@@ -116,9 +116,8 @@ public class BilgiMenuGUI extends JFrame {
                 "📢",
                 e -> new DuyuruListeGUI().setVisible(true)
         ));
-        // ... (Önceki kodlar: Duyurular vs.)
 
-        // 9. Not Hesaplama (YENİ)
+        // 9. Not Hesaplama
         gridPanel.add(createCard(
                 "Not Hesapla",
                 "Vize/Final ortalaması ve GNO hesapla.",
@@ -126,7 +125,7 @@ public class BilgiMenuGUI extends JFrame {
                 e -> new NotHesaplamaGUI().setVisible(true)
         ));
 
-        // 10. Kampüs Haritası (YENİ)
+        // 10. Kampüs Haritası
         gridPanel.add(createCard(
                 "Kampüs Haritası",
                 "Yerleşke planı ve bina konumları.",
@@ -134,7 +133,13 @@ public class BilgiMenuGUI extends JFrame {
                 e -> new HaritaGUI().setVisible(true)
         ));
 
-        // ... (Sonraki kodlar: mainPanel.add(gridPanel... )
+        // --- YENİ EKLENEN MEDICO KARTI ---
+        gridPanel.add(createCard(
+                "Medico (Sağlık)",
+                "Doktorlar, poliklinikler ve randevu.",
+                "🏥",
+                e -> new MedicoGUI().setVisible(true)
+        ));
 
         mainPanel.add(gridPanel, BorderLayout.CENTER);
 
@@ -178,7 +183,7 @@ public class BilgiMenuGUI extends JFrame {
                 new EmptyBorder(20, 25, 20, 25)
         ));
         card.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        // Boyut sabitleme (Grid içinde düzgün durması için)
+        // Boyut sabitleme
         card.setPreferredSize(new Dimension(300, 100));
 
         // Sol İkon
