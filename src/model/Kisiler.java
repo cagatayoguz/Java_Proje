@@ -1,5 +1,4 @@
 package model;
-
 public abstract class Kisiler implements Yazdirilabilir {
 
     private String ad;
