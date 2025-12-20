@@ -2,6 +2,7 @@ package model;
 
 import service.DosyaIslemleri;
 import java.io.IOException;
+import exception.GecersizGirisBilgisiException;
 
 public class Kitap implements Yazdirilabilir, Kaydedilebilir {
 
@@ -24,6 +25,12 @@ public class Kitap implements Yazdirilabilir, Kaydedilebilir {
     // --- GETTERLAR ---
     public String getYazarAdi() { return yazarAdi; }
     public String getIsbn() { return isbn; }
+    public void setIsbn(String isbn) throws GecersizGirisBilgisiException {
+        if (isbn == null || isbn.trim().length() < 3) {
+            throw new GecersizGirisBilgisiException("ISBN numarası çok kısa! En az 3 karakter olmalıdır.");
+        }
+        this.isbn = isbn;
+    }
     public boolean isMusaitMi() { return musaitMi; }
     public void setMusaitMi(boolean musaitMi) { this.musaitMi = musaitMi; }
 

@@ -1,5 +1,7 @@
 package model;
 
+import exception.GecersizGirisBilgisiException;
+
 public abstract class Akademisyen extends Kisiler {
 
     private String unvan;
@@ -16,5 +18,11 @@ public abstract class Akademisyen extends Kisiler {
 
     // Getterlar
     public String getUnvan() { return unvan; }
+    public void setUnvan(String unvan) throws GecersizGirisBilgisiException {
+        if (unvan == null || unvan.trim().isEmpty()) {
+            throw new GecersizGirisBilgisiException("Akademisyen unvanı boş bırakılamaz!");
+        }
+        this.unvan = unvan;
+    }
     public String getUzmanlikAlani() { return uzmanlikAlani; }
 }

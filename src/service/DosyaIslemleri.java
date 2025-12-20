@@ -264,4 +264,26 @@ public class DosyaIslemleri {
 
         return ogrenciler.get(ogrNo);
     }
+
+    public static boolean dosyaKontrolTest(String dosyaYolu) {
+        java.io.FileReader fr = null;
+        try {
+            fr = new java.io.FileReader(dosyaYolu);
+            int i = fr.read(); // İlk karakteri okumayı dene
+            return i != -1;
+        } catch (java.io.IOException e) {
+            System.out.println("Dosya okuma testi hatası: " + e.getMessage());
+            return false;
+        } finally {
+            // ZORUNLULUK: Finally bloğu kullanımı
+            try {
+                if (fr != null) {
+                    fr.close(); // Dosyayı manuel kapatıyoruz
+                    System.out.println("Kaynaklar finally bloğunda serbest bırakıldı.");
+                }
+            } catch (java.io.IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
 }

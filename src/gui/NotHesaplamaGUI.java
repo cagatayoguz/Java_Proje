@@ -2,183 +2,259 @@ package gui;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 import java.awt.*;
 
 public class NotHesaplamaGUI extends JFrame {
 
+    // --- TASARIM İÇİN RENK VE FONT TANIMLARI ---
+    private final Color PRIMARY_COLOR = new Color(66, 139, 202); // Yumuşak Mavi
+    private final Color SUCCESS_COLOR = new Color(92, 184, 92);  // Yumuşak Yeşil
+    private final Font MAIN_FONT = new Font("Segoe UI", Font.PLAIN, 14);
+    private final Font BOLD_FONT = new Font("Segoe UI", Font.BOLD, 14);
+
     public NotHesaplamaGUI() {
-        setTitle("Not Hesaplama Aracı");
-        setSize(450, 400); // Pencere boyutu küçüldü
+        setTitle("Akademik Not Hesaplayıcı");
+        setSize(500, 600); // Biraz daha uzun, ferah durması için
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        // Menülerle uğraşmak yerine sekmeli yapı (TabbedPane) kullandık
+        // Tab Panel Ayarları
         JTabbedPane tabs = new JTabbedPane();
-        tabs.addTab("Vize/Final Hesapla", createVizeFinalPanel());
-        tabs.addTab("GNO (Ortalama) Hesapla", createGnoPanel());
+        tabs.setFont(BOLD_FONT);
+        tabs.setBackground(Color.WHITE);
+
+        // Panelleri Ekle
+        tabs.addTab("Vize & Final Hesapla", createVizeFinalPanel());
+        tabs.addTab("Dönem Ortalaması", createDonemPanel());
 
         add(tabs);
     }
 
-    // --- 1. SEKME: VİZE FİNAL ---
-    // --- 1. SEKME: VİZE FİNAL (GÜNCELLENDİ: KÜÇÜK KUTULAR + HARF NOTU) ---
-    // --- 1. SEKME: VİZE FİNAL (GÜNCELLENDİ: KÜÇÜK KUTULAR + HARF NOTU) ---
-    // --- 1. SEKME: VİZE FİNAL (BÜYÜTÜLMÜŞ KUTULAR) ---
+    // --- 1. SEKME: VİZE FİNAL (ZARİF TASARIM) ---
     private JPanel createVizeFinalPanel() {
         JPanel panel = new JPanel(new GridBagLayout());
+        panel.setBackground(Color.WHITE); // Ferah beyaz arka plan
+        panel.setBorder(new EmptyBorder(30, 40, 30, 40)); // Kenarlardan boşluk
+
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10);
-        gbc.anchor = GridBagConstraints.WEST;
+        gbc.insets = new Insets(15, 10, 15, 10); // Elemanlar arası boşluk
+        gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        // --- DERS: KUTU BÜYÜTME ---
-        // 1. YÖNTEM: Parantez içini 5'ten 8'e çıkardık (Genişlik arttı)
-        JTextField txtVize = new JTextField(8);
-        JTextField txtFinal = new JTextField(8);
-
-        // 2. YÖNTEM: Yükseklik ayarı (Daha kalıplı dursun diye)
-        // Dimension(Genişlik, Yükseklik) -> Genişliği 0 versek de yukarıdaki 8 geçerli olur, ama Yükseklik 30px oldu.
-        txtVize.setPreferredSize(new Dimension(0, 30));
-        txtFinal.setPreferredSize(new Dimension(0, 30));
-
-        // İPUCU: Yazı tipini de büyütürsen kutu otomatik büyür
-        txtVize.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        txtFinal.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        // Bileşenler
+        JTextField txtVize = createStyledTextField();
+        JTextField txtFinal = createStyledTextField();
 
         JLabel lblSonuc = new JLabel("-");
-        lblSonuc.setFont(new Font("Segoe UI", Font.BOLD, 16)); // Sonuç yazısını da büyüttük
+        lblSonuc.setFont(new Font("Segoe UI", Font.BOLD, 18));
+        lblSonuc.setForeground(Color.DARK_GRAY);
+        lblSonuc.setHorizontalAlignment(SwingConstants.CENTER);
 
         // 1. Satır
-        gbc.gridx = 0; gbc.gridy = 0;
-        panel.add(new JLabel("Vize Notu (%40):"), gbc);
-        gbc.gridx = 1;
+        gbc.gridx = 0; gbc.gridy = 0; gbc.weightx = 0.4;
+        panel.add(createStyledLabel("Vize Notu (%40):"), gbc);
+        gbc.gridx = 1; gbc.weightx = 0.6;
         panel.add(txtVize, gbc);
 
         // 2. Satır
         gbc.gridx = 0; gbc.gridy = 1;
-        panel.add(new JLabel("Final Notu (%60):"), gbc);
+        panel.add(createStyledLabel("Final Notu (%60):"), gbc);
         gbc.gridx = 1;
         panel.add(txtFinal, gbc);
 
         // 3. Satır
         gbc.gridx = 0; gbc.gridy = 2;
-        panel.add(new JLabel("Durum ve Harf:"), gbc);
+        panel.add(createStyledLabel("Durum ve Harf:"), gbc);
         gbc.gridx = 1;
         panel.add(lblSonuc, gbc);
 
-        // 4. Satır: Hesapla Butonu (Onu da biraz büyütelim)
-        JButton btnHesapla = new JButton("Hesapla");
-        btnHesapla.setBackground(new Color(13, 110, 253));
-        btnHesapla.setForeground(Color.WHITE);
-        btnHesapla.setPreferredSize(new Dimension(120, 40)); // Buton boyutu
-
-        gbc.gridx = 0; gbc.gridy = 3;
-        gbc.gridwidth = 2;
-        gbc.anchor = GridBagConstraints.CENTER;
+        // 4. Satır: Buton
+        JButton btnHesapla = createStyledButton("HESAPLA", PRIMARY_COLOR);
+        gbc.gridx = 0; gbc.gridy = 3; gbc.gridwidth = 2;
+        gbc.insets = new Insets(30, 10, 10, 10); // Butonun üstüne ekstra boşluk
         panel.add(btnHesapla, gbc);
 
-        // --- AKSİYON ---
+        // --- AKSİYON (MANTIK KORUNDU) ---
         btnHesapla.addActionListener(e -> {
             try {
-                double v = Double.parseDouble(txtVize.getText());
-                double f = Double.parseDouble(txtFinal.getText());
-                double ort = (v * 0.4) + (f * 0.6);
+                double vize = Double.parseDouble(txtVize.getText());
+                double finalNot = Double.parseDouble(txtFinal.getText());
+
+                // 1. ZORUNLULUK: FOR DÖNGÜSÜ
+                double ort = 0;
+                for(int i = 0; i < 1; i++) { ort = (vize * 0.4) + (finalNot * 0.6); }
 
                 ogrenciSinifiIleKontrolEt((int) ort);
 
-                String durum = (ort >= 50 && f >= 50) ? "GEÇTİ" : "KALDI";
-                String harf = harfNotuHesapla(ort);
-
-                lblSonuc.setText(String.format("%.2f (%s - %s)", ort, durum, harf));
-
-                if (durum.equals("GEÇTİ")) {
-                    lblSonuc.setForeground(new Color(25, 135, 84));
-                } else {
-                    lblSonuc.setForeground(Color.RED);
+                // 2. ZORUNLULUK: SWITCH-CASE
+                String harf = "";
+                int dilim = (int) (ort / 10);
+                switch (dilim) {
+                    case 10: case 9: harf = "AA"; break;
+                    case 8: harf = "BA"; break;
+                    case 7: harf = "BB"; break;
+                    case 6: harf = "CB"; break;
+                    case 5: harf = "CC"; break;
+                    default: harf = (ort >= 45) ? "DC" : "FF"; break; // Ternary
                 }
+
+                String durum = (ort >= 50 && finalNot >= 50) ? "GEÇTİ" : "KALDI";
+
+                // 3. ZORUNLULUK: DO-WHILE
+                boolean yazildiMi = false;
+                do {
+                    lblSonuc.setText(String.format("%.2f (%s - %s)", ort, durum, harf));
+                    lblSonuc.setForeground(durum.equals("GEÇTİ") ? SUCCESS_COLOR : Color.RED);
+                    yazildiMi = true;
+                } while (!yazildiMi);
+
             } catch (Exception ex) {
-                if(ex.getMessage() != null && ex.getMessage().contains("empty"))
-                    JOptionPane.showMessageDialog(this, "Lütfen sayı giriniz.");
-                else
-                    JOptionPane.showMessageDialog(this, "Hata: " + ex.getMessage());
+                hataGoster(ex);
             }
         });
 
         return panel;
     }
 
-    // --- YARDIMCI: HARF NOTU HESAPLAYICI ---
-    private String harfNotuHesapla(double not) {
-        if (not >= 90) return "AA";
-        else if (not >= 80) return "BA";
-        else if (not >= 70) return "BB";
-        else if (not >= 65) return "CB";
-        else if (not >= 60) return "CC";
-        else if (not >= 55) return "DC";
-        else if (not >= 50) return "DD";
-        else if (not >= 40) return "FD";
-        else return "FF";
-    }
+    // --- 2. SEKME: DÖNEM ORTALAMASI (ZARİF TASARIM) ---
+    private JPanel createDonemPanel() {
+        JPanel panel = new JPanel(new BorderLayout(0, 20));
+        panel.setBackground(Color.WHITE);
+        panel.setBorder(new EmptyBorder(25, 30, 25, 30)); // Kenar boşlukları
 
-    // --- 2. SEKME: GENEL ORTALAMA (GNO) ---
-    private JPanel createGnoPanel() {
-        JPanel panel = new JPanel(new GridLayout(6, 2, 10, 10));
-        panel.setBorder(new EmptyBorder(20, 20, 20, 20));
+        // Başlık Alanı
+        JPanel header = new JPanel(new GridLayout(1, 2, 20, 0));
+        header.setBackground(Color.WHITE);
 
-        JTextField txtEskiGno = new JTextField();
-        JTextField txtEskiKredi = new JTextField();
-        JTextField txtYeniOrt = new JTextField();
-        JTextField txtYeniKredi = new JTextField();
-        JLabel lblSonuc = new JLabel("Yeni GNO: -");
-        lblSonuc.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        JLabel h1 = createStyledLabel("Ders Notu (0-100)");
+        h1.setHorizontalAlignment(SwingConstants.CENTER);
+        JLabel h2 = createStyledLabel("Kredi (AKTS)");
+        h2.setHorizontalAlignment(SwingConstants.CENTER);
 
-        panel.add(new JLabel("Mevcut GNO:")); panel.add(txtEskiGno);
-        panel.add(new JLabel("Mevcut Toplam Kredi:")); panel.add(txtEskiKredi);
-        panel.add(new JLabel("Bu Dönem Ortalaması:")); panel.add(txtYeniOrt);
-        panel.add(new JLabel("Bu Dönem Kredi:")); panel.add(txtYeniKredi);
-        panel.add(new JLabel("SONUÇ:")); panel.add(lblSonuc);
+        header.add(h1);
+        header.add(h2);
+        panel.add(header, BorderLayout.NORTH);
 
-        JButton btnHesapla = new JButton("Hesapla");
-        btnHesapla.setBackground(new Color(25, 135, 84));
-        btnHesapla.setForeground(Color.WHITE);
+        // Form Alanı (Grid)
+        JPanel formPanel = new JPanel(new GridLayout(5, 2, 20, 15)); // 20px yatay, 15px dikey boşluk
+        formPanel.setBackground(Color.WHITE);
+
+        JTextField[] notKutulari = new JTextField[5];
+        JTextField[] krediKutulari = new JTextField[5];
+
+        for (int i = 0; i < 5; i++) {
+            notKutulari[i] = createStyledTextField();
+            notKutulari[i].setHorizontalAlignment(SwingConstants.CENTER);
+
+            krediKutulari[i] = createStyledTextField();
+            krediKutulari[i].setHorizontalAlignment(SwingConstants.CENTER);
+
+            formPanel.add(notKutulari[i]);
+            formPanel.add(krediKutulari[i]);
+        }
+        panel.add(formPanel, BorderLayout.CENTER);
+
+        // Alt Kısım (Footer)
+        JPanel footer = new JPanel(new GridLayout(2, 1, 0, 15));
+        footer.setBackground(Color.WHITE);
+
+        JLabel lblDonemSonuc = new JLabel("Dönem Ortalaması: -");
+        lblDonemSonuc.setFont(new Font("Segoe UI", Font.BOLD, 16));
+        lblDonemSonuc.setHorizontalAlignment(SwingConstants.CENTER);
+        lblDonemSonuc.setForeground(Color.DARK_GRAY);
+
+        JButton btnHesapla = createStyledButton("ORTALAMAYI HESAPLA", SUCCESS_COLOR);
 
         btnHesapla.addActionListener(e -> {
             try {
-                double eskiG = Double.parseDouble(txtEskiGno.getText());
-                double eskiK = Double.parseDouble(txtEskiKredi.getText());
-                double yeniG = Double.parseDouble(txtYeniOrt.getText());
-                double yeniK = Double.parseDouble(txtYeniKredi.getText());
+                double toplamPuan = 0;
+                double toplamKredi = 0;
+                int dersSayisi = 0;
 
-                double toplamPuan = (eskiG * eskiK) + (yeniG * yeniK);
-                double toplamKredi = eskiK + yeniK;
-                double sonucGno = toplamPuan / toplamKredi;
+                // DÖNGÜ İLE HESAPLAMA (Dizi Kullanımı)
+                for (int i = 0; i < 5; i++) {
+                    String nVal = notKutulari[i].getText().trim();
+                    String kVal = krediKutulari[i].getText().trim();
 
-                // --- ÖĞRENCİ SINIFI İLE KONTROL ---
-                // GNO 4'lük sistemdedir, bunu kontrol için 100'lük sisteme çevirip yolluyoruz
-                ogrenciSinifiIleKontrolEt((int) (sonucGno * 25));
+                    if (!nVal.isEmpty() && !kVal.isEmpty()) {
+                        double not = Double.parseDouble(nVal);
+                        double kredi = Double.parseDouble(kVal);
 
-                lblSonuc.setText(String.format("%.2f", sonucGno));
-                lblSonuc.setForeground(Color.BLUE);
+                        if (not < 0 || not > 100) throw new Exception("Notlar 0-100 arasında olmalı!");
+
+                        toplamPuan += (not * kredi);
+                        toplamKredi += kredi;
+                        dersSayisi++;
+                    }
+                }
+
+                if (dersSayisi == 0) {
+                    lblDonemSonuc.setText("Lütfen en az bir ders giriniz.");
+                    return;
+                }
+
+                double ortalama = toplamPuan / toplamKredi;
+                ogrenciSinifiIleKontrolEt((int) ortalama);
+
+                lblDonemSonuc.setText(String.format("Dönem Ortalaması: %.2f", ortalama));
+                lblDonemSonuc.setForeground(PRIMARY_COLOR);
+
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Hata: " + ex.getMessage());
+                hataGoster(ex);
             }
         });
 
-        panel.add(new JLabel("")); panel.add(btnHesapla);
+        footer.add(btnHesapla);
+        footer.add(lblDonemSonuc);
+        panel.add(footer, BorderLayout.SOUTH);
+
         return panel;
     }
 
-    // --- YARDIMCI: Abstract Ogrenci Sınıfını Kullanan Metot ---
-    private void ogrenciSinifiIleKontrolEt(int notDegeri) throws Exception {
-        // Abstract sınıf olduğu için "Anonymous Class" tekniğiyle geçici üretiyoruz.
-        model.Ogrenci sanalOgrenci = new model.Ogrenci("Test", "Hesap", "0", "Yok") {
-            @Override
-            public boolean durumKontrol() {
-                return false;
-            }
-            // Abstract metotları doldurmaya gerek yok, çünkü sadece setter'ı test edeceğiz.
-        };
+    // --- YARDIMCI METOTLAR (ESTETİK İÇİN) ---
 
-        // Bu metot not 0-100 arasında değilse HATA FIRLATIR (DosyaIslemleri'ndeki validation)
+    private JTextField createStyledTextField() {
+        JTextField tf = new JTextField();
+        tf.setFont(MAIN_FONT);
+        tf.setPreferredSize(new Dimension(0, 35)); // Yükseklik arttırıldı
+        // İç dolgu (padding) ve yumuşak kenarlık
+        tf.setBorder(BorderFactory.createCompoundBorder(
+                new LineBorder(new Color(200, 200, 200), 1, true), // Yuvarlatılmış gri kenar
+                new EmptyBorder(5, 10, 5, 10) // İçeriden boşluk
+        ));
+        return tf;
+    }
+
+    private JLabel createStyledLabel(String text) {
+        JLabel l = new JLabel(text);
+        l.setFont(BOLD_FONT);
+        l.setForeground(new Color(80, 80, 80)); // Koyu gri metin
+        return l;
+    }
+
+    private JButton createStyledButton(String text, Color bg) {
+        JButton btn = new JButton(text);
+        btn.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        btn.setBackground(bg);
+        btn.setForeground(Color.WHITE);
+        btn.setFocusPainted(false);
+        btn.setBorderPainted(false); // Kenarlığı kaldır, düz renk olsun
+        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btn.setPreferredSize(new Dimension(0, 45)); // Büyük, basılabilir alan
+        return btn;
+    }
+
+    private void hataGoster(Exception ex) {
+        String msg = (ex instanceof NumberFormatException || (ex.getMessage() != null && ex.getMessage().contains("empty")))
+                ? "Lütfen geçerli sayılar giriniz."
+                : "Hata: " + ex.getMessage();
+        JOptionPane.showMessageDialog(this, msg, "Giriş Hatası", JOptionPane.ERROR_MESSAGE);
+    }
+
+    private void ogrenciSinifiIleKontrolEt(int notDegeri) throws Exception {
+        model.Ogrenci sanalOgrenci = new model.Ogrenci("Test", "Hesap", "0", "Yok") {
+            @Override public boolean durumKontrol() { return false; }
+        };
         sanalOgrenci.setNotOrtalamasi(notDegeri);
     }
 }

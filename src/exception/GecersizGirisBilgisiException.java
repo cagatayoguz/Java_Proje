@@ -1,9 +1,5 @@
 package exception;
 
-/**
- * Bu sınıf, kullanıcı formlarda eksik veya hatalı bilgi girdiğinde
- * fırlatılacak olan özel hata sınıfıdır.
- */
 public class GecersizGirisBilgisiException extends Exception {
 
     // 1. Özel mesaj ile hata fırlatma (Örn: "Öğrenci No boş olamaz!")
