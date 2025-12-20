@@ -8,7 +8,7 @@ import java.util.List;
 // Ödev Gereksinimi: Generic Sınıf <T>
 public class Depo<T extends Kaydedilebilir> {
 
-    
+
     private List<T> liste;
 
     public Depo() {
@@ -17,6 +17,11 @@ public class Depo<T extends Kaydedilebilir> {
 
     public void ekle(T item) {
         liste.add(item);
+    }
+
+    public void ekle(List<T> topluListe) {
+        // Tek tek eklemek yerine koca listeyi ekler
+        this.liste.addAll(topluListe);
     }
 
     // Ödev Gereksinimi: Collections.sort kullanımı

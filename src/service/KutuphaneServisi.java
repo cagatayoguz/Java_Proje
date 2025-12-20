@@ -3,6 +3,7 @@ package service;
 import model.Kitap;
 import model.KitapBaslangicVerisi;
 import java.util.List;
+import java.util.ArrayList;
 
 public class KutuphaneServisi {
 
@@ -75,4 +76,16 @@ public class KutuphaneServisi {
     public List<Kitap> tumKitaplariGetir() {
         return kitapDeposu.getListe();
     }
+    public List<Kitap> tumKitaplariGetir(String yazarAdi) {
+        List<Kitap> tumu = kitapDeposu.getListe();
+        List<Kitap> filtreli = new ArrayList<>();
+
+        for (Kitap k : tumu) {
+            if (k.getYazarAdi().equalsIgnoreCase(yazarAdi)) {
+                filtreli.add(k);
+            }
+        }
+        return filtreli;
+    }
+
 }

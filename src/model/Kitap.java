@@ -17,7 +17,10 @@ public class Kitap implements Yazdirilabilir, Kaydedilebilir {
         this.isbn = isbn;         // Bu satır yoksa ISBN NULL olur
         this.musaitMi = musaitMi;
     }
-
+    // Kitap.java içine ekle:
+    public Kitap(String kitapAdi) {
+        this(kitapAdi, "Bilinmiyor", "0000", true); // Diğer değerleri varsayılan atar
+    }
     // --- GETTERLAR ---
     public String getYazarAdi() { return yazarAdi; }
     public String getIsbn() { return isbn; }

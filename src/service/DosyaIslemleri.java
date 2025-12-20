@@ -57,6 +57,11 @@ public class DosyaIslemleri {
         }
     }
 
+    public static void ogrenciSil(String ad, String soyad) throws IOException {
+        // Burada öğrenciyi numarası yerine Ad ve Soyadına göre bulup silen kod simülasyonu
+        System.out.println(ad + " " + soyad + " isimli öğrenci aranıyor ve siliniyor...");
+    }
+
     // --- KİTAP İŞLEMLERİ (TALEP VE ONAY SİSTEMİ) ---
 
     public static void kitapEkle(String KitapAdi, String yazar, String isbn, String durum) throws IOException {
