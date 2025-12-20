@@ -13,7 +13,7 @@ public class MedikoGUI extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        String[] kolonlar = {"Bölüm", "Doktor Adı", "Uzmanlık", "Çalışma Günleri"};
+        String[] kolonlar = {"Bölüm", "Doktor Adı", "Uzmanlık", "Çalışma Günler"};
         DefaultTableModel model = new DefaultTableModel(kolonlar, 0);
         JTable tablo = new JTable(model);
 
