@@ -10,7 +10,7 @@ import java.io.IOException;
 public class TakvimSecimGUI extends JFrame {
 
     public TakvimSecimGUI() {
-        // Pencere yapılandırması (Başlık, Boyut, Konumlandırma) gerçekleştirildi.
+        // Başlık boyut konumlandırma
         setTitle("Takvim Seçimi");
         setSize(500, 350);
         // Bu pencere kapatıldığında ana menüye dönülmesi için DISPOSE tercih edildi.
@@ -22,19 +22,18 @@ public class TakvimSecimGUI extends JFrame {
         mainPanel.setBorder(new EmptyBorder(40, 40, 40, 40)); // Kenar boşlukları
         mainPanel.setBackground(new Color(248, 249, 250)); // Açık gri arka plan
 
-        // --- 1. AKADEMİK TAKVİM BUTONU ---
+        //AKADEMİK TAKVİM BUTONU
         JButton btnAkademik = new JButton("📅 Akademik Takvim");
-        styleButton(btnAkademik, new Color(13, 110, 253)); // Mavi Buton
+        styleButton(btnAkademik, new Color(13, 110, 253)); // M
 
         // Lambda ifadesi ile yerel diskteki PDF dosyasının açılması sağlandı.
-        // Dosya yolu statik olarak tanımlanmıştır.
+        // Dosya yolu statik olarak tanımlanmış
         btnAkademik.addActionListener(e -> dosyaAc("C:\\Users\\cagat\\Downloads\\akademik takvim.pdf"));
 
-        // --- 2. SINAV TAKVİMİ BUTONU ---
+        //SINAV TAKVİMİ BUTONU
         JButton btnSinav = new JButton("📝 Sınav Takvimi");
         styleButton(btnSinav, new Color(25, 135, 84)); // Yeşil Buton
 
-        // Navigasyon Mantığı:
         // Sınav takvimleri fakülte bazlı ayrıldığı için doğrudan dosya açmak yerine,
         // kullanıcının fakülte seçebileceği ara ekrana ('SinavFakulteSecimGUI') yönlendirme yapıldı.
         btnSinav.addActionListener(e -> new SinavFakulteSecimGUI().setVisible(true));
@@ -45,7 +44,6 @@ public class TakvimSecimGUI extends JFrame {
         add(mainPanel);
     }
 
-    // --- UI Helper: Buton Stilleme ---
     // Kod tekrarını önlemek ve arayüz standardizasyonu sağlamak için yardımcı metot kullanıldı.
     private void styleButton(JButton btn, Color bgColor) {
         btn.setFont(new Font("Segoe UI", Font.BOLD, 18));
@@ -55,7 +53,6 @@ public class TakvimSecimGUI extends JFrame {
         btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
     }
 
-    // --- Dosya Açma Servisi ---
     // Java Desktop API kullanılarak, dosya uzantısından bağımsız (PDF, JPG vb.)
     // işletim sisteminin varsayılan görüntüleyicisi ile açılması sağlandı.
     private void dosyaAc(String path) {
@@ -73,7 +70,7 @@ public class TakvimSecimGUI extends JFrame {
                 Desktop.getDesktop().open(file);
             }
         } catch (IOException ex) {
-            ex.printStackTrace(); // Hata durumunda log basıldı.
+            ex.printStackTrace();
         }
     }
 }

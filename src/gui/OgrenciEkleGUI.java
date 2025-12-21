@@ -65,14 +65,14 @@ public class OgrenciEkleGUI extends JFrame {
         // --- OOP ENTEGRASYONU ---
         btnKaydet.addActionListener(e -> {
             try {
-                // 1. Validasyon: Boş alan kontrolü
+                //Boş alan kontrolü
                 if (txtAd.getText().trim().isEmpty() || txtSoyad.getText().trim().isEmpty() ||
                         txtNo.getText().trim().isEmpty() || txtBolum.getText().trim().isEmpty()) {
                     throw new GecersizGirisBilgisiException("Lütfen tüm alanları doldurunuz.");
                 }
 
-                // 2. Nesne Oluşturma (Polimorfizm)
-                // Doğrudan servisi çağırmak yerine önce nesneyi oluşturuyoruz.
+                //polimorfizm ile nesne oluşturluyor
+                // Doğrudan servisi çağırmak yerine önce nesneyi oluşturuyo
                 Ogrenci yeniOgrenci = new LisansOgrenci(
                         txtAd.getText().trim(),
                         txtSoyad.getText().trim(),
@@ -80,13 +80,12 @@ public class OgrenciEkleGUI extends JFrame {
                         txtBolum.getText().trim()
                 );
 
-                // 3. Model Validasyonu
                 // setBolum ve setNotOrtalamasi metotları, model içindeki kurallara uymazsa hata fırlatır.
                 yeniOgrenci.setBolum(txtBolum.getText().trim());
 
                 if (!txtOrt.getText().trim().isEmpty()) {
                     try {
-                        double ort = Double.parseDouble(txtOrt.getText().trim());
+                        int ort = Integer.parseInt(txtOrt.getText().trim());
                         yeniOgrenci.setNotOrtalamasi(ort);
                     } catch (NumberFormatException nfe) {
                         throw new GecersizGirisBilgisiException("Ortalama sayısal bir değer olmalıdır.");

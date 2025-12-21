@@ -27,7 +27,7 @@ public class SporSalonuYonetimMenuGUI extends JFrame {
         mainPanel.setBackground(BG_COLOR);
         setContentPane(mainPanel);
 
-        // --- Başlık Alanı ---
+        //başlık alanı
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(BG_COLOR);
         headerPanel.setBorder(new EmptyBorder(30, 40, 10, 40));
@@ -37,18 +37,18 @@ public class SporSalonuYonetimMenuGUI extends JFrame {
         headerPanel.add(lblTitle, BorderLayout.NORTH);
         mainPanel.add(headerPanel, BorderLayout.NORTH);
 
-        // --- Menü Kartları (Grid Layout) ---
+        // menü kartları
         // Kartların yan yana düzenli durması için 1 satır 2 sütunluk Grid yapısı kurgulandı.
         JPanel gridPanel = new JPanel(new GridLayout(1, 2, 20, 20));
         gridPanel.setBackground(BG_COLOR);
         gridPanel.setBorder(new EmptyBorder(20, 40, 40, 40));
 
-        // 1. Onay Bekleyenler Kartı
+        // onay bekleynelr
         // Lambda ifadesi ile başvuru onay ekranının açılması sağlandı.
         gridPanel.add(createCard("Onay Bekleyenler", "Yeni başvuruları yönet.", "📝",
                 e -> new SporSalonuOnayGUI().setVisible(true)));
 
-        // 2. Üye Listesi / İptal Kartı
+        //üye Listesi / İptal Kartı
         // Aktif üyelerin listelendiği ve silindiği ekran yönlendirmesi.
         gridPanel.add(createCard("Üye Listesi / İptal", "Üyeleri gör veya sil.", "👥",
                 e -> new SporSalonuUyeYonetimGUI().setVisible(true)));
@@ -90,7 +90,7 @@ public class SporSalonuYonetimMenuGUI extends JFrame {
         textPanel.add(lblD);
         card.add(textPanel, BorderLayout.CENTER);
 
-        // --- Kullanıcı Deneyimi (UX) ---
+        //  Kullanıcı Deneyimi
         // Mouse üzerine geldiğinde (Hover) kenarlık rengi değiştirilerek görsel geri bildirim sağlandı.
         card.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {

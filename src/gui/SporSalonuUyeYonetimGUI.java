@@ -26,7 +26,7 @@ public class SporSalonuUyeYonetimGUI extends JFrame {
         mainPanel.setBackground(Color.WHITE);
         setContentPane(mainPanel);
 
-        // --- Başlık Paneli ---
+        //Başlık Panel
         JPanel header = new JPanel(new FlowLayout(FlowLayout.LEFT));
         header.setBackground(new Color(248, 249, 250)); // Kurumsal gri arka plan
         header.setBorder(new EmptyBorder(15, 20, 15, 20));
@@ -36,7 +36,7 @@ public class SporSalonuUyeYonetimGUI extends JFrame {
         header.add(lblBaslik);
         mainPanel.add(header, BorderLayout.NORTH);
 
-        // --- Tablo Yapılandırması ---
+        //Tablo Yapılandırması
         String[] kolonlar = {"Ad Soyad", "Öğrenci No", "Üyelik Tipi", "Ücret", "Durum"};
 
         // Veri tutarlılığını korumak için hücrelerin elle düzenlenmesi engellendi.
@@ -46,7 +46,7 @@ public class SporSalonuUyeYonetimGUI extends JFrame {
         };
 
         table = new JTable(model);
-        table.setRowHeight(30); // Okunabilirlik için satır yüksekliği artırıldı.
+        table.setRowHeight(30);
         table.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 
         // Silme işlemi yapılacağı için seçim rengi kırmızımsı bir ton olarak ayarlandı.
@@ -61,7 +61,7 @@ public class SporSalonuUyeYonetimGUI extends JFrame {
         scrollPane.getViewport().setBackground(Color.WHITE);
         mainPanel.add(scrollPane, BorderLayout.CENTER);
 
-        // --- Alt Panel (İşlem Butonu) ---
+        //işle butonu
         JPanel altPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 20, 20));
         altPanel.setBackground(Color.WHITE);
 
@@ -70,7 +70,7 @@ public class SporSalonuUyeYonetimGUI extends JFrame {
         btnSil.setBackground(new Color(220, 53, 69)); // Kritik işlem (Kırmızı)
         btnSil.setForeground(Color.WHITE);
 
-        // Butona tıklandığında silme/iptal metodu tetiklendi.
+        // Butona tıklandığında silme/iptal metodu tetiklenir
         btnSil.addActionListener(e -> silmeIslemi());
 
         altPanel.add(btnSil);

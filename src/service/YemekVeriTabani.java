@@ -51,7 +51,6 @@ public class YemekVeriTabani {
                         "Ekstra: Kemalpaşa Tatlısı\n" +
                         "Kalori: 1250 kcal");
 
-        // --- 2. HAFTA (8-12 Aralık 2025) ---
         menuListesi.put("08.12.2025",
                 "Çorba: Kış Çorbası\n" +
                         "Ana Yemek: Etli Nohut\n" +
@@ -92,7 +91,6 @@ public class YemekVeriTabani {
                         "Ekstra: Vişneli Kup\n" +
                         "Kalori: 1250 kcal");
 
-        // --- 3. HAFTA (15-19 Aralık 2025) ---
         menuListesi.put("15.12.2025",
                 "Çorba: Domates Çorba\n" +
                         "Ana Yemek: Kıy. Mantı Makarna\n" +
@@ -133,7 +131,6 @@ public class YemekVeriTabani {
                         "Ekstra: Meyve\n" +
                         "Kalori: 1150 kcal");
 
-        // --- 4. HAFTA (22-26 Aralık 2025) ---
         menuListesi.put("22.12.2025",
                 "Çorba: Ezogelin Çorba\n" +
                         "Ana Yemek: Tas Kebabı\n" +
@@ -212,10 +209,10 @@ public class YemekVeriTabani {
     }
 
     public static String gununMenusuGetir() {
-        // Bugünün tarihini al (Örn: 17.12.2025 formatında)
+        // Bugünün tarihini al gg aa yyyy
         String bugunTarih = LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
 
-        // Listede var mı bak
+        // Listede var mı bakıyor
         if (menuListesi.containsKey(bugunTarih)) {
             return "TARİH: " + bugunTarih + "\n----------------------------\n" + menuListesi.get(bugunTarih);
         } else {

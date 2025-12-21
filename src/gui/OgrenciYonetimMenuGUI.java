@@ -56,11 +56,10 @@ public class OgrenciYonetimMenuGUI extends JFrame {
         mainPanel.add(gridPanel, BorderLayout.CENTER);
     }
 
-    /**
-     * Helper Metot: Kart Oluşturucu
-     * Kod tekrarını önlemek (DRY Prensibi) ve tasarım standardını korumak amacıyla
-     * kart üretim süreci parametrik bir metoda devredildi.
-     */
+
+       //Kart Oluşturucu Kod tekrarını önlemek (DRY Prensibi) ve tasarım standardını korumak amacıyla
+      //kart üretim işi parametrik bir metoda devredildi.
+
     private JPanel createCard(String title, String desc, String icon, java.awt.event.ActionListener action) {
         JPanel card = new JPanel(new BorderLayout());
         card.setBackground(CARD_BG);

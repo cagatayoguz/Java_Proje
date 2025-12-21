@@ -9,32 +9,32 @@ import java.awt.event.MouseEvent;
 
 public class BilgiMenuGUI extends JFrame {
 
-    // Arayüzde tutarlılık sağlamak amacıyla sabit renk paleti tanımlandı.
-    private final Color BG_COLOR = new Color(248, 249, 250); // Açık gri arka plan
-    private final Color CARD_BG = Color.WHITE;               // Kartlar beyaz olsun
-    private final Color ACCENT_BLUE = new Color(13, 110, 253); // Vurgu rengi (Mavi)
+    //renk paleti
+    private final Color BG_COLOR = new Color(248, 249, 250); //
+    private final Color CARD_BG = Color.WHITE;               // Kartlar beyaz
+    private final Color ACCENT_BLUE = new Color(13, 110, 253); //
 
     public BilgiMenuGUI() {
         setTitle("Bilgi Sistemi");
-        setSize(1000, 800); // İçerik çok olduğu için pencere boyutu dikeyde geniş tutuldu
+        setSize(1000, 800);
         // Bu pencere kapandığında ana uygulama çalışmaya devam etsin diye DISPOSE seçildi
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setLocationRelativeTo(null); // Ekran ortasında başlaması sağlandı
+        setLocationRelativeTo(null); // Ekran ortasında başlatan fonksiyon
 
-        // --- Ana Panel ---
+        // Ana Panel
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.setBackground(BG_COLOR);
 
-        // İçerik ekrana sığmayacağı için kaydırma çubuğu (ScrollPane) eklendi
+        // kaydırma çubuğu eklendi
         JScrollPane scrollPane = new JScrollPane(mainPanel);
-        scrollPane.setBorder(null); // Çirkin kenarlık kaldırıldı
-        scrollPane.getVerticalScrollBar().setUnitIncrement(16); // Kaydırma hızı artırıldı (daha akıcı)
+        scrollPane.setBorder(null); //
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16); // Kaydırma hızı
         setContentPane(scrollPane);
 
-        // --- 1. Başlık (Header) ---
+        //Başlık
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(BG_COLOR);
-        // Yazıların kenara yapışmaması için boşluk (padding) verildi
+        // Yazıların kenara yapışmaması için padding verildi
         headerPanel.setBorder(new EmptyBorder(40, 50, 20, 50));
 
         JLabel lblTitle = new JLabel("Bilgi Sistemi");
@@ -49,17 +49,17 @@ public class BilgiMenuGUI extends JFrame {
         headerPanel.add(lblSubtitle, BorderLayout.SOUTH);
         mainPanel.add(headerPanel, BorderLayout.NORTH);
 
-        // --- 2. Kartlar Alanı (Grid) ---
+        // Kartlar Alanı grid
         // Kartların düzenli durması için GridLayout kullanıldı.
-        // (0, 2) -> Satır sayısı dinamik, sütun sayısı sabit 2 olacak şekilde ayarlandı.
-        // 25, 25 -> Kartlar arasındaki boşluklar.
+        // Satır sayısı dinamik, sütun sayısı sabit olacak şekilde ayarlandı.
+        // Kartlar arasındaki boşluklar.
         JPanel gridPanel = new JPanel(new GridLayout(0, 2, 25, 25));
         gridPanel.setBackground(BG_COLOR);
         gridPanel.setBorder(new EmptyBorder(10, 50, 50, 50));
 
-        // Kod tekrarını önlemek için 'createCard' metodu kullanılarak menü elemanları eklendi.
+        // createCard metodu ile kod tekrarı onlenir  menü elemanları eklendi.
 
-        // 1. Öğrenci Bilgi Kartı
+        //  Öğrenci Bilgi Kartı
         gridPanel.add(createCard(
                 "Öğrenci Sorgulama",
                 "Öğrenci no ile detaylı bilgi görüntüle.",
@@ -67,7 +67,7 @@ public class BilgiMenuGUI extends JFrame {
                 e -> new OgrenciBilgiSistemiGUI().setVisible(true)
         ));
 
-        // 2. Akademisyen Bilgi Kartı
+        //  Akademisyen Bilgi Kartı
         gridPanel.add(createCard(
                 "Akademisyenler",
                 "Öğretim üyeleri ve iletişim bilgileri.",
@@ -75,7 +75,7 @@ public class BilgiMenuGUI extends JFrame {
                 e -> new AkademisyenListeGUI().setVisible(true)
         ));
 
-        // 3. Ders Programı Kartı
+        //  Ders Programı Kartı
         gridPanel.add(createCard(
                 "Ders Programı",
                 "Fakülte ve bölümlere göre haftalık program.",
@@ -83,7 +83,7 @@ public class BilgiMenuGUI extends JFrame {
                 e -> new FakulteSecimGUI().setVisible(true)
         ));
 
-        // 4. Yemekhane Kartı
+        //  Yemekhane Kartı
         gridPanel.add(createCard(
                 "Yemekhane Menüsü",
                 "Günün yemeği ve aylık liste.",
@@ -91,7 +91,7 @@ public class BilgiMenuGUI extends JFrame {
                 e -> new YemekhaneGUI().setVisible(true)
         ));
 
-        // 5. Kütüphane Kartı
+        //  Kütüphane Kartı
         gridPanel.add(createCard(
                 "Kütüphane",
                 "Kitap arama, ödünç alma ve iade.",
@@ -99,7 +99,7 @@ public class BilgiMenuGUI extends JFrame {
                 e -> new KutuphaneListeGUI().setVisible(true)
         ));
 
-        // 6. Spor Salonu Kartı
+        //  Spor Salonu Kartı
         gridPanel.add(createCard(
                 "Spor Salonu",
                 "Çalışma saatleri ve üyelik başvurusu.",
@@ -107,7 +107,7 @@ public class BilgiMenuGUI extends JFrame {
                 e -> new SporSalonuMenuGUI().setVisible(true)
         ));
 
-        // 7. Takvimler Kartı
+        //  Takvimler Kartı
         gridPanel.add(createCard(
                 "Takvimler",
                 "Akademik takvim ve sınav tarihleri.",
@@ -115,7 +115,7 @@ public class BilgiMenuGUI extends JFrame {
                 e -> new TakvimSecimGUI().setVisible(true)
         ));
 
-        // 8. Duyurular Kartı
+        //  Duyurular Kartı
         gridPanel.add(createCard(
                 "Duyurular",
                 "Üniversiteden güncel haberler.",
@@ -123,7 +123,7 @@ public class BilgiMenuGUI extends JFrame {
                 e -> new DuyuruListeGUI().setVisible(true)
         ));
 
-        // 9. Not Hesaplama Kartı
+        // Not Hesaplama Kartı
         gridPanel.add(createCard(
                 "Not Hesapla",
                 "Vize/Final ortalaması ve GNO hesapla.",
@@ -131,7 +131,7 @@ public class BilgiMenuGUI extends JFrame {
                 e -> new NotHesaplamaGUI().setVisible(true)
         ));
 
-        // 10. Kampüs Haritası Kartı
+        //  Kampüs Haritası Kartı
         gridPanel.add(createCard(
                 "Kampüs Haritası",
                 "Yerleşke planı ve bina konumları.",
@@ -139,7 +139,6 @@ public class BilgiMenuGUI extends JFrame {
                 e -> new HaritaGUI().setVisible(true)
         ));
 
-        // --- YENİ EKLENEN MEDICO KARTI ---
         // Sağlık işleri için yeni modül eklendi
         gridPanel.add(createCard(
                 "Medico (Sağlık)",
@@ -150,7 +149,6 @@ public class BilgiMenuGUI extends JFrame {
 
         mainPanel.add(gridPanel, BorderLayout.CENTER);
 
-        // --- 3. Alt Kısım (Geri Dön Butonu) ---
         JPanel footerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         footerPanel.setBackground(BG_COLOR);
         footerPanel.setBorder(new EmptyBorder(0, 0, 30, 0));
@@ -159,7 +157,7 @@ public class BilgiMenuGUI extends JFrame {
         btnBack.setFont(new Font("Segoe UI", Font.BOLD, 14));
         btnBack.setForeground(new Color(100, 100, 100));
         btnBack.setBackground(Color.WHITE);
-        // Buton etrafına ince gri çizgi eklendi
+        // Buton etrafına ince gri çizgi
         btnBack.setBorder(BorderFactory.createCompoundBorder(
                 new LineBorder(new Color(200, 200, 200), 1),
                 new EmptyBorder(10, 30, 10, 30)
@@ -167,7 +165,7 @@ public class BilgiMenuGUI extends JFrame {
         btnBack.setFocusPainted(false); // Tıklama efekti temizlendi
         btnBack.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        // Mouse üzerine geldiğinde renk değişimi (Hover) sağlandı
+        // Mouse üzerine geldiğinde renk değişimi
         btnBack.addMouseListener(new MouseAdapter() {
             public void mouseEntered(MouseEvent e) { btnBack.setBackground(new Color(240, 240, 240)); }
             public void mouseExited(MouseEvent e) { btnBack.setBackground(Color.WHITE); }
@@ -180,10 +178,10 @@ public class BilgiMenuGUI extends JFrame {
         mainPanel.add(footerPanel, BorderLayout.SOUTH);
     }
 
-    /**
-     * Modern Kart Bileşeni Oluşturucu Metot
-     * Her buton için aynı kodları yazmamak adına, parametre alan dinamik bir yapı kuruldu.
-     */
+
+    //  Modern Kart Bileşeni Oluşturucu Metot
+      //Her buton için aynı kodları yazmamak adına, parametre alan dinamik bir yapı kuruldu.
+
     private JPanel createCard(String title, String desc, String icon, java.awt.event.ActionListener action) {
         JPanel card = new JPanel(new BorderLayout());
         card.setBackground(CARD_BG);
@@ -194,10 +192,10 @@ public class BilgiMenuGUI extends JFrame {
                 new EmptyBorder(20, 25, 20, 25)
         ));
         card.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        // Kart boyutları sabitlendi
+        // Kart boyutları sabitlenir
         card.setPreferredSize(new Dimension(300, 100));
 
-        // Sol tarafa ikon eklendi (Emoji fontu kullanıldı)
+        // Sol tarafa ikon eklendi
         JLabel lblIcon = new JLabel(icon);
         lblIcon.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 36));
         lblIcon.setBorder(new EmptyBorder(0, 0, 0, 20));
@@ -219,7 +217,7 @@ public class BilgiMenuGUI extends JFrame {
         textPanel.add(lblDesc);
         card.add(textPanel, BorderLayout.CENTER);
 
-        // Kartın üzerine tıklanma ve mouse hareketleri dinlendi
+        // Kartın üzerine tıklanma ve mouse hareketleri
         card.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -229,7 +227,7 @@ public class BilgiMenuGUI extends JFrame {
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                // Hover Durumu: Mavi çerçeve ve hafif renkli arka plan uygulandı
+                //Mavi çerçeve ve hafif renkli arka plan uygulandı
                 card.setBackground(new Color(250, 251, 255));
                 card.setBorder(BorderFactory.createCompoundBorder(
                         new LineBorder(ACCENT_BLUE, 1),

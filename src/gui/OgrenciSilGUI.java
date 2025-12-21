@@ -25,7 +25,7 @@ public class OgrenciSilGUI extends JFrame {
         mainPanel.setBackground(Color.WHITE);
         setContentPane(mainPanel);
 
-        // --- Başlık ---
+        //başlık
         JPanel header = new JPanel(new FlowLayout(FlowLayout.LEFT));
         header.setBackground(new Color(248, 249, 250));
 
@@ -34,7 +34,7 @@ public class OgrenciSilGUI extends JFrame {
         header.add(lblTitle);
         mainPanel.add(header, BorderLayout.NORTH);
 
-        // --- Tablo ---
+        //tablo
         String[] cols = {"No", "Ad", "Soyad", "Bölüm"};
         model = new DefaultTableModel(cols, 0) {
             @Override
@@ -54,7 +54,7 @@ public class OgrenciSilGUI extends JFrame {
         sp.getViewport().setBackground(Color.WHITE);
         mainPanel.add(sp, BorderLayout.CENTER);
 
-        // --- Sil Butonu ---
+        //sil butonu
         JPanel footer = new JPanel();
         footer.setBackground(Color.WHITE);
 
@@ -78,7 +78,7 @@ public class OgrenciSilGUI extends JFrame {
         }
     }
 
-    // --- OOP ENTEGRE EDİLMİŞ SİLME İŞLEMİ ---
+    //silme işlei yapılıyor
     private void silmeIslemi() {
         int row = table.getSelectedRow();
 
@@ -95,9 +95,8 @@ public class OgrenciSilGUI extends JFrame {
 
         if(confirm == JOptionPane.YES_OPTION) {
             try {
-                // DEĞİŞİKLİK BURADA:
-                // Doğrudan DosyaIslemleri çağırmak yerine Model üzerinden gidiyoruz.
-                // Parametreler boş olabilir çünkü sadece sil(id) metodunu tetikleyeceğiz.
+                // direkt DosyaIslemleri çağırmak yerine Model üzerinden çağrılıyor
+                // Parametreler boş olabilir çünkü sadece sil metodunu tetikleyecek
                 boolean sonuc = new LisansOgrenci("", "", "", "").sil(no);
 
                 if (sonuc) {

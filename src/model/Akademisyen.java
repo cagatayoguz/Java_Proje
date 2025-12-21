@@ -16,27 +16,18 @@ public abstract class Akademisyen extends Kisiler {
         this.posta = bolum;
     }
 
-    // --- INTERFACE (KAYDEDİLEBİLİR) METOTLARI ---
+    //interface kaydedilenilir metotları
 
     @Override
     public boolean kaydet() {
-        // NOT: DosyaIslemleri sınıfında henüz 'akademisyenEkle' metodu olmadığı için
-        // burası şimdilik işlem yapmaz. Servise o metot eklendiğinde buradaki yorumu kaldırabilirsin.
-        /*
-        try {
-            DosyaIslemleri.akademisyenEkle(getAd(), getSoyad(), sicilNo, unvan, bolum);
-            return true;
-        } catch (IOException e) {
-            return false;
-        }
-        */
+
         System.out.println("UYARI: Akademisyen kayıt servisi henüz aktif değil.");
         return false;
     }
 
     @Override
     public boolean sil(String id) {
-        // DosyaIslemleri.akademisyenSil(id); eklendiğinde burası aktif edilecek.
+        // DosyaIslemleri.akademisyenSil(id); eklendiğinde burası aktif edilecek
         return false;
     }
 
@@ -45,7 +36,7 @@ public abstract class Akademisyen extends Kisiler {
         return false;
     }
 
-    // --- DİĞER METOTLAR ---
+    //diğer metotolar
 
     @Override
     public String getPozisyon() {

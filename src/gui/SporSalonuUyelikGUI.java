@@ -14,7 +14,7 @@ public class SporSalonuUyelikGUI extends JFrame {
     private JLabel lblUcret;
 
     public SporSalonuUyelikGUI() {
-        // Pencere yapılandırması (Başlık, Boyut, Konumlandırma) gerçekleştirildi.
+        //başlık boyut konumlandırma
         setTitle("Spor Salonu - Aylık Üyelik");
         setSize(400, 350);
         // Pencere kapatıldığında ana menüye dönülmesi için DISPOSE tercih edildi.
@@ -26,7 +26,7 @@ public class SporSalonuUyelikGUI extends JFrame {
         JPanel mainPanel = new JPanel(new GridLayout(5, 2, 10, 20));
         mainPanel.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
 
-        // --- Form Alanlarının Eklenmesi ---
+        //form Alanlarının Eklenmes
 
         // Ad Soyad Alanı
         mainPanel.add(boldLabel("Ad Soyad:"));
@@ -58,14 +58,13 @@ public class SporSalonuUyelikGUI extends JFrame {
         JButton btnUyeOl = new JButton("Üye Ol");
         btnUyeOl.setFont(new Font("Arial", Font.BOLD, 14));
 
-        // Kayıt işlemi butona bağlandı.
+        // Kayıt işlemi butona bağlandı
         btnUyeOl.addActionListener(e -> kayitOlAction());
         mainPanel.add(btnUyeOl);
 
         add(mainPanel);
     }
 
-    // --- UI Helper: Etiket Oluşturucu ---
     // Arayüzde görsel bütünlük sağlamak ve kod tekrarını önlemek amacıyla
     // etiket oluşturma işlemi parametrik bir metoda devredildi.
     private JLabel boldLabel(String text) {
@@ -75,7 +74,7 @@ public class SporSalonuUyelikGUI extends JFrame {
         return label;
     }
 
-    // --- Fiyat Güncelleme Mantığı ---
+
     // Kullanıcının seçtiği üyelik tipine göre ödenecek tutar dinamik olarak güncellendi.
     private void fiyatGuncelle() {
         String secim = (String) cmbUyelikTipi.getSelectedItem();
@@ -84,16 +83,17 @@ public class SporSalonuUyelikGUI extends JFrame {
         else if ("Yıllık Üyelik".equals(secim)) lblUcret.setText("5000 TL");
     }
 
-    // --- Kayıt İşlemi ---
+    //kayıt İşlemi
     private void kayitOlAction() {
-        // 1. Validasyon: Boş alan kontrolü sağlandı.
+        // boş alan kontrolü sağlandı.
         if (txtAdSoyad.getText().trim().isEmpty() || txtOgrenciNo.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Lütfen tüm alanları doldurunuz!", "Hata", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
         try {
-            // 2. Veri Kaydı: Servis katmanı çağrılarak üyelik talebi sisteme iletildi.
+
+            // Servis katmanı çağrılarak üyelik talebi sisteme iletildi.
             // Talep varsayılan olarak "Bekliyor" statüsünde kaydedildi, yönetici onayı beklenecek.
             DosyaIslemleri.sporUyelikEkle(
                     txtAdSoyad.getText(),
@@ -103,7 +103,7 @@ public class SporSalonuUyelikGUI extends JFrame {
                     "Bekliyor"
             );
 
-            // 3. Kullanıcı Geri Bildirimi
+            //kullaanıcı geri Bildirimi
             String mesaj = "Sayın " + txtAdSoyad.getText() + ",\n" +
                     "Kayıt talebiniz alınmıştır. Yönetici onayından sonra üyeliğiniz aktifleşecektir.";
             JOptionPane.showMessageDialog(this, mesaj, "Talep Oluşturuldu", JOptionPane.INFORMATION_MESSAGE);

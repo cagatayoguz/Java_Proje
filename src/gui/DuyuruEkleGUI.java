@@ -80,8 +80,6 @@ public class DuyuruEkleGUI extends JFrame {
         // Buton Aksiyonu
         btnYayinla.addActionListener(e -> {
             try {
-                // --- DEĞİŞİKLİK BURADA YAPILDI ---
-                // Eskiden: LocalDate.now().toString(); -> 2025-12-21 veriyordu.
                 // Şimdi: TarihIslemleri sınıfını kullanarak "21.12.2025" formatına çeviriyoruz.
                 String tarih = TarihIslemleri.tarihFormatla(LocalDate.now());
 

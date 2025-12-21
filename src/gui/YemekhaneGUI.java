@@ -71,10 +71,9 @@ public class YemekhaneGUI extends JFrame {
         mainPanel.add(footerPanel, BorderLayout.SOUTH);
     }
 
-    /**
-     * UI Helper: Yemekhane Kartı Oluşturucu
-     * Görsel ve bilgilerin yer aldığı kart yapısını parametrik olarak üretir.
-     */
+
+     // Görsel ve bilgilerin yer aldığı kart yapısını parametrik olarak üretir.
+
     private JPanel createYemekhaneCard(String title, String info, String imagePath) {
         JPanel card = new JPanel(new BorderLayout());
         card.setBackground(Color.WHITE);
@@ -85,14 +84,14 @@ public class YemekhaneGUI extends JFrame {
                 new EmptyBorder(15, 15, 15, 15)
         ));
 
-        // --- Resim Alanı ---
+
         JLabel lblImage = new JLabel();
         lblImage.setHorizontalAlignment(SwingConstants.CENTER);
         lblImage.setBackground(new Color(240, 240, 240));
         lblImage.setOpaque(true);
         lblImage.setPreferredSize(new Dimension(300, 200));
 
-        // Dosya kontrolü ve görüntü ölçeklendirme (Scaling) işlemi.
+        // Dosya kontrolü ve görüntü ölçeklendirme  işlemi.
         File imgFile = new File(imagePath);
         if (imgFile.exists()) {
             ImageIcon icon = new ImageIcon(new ImageIcon(imagePath).getImage().getScaledInstance(350, 220, Image.SCALE_SMOOTH));
@@ -147,7 +146,7 @@ public class YemekhaneGUI extends JFrame {
             l.setText("Liste dosyası bulunamadı: " + path);
         }
 
-        // Liste uzun olabileceği için ScrollPane içine alındı.
+        // Liste uzun olabileceği için ScrollPane kullanıldı
         d.add(new JScrollPane(l));
         d.setLocationRelativeTo(this);
         d.setVisible(true);

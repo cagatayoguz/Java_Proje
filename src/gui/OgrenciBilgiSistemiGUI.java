@@ -12,7 +12,7 @@ import exception.OgrenciBulunamadiException;
 public class OgrenciBilgiSistemiGUI extends JFrame {
 
     public OgrenciBilgiSistemiGUI() {
-        // Pencere yapılandırması (Başlık, Boyut, Konum) gerçekleştirildi.
+        // Başlık boyut konum
         setTitle("Öğrenci Sorgulama");
         setSize(500, 400);
 
@@ -20,13 +20,13 @@ public class OgrenciBilgiSistemiGUI extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        // --- Ana Düzen (Layout) ---
+        // Ana Düzen
         // Formun ekranın tam ortasında durması için GridBagLayout tercih edildi.
         JPanel mainPanel = new JPanel(new GridBagLayout());
         mainPanel.setBackground(new Color(248, 249, 250)); // Açık gri arka plan
         setContentPane(mainPanel);
 
-        // --- Kart Paneli Tasarımı ---
+       //kart paneli
         // Görsel bütünlük sağlamak amacıyla bileşenler beyaz bir kart paneli içinde gruplandı.
         JPanel cardPanel = new JPanel();
         cardPanel.setLayout(new BoxLayout(cardPanel, BoxLayout.Y_AXIS)); // Dikey hizalama
@@ -48,12 +48,13 @@ public class OgrenciBilgiSistemiGUI extends JFrame {
         lblDesc.setForeground(Color.GRAY);
         lblDesc.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // Veri Giriş Alanı (Input)
+        //veri girişi bölümü
         JTextField txtNo = new JTextField(15);
         txtNo.setFont(new Font("Segoe UI", Font.PLAIN, 16));
         txtNo.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
 
-        // Input alanına modern bir görünüm için özel kenarlık tanımlandı.
+
+        //ınput alanı
         txtNo.setBorder(BorderFactory.createCompoundBorder(
                 new LineBorder(new Color(200, 200, 200)),
                 new EmptyBorder(5, 10, 5, 10)
@@ -68,7 +69,7 @@ public class OgrenciBilgiSistemiGUI extends JFrame {
         btnSorgula.setFocusPainted(false);
         btnSorgula.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        // --- Bileşenlerin Karta Eklenmesi ---
+        //Bileşenlerin Karta Eklenmesi
         cardPanel.add(lblTitle);
         cardPanel.add(lblDesc);
         cardPanel.add(Box.createVerticalStrut(20)); // Boşluk
@@ -80,30 +81,26 @@ public class OgrenciBilgiSistemiGUI extends JFrame {
 
         mainPanel.add(cardPanel);
 
-        // --- BUTON AKSİYONU ve HATA YÖNETİMİ ---
+        //hata yakalama
         btnSorgula.addActionListener(e -> {
             String ogrNo = txtNo.getText().trim();
 
-            // 1. Validasyon: Boş giriş kontrolü
-            if (ogrNo.isEmpty())
-                return;
+            // boş giriş kontrolü yapılıyor
+            if (ogrNo.isEmpty()) return;
 
             try {
-                // 2. Servis Katmanı Çağrısı
-
-      // Veritabanı işlemleri için DosyaIslemleri sınıfı kullanıldı.
-                // Eğer numara bulunamazsa, bu metot 'OgrenciBulunamadiException' fırlatır.
+                // Veritabanı işlemleri için DosyaIslemleri sınıfı kullanıldı.
+                // Eğer numara bulunamazsa, bu metot OgrenciBulunamadiException fırlatır.
                 String[] bilgiler = DosyaIslemleri.ogrenciGetir(ogrNo);
-                // 3. Sonuç Gösterimi
+
+                //Sonuç Gösterimi
                 String mesaj = String.format(
                         "Ad: %s\nSoyad: %s\nBölüm: %s\nSınıf: %s\nOrtalama: %s",
                         bilgiler[0], bilgiler[1], bilgiler[2], bilgiler[3], bilgiler[4]);
 
                 JOptionPane.showMessageDialog(this, mesaj, "Öğrenci Bulundu", JOptionPane.INFORMATION_MESSAGE);
 
-
             } catch (OgrenciBulunamadiException ex) {
-                // 4. Özel İstisna Yönetimi (Custom Exception Handling)
                 // Hata yakalandığında, Exception sınıfı içindeki özelleştirilmiş mesaj kullanıcıya gösterildi.
                 JOptionPane.showMessageDialog(this, ex.getMessage(), "Hata", JOptionPane.ERROR_MESSAGE);
             }

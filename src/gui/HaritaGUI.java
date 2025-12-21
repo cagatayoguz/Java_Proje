@@ -12,8 +12,6 @@ public class HaritaGUI extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        // Resim Dosyası Yolu
-        // Senin atacağın SS'in adı "kampus_harita.jpg" olmalı ve veriler/resimler klasöründe olmalı.
         String dosyaYolu = "C:\\Users\\cagat\\Downloads\\gazi kampüs harita.jpg";
 
         JLabel lblResim = new JLabel();
@@ -22,12 +20,9 @@ public class HaritaGUI extends JFrame {
 
         File dosya = new File(dosyaYolu);
         if (dosya.exists()) {
-            // Resmi yükle
             ImageIcon icon = new ImageIcon(dosyaYolu);
 
-            // Eğer resim çok büyükse biraz küçültelim (Opsiyonel)
-            // Image img = icon.getImage().getScaledInstance(950, 750, Image.SCALE_SMOOTH);
-            // lblResim.setIcon(new ImageIcon(img));
+
 
             lblResim.setIcon(icon);
         } else {
@@ -36,8 +31,7 @@ public class HaritaGUI extends JFrame {
                     "'veriler/resimler/' klasörüne ekleyiniz.</center></html>");
             lblResim.setForeground(Color.RED);
         }
-
-        // ScrollPane ekleyelim ki resim büyükse kaydırılabilsin
+// kaydırma çubuğu
         JScrollPane scrollPane = new JScrollPane(lblResim);
         scrollPane.getViewport().setBackground(Color.WHITE);
 

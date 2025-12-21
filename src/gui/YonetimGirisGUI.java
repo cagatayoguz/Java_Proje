@@ -53,7 +53,6 @@ public class YonetimGirisGUI extends JFrame {
         lblBaslik.setForeground(new Color(50, 60, 80));
         lblBaslik.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // --- 2. Kullanıcı Adı Alanı ---
         JLabel lblUser = new JLabel("Kullanıcı Adı");
         lblUser.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         lblUser.setForeground(Color.GRAY);

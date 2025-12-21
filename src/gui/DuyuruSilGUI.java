@@ -7,7 +7,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
 
-// Yönetici panelinde, mevcut duyuruların listelendiği ve silinebildiği arayüz sınıfı.
+// Yönetici panelinde, mevcut duyuruların listelendiği ve silinebildiği arayüz sınıfı
 public class DuyuruSilGUI extends JFrame {
 
     private DefaultTableModel model;
@@ -17,7 +17,7 @@ public class DuyuruSilGUI extends JFrame {
         // Pencere yapılandırması (Başlık, Boyut, Konum)
         setTitle("Duyuruları Yönet");
         setSize(800, 500);
-        // Pencere kapatıldığında ana uygulama akışının devam etmesi için DISPOSE tercih edildi.
+        // Pencere kapatıldığında ana uygulama akışının devam etmesi için DISPOSE tercih edilir
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
@@ -28,17 +28,16 @@ public class DuyuruSilGUI extends JFrame {
 
         // --- 1. Üst Panel (Header) ---
         JPanel header = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        header.setBackground(new Color(248, 249, 250)); // Hafif gri ton
+        header.setBackground(new Color(248, 249, 250));
 
         JLabel lbl = new JLabel(" Yayındaki Duyurular");
         lbl.setFont(new Font("Segoe UI", Font.BOLD, 18));
         header.add(lbl);
         mainPanel.add(header, BorderLayout.NORTH);
 
-        // --- 2. Tablo Yapısı ---
+
         String[] cols = {"Tarih", "Başlık", "İçerik (Önizleme)"};
 
-        // Tablo modeli, hücrelerin doğrudan düzenlenmesini engellemek amacıyla
         // isCellEditable metodu geçersiz kılınarak (override) oluşturuldu.
         model = new DefaultTableModel(cols, 0) {
             @Override
@@ -46,7 +45,7 @@ public class DuyuruSilGUI extends JFrame {
         };
 
         table = new JTable(model);
-        table.setRowHeight(30); // Satır yüksekliği okunabilirlik için artırıldı.
+        table.setRowHeight(30);
         table.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 
         // Verilerin tabloya yüklenmesi işlemi başlatıldı.
@@ -54,16 +53,15 @@ public class DuyuruSilGUI extends JFrame {
 
         // Tablo taşma durumuna karşı ScrollPane içerisine alındı.
         JScrollPane sp = new JScrollPane(table);
-        sp.setBorder(new EmptyBorder(10, 20, 10, 20)); // Kenar boşlukları ayarlandı.
+        sp.setBorder(new EmptyBorder(10, 20, 10, 20));
         sp.getViewport().setBackground(Color.WHITE);
         mainPanel.add(sp, BorderLayout.CENTER);
 
-        // --- 3. Alt Panel (Butonlar) ---
         JPanel footer = new JPanel();
         footer.setBackground(Color.WHITE);
 
         JButton btnSil = new JButton("Seçili Duyuruyu Kaldır");
-        // Silme işlemi kritik olduğu için buton rengi kırmızı (Danger) olarak ayarlandı.
+        // Silme işlemi kritik olduğu için buton rengi kırmızı  olarak ayarlanır
         btnSil.setBackground(new Color(220, 53, 69));
         btnSil.setForeground(Color.WHITE);
         btnSil.setFont(new Font("Segoe UI", Font.BOLD, 14));
@@ -75,10 +73,10 @@ public class DuyuruSilGUI extends JFrame {
         mainPanel.add(footer, BorderLayout.SOUTH);
     }
 
-    // --- Veri Yükleme Metodu ---
+    // veri yükleme metodu
     // Dosyadan okunan verilerin tablo modeline aktarılmasını sağlar.
     private void yukle() {
-        // Tablo temizlenerek mükerrer kayıt oluşumu engellendi.
+        // Tablo temizlenerek tekrar kayıt oluşumu engellendi.
         model.setRowCount(0);
 
         // Servis katmanından güncel liste çekildi.
@@ -88,7 +86,7 @@ public class DuyuruSilGUI extends JFrame {
         }
     }
 
-    // --- Silme İşlemi Mantığı ---
+//silme işlemş
     private void sil() {
         int r = table.getSelectedRow();
 

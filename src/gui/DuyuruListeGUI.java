@@ -49,10 +49,8 @@ public class DuyuruListeGUI extends JFrame {
         // Dosyadan tüm duyuruları çekiyoruz (Eskiden yeniye gelir)
         List<String[]> duyurular = DosyaIslemleri.duyurulariOku();
 
-        // --- İŞTE SİHİRLİ KOD BURASI ---
         // Listeyi ters çeviriyoruz ki en son eklenen (listenin sonundaki) en başa gelsin.
         Collections.reverse(duyurular);
-        // -------------------------------
 
         for (String[] d : duyurular) {
             model.addRow(d);

@@ -11,7 +11,6 @@ import java.awt.event.MouseEvent;
 public class FakulteSecimGUI extends JFrame {
 
     public FakulteSecimGUI() {
-        // Pencere yapılandırması (Başlık, Boyut, Konumlandırma) gerçekleştirildi.
         setTitle("Ders Programı - Fakülte Seçimi");
         setSize(800, 500);
         // Ana menüye dönüşü engellememek için DISPOSE_ON_CLOSE tercih edildi.
@@ -45,7 +44,6 @@ public class FakulteSecimGUI extends JFrame {
         // Yardımcı metot (createCard) kullanılarak kod tekrarı önlendi ve modüler yapı sağlandı.
         // Her butona tıklandığında 'BolumSecimGUI' sınıfına ilgili fakülte adı parametre olarak gönderildi.
 
-        // 1. Teknoloji Fakültesi Kartı
         gridPanel.add(createCard("Teknoloji Fakültesi", "Yazılım, Mekatronik...", "💻",
                 e -> new BolumSecimGUI("Teknoloji Fakültesi").setVisible(true)));
 

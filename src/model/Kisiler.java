@@ -5,13 +5,12 @@ public abstract class Kisiler implements Yazdirilabilir,Kaydedilebilir {
     private String ad;
     private String soyad;
 
-    // SADECE GEREKLİ OLAN CONSTRUCTOR
     public Kisiler(String ad, String soyad) {
         this.ad = ad;
         this.soyad = soyad;
     }
 
-    // Ortak Metotlar
+    // ortak metotlar
     public String tamAdGetir() {
         return this.ad + " " + this.soyad;
     }
@@ -20,9 +19,9 @@ public abstract class Kisiler implements Yazdirilabilir,Kaydedilebilir {
     public String getAd() { return ad; }
     public String getSoyad() { return soyad; }
 
-    // --- INTERFACE METOTLARI ---
+    //interface metotlar
 
-    // Alt sınıflar (Ogrenci, Akademisyen) bunu kendine göre dolduracak
+    // Alt sınıflar (Ogrenci, Akademisyen) bunu kendine göre doldurur
     public abstract String getPozisyon();
 
 

@@ -20,7 +20,7 @@ public class NotHesaplamaGUI extends JFrame {
 
     public NotHesaplamaGUI() {
         setTitle("Akademik Not Hesaplayıcı");
-        setSize(450, 600); // Genişlik biraz daraltıldı
+        setSize(450, 600);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
@@ -75,13 +75,12 @@ public class NotHesaplamaGUI extends JFrame {
         return p;
     }
 
-    // --- 2. SEKME: DİNAMİK ORTALAMA ---
     private JPanel createDonemPanel() {
         JPanel main = new JPanel(new BorderLayout(0, 10));
         main.setBorder(new EmptyBorder(10, 15, 10, 15));
         main.setBackground(Color.WHITE);
 
-        // -- Üst Kısım: Sayı Girişi --
+        // sayı girişi
         JPanel top = new JPanel(new FlowLayout(FlowLayout.LEFT));
         top.setBackground(Color.WHITE);
 
@@ -95,7 +94,6 @@ public class NotHesaplamaGUI extends JFrame {
         top.add(txtSayi);
         top.add(btnOlustur);
 
-        // -- Liste Başlıkları --
         JPanel header = new JPanel(new GridLayout(1, 2));
         header.setBackground(Color.WHITE);
         header.add(new JLabel("Not (0-100)", 0));
@@ -105,14 +103,12 @@ public class NotHesaplamaGUI extends JFrame {
         topContainer.add(top, BorderLayout.NORTH);
         topContainer.add(header, BorderLayout.SOUTH);
 
-        // -- Orta Kısım: Kaydırılabilir Liste --
         formPanel = new JPanel();
         formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.Y_AXIS));
         formPanel.setBackground(Color.WHITE);
         JScrollPane scroll = new JScrollPane(formPanel);
         scroll.setBorder(BorderFactory.createEmptyBorder());
 
-        // -- Alt Kısım: Hesapla --
         JPanel bottom = new JPanel(new BorderLayout(5, 5));
         bottom.setBackground(Color.WHITE);
         JLabel lblOrt = new JLabel("Ortalama: -", 0);
