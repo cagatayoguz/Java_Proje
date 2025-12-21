@@ -59,7 +59,7 @@ public class KutuphaneListeGUI extends JFrame {
         };
 
         table = new JTable(model);
-        table.setRowHeight(30); // Okunabilirlik için satır yüksekliği artırıldı.
+        table.setRowHeight(30);
 
         // Tabloyu filtreleyebilmek için Sorter bağladım.
         sorter = new TableRowSorter<>(model);

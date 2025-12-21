@@ -185,14 +185,31 @@ public class DosyaIslemleri {
     // --- DUYURU VE SPOR İŞLEMLERİ ---
     // (Mantık olarak Öğrenci ve Kitap işlemleriyle aynı CRUD yapısını kullanır)
 
+    // DosyaIslemleri.java içi:
+
+    // --- 1. ASIL İŞÇİ METOT (Bunu sakın silme/değiştirme) ---
+// Bu metot, kendisine verilen 3 bilgiyi alır ve dosyaya yazar.
     public static void duyuruEkle(String tarih, String baslik, String icerik) throws IOException {
         File file = new File(DUYURU_DOSYASI);
         if (file.getParentFile() != null) file.getParentFile().mkdirs();
+
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, true))) {
-            // Duyuru içeriğindeki enter karakterlerini temizle (Tek satırda tutmak için)
+            // Dosyaya yazma işlemi burada gerçekleşir
             writer.write(tarih + "::" + baslik + "::" + icerik.replace("\n", " "));
             writer.newLine();
         }
+    }
+
+    // --- 2. YARDIMCI METOT (Overloading - Senin eklediğin kısım) ---
+// Bu metot sadece tarihi hesaplar ve işi yukarıdaki "Asıl İşçi"ye devreder.
+    public static void duyuruEkle(String baslik, String icerik) throws IOException {
+
+        // Tarihi formatlayarak alıyoruz (Az önce yaptığımız format ayarı)
+        String bugun = java.time.LocalDate.now().format(TarihIslemleri.TARIH_FORMATI);
+
+        // DİKKAT: Burası kendini çağırmıyor!
+        // Yukarıdaki "3 parametreli" versiyonu çağırıyor.
+        duyuruEkle(bugun, baslik, icerik);
     }
 
     //Dosyaları okuyan metod
