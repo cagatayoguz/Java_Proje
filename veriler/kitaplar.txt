@@ -1,19 +1,19 @@
 Kürk Mantolu Madonna,Sabahattin Ali,978-975-07-2720-0,Oduncte,15.01.2026,-
-1984,George Orwell,978-975-07-3531-1,Müsait,-,-
+1984,George Orwell,978-975-07-3531-1,Oduncte,04.01.2026,Osmancan Küçdemir
 Sefiller,Victor Hugo,978-605-360-951-4,Oduncte,-,-
 Nutuk,Mustafa Kemal Atatürk,978-975-16-1681-3,Oduncte,03.01.2026,çağatay oğuz
-Tutunamayanlar,Oğuz Atay,978-975-07-0683-0,Müsait,-,-
+Tutunamayanlar,Oğuz Atay,978-975-07-0683-0,Oduncte,04.01.2026,çağatay oğuz
 Çalıkuşu,Reşat Nuri Güntekin,978-975-10-2187-5,Oduncte,02.01.2026,çağatay oğuz
 İnce Memed,Yaşar Kemal,978-975-08-0775-9,Müsait,-,-
 Saatleri Ayarlama Enstitüsü,Ahmet Hamdi Tanpınar,978-975-08-0056-9,Musait,-,-
-Medeniyetler Çatışması,Samuel P. Huntington,978-605-4764-58-1,Musait,-,-
+Medeniyetler Çatışması,Samuel P. Huntington,978-605-4764-58-1,Oduncte,04.01.2026,çağatay oğuz
 Hayvan Çiftliği,George Orwell,978-975-07-2723-1,Oduncte,20.01.2026,-
 Fahrenheit 451,Ray Bradbury,978-975-273-047-9,Musait,-,-
 Cesur Yeni Dünya,Aldous Huxley,978-975-07-1604-4,Musait,-,-
 Yüz Yıllık Yalnızlık,Gabriel García Márquez,978-975-07-2826-9,Musait,-,-
 Bülbülü Öldürmek,Harper Lee,978-975-07-2172-7,Oduncte,28.01.2026,-
 Dönüşüm,Franz Kafka,978-975-07-1011-0,Musait,-,-
-Anna Karenina,Lev Tolstoy,978-975-08-0897-8,Oduncte,03.01.2026,çağatay oğuz
+Anna Karenina,Lev Tolstoy,978-975-08-0897-8,Müsait,-,-
 Savaş ve Barış,Lev Tolstoy,978-975-08-0898-5,Oduncte,12.02.2026,-
 Beyaz Diş,Jack London,978-975-08-0877-0,Musait,-,-
 Martin Eden,Jack London,978-975-08-0845-9,Musait,-,-
@@ -46,3 +46,5 @@ Gurur ve Ceza,Jane Austen,978-975-07-2600-0,Musait,-,-
 İnsan Ne ile Yaşar,Lev Tolstoy,978-975-07-2650-0,Musait,-,-
 Körlük,José Saramago,978-975-07-2700-0,Musait,-,-
 Suç ve Ceza,Dostoyevski,978-605-7798-01-1,Müsait,-,-
+a,a,u,Müsait,-,-
+e,r,t,Müsait,-,-

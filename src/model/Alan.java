@@ -12,9 +12,14 @@ public abstract class Alan {
     }
 
     // --- Abstract Metotlar (Miras alanlar doldurmak zorunda) ---
-    public abstract String kullanimAmaci();
     public abstract boolean kapasiteKontrol(int mevcutSayi);
 
     // Getter
+    public int getAdi() {
+        return adi.length();
+    }
+    public void setAdi(String adi) {
+        this.adi = adi;
+    }
     public int getKapasite() { return kapasite; }
 }

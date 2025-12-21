@@ -10,4 +10,4 @@
 202200606,Selin,Koç,Diş Hekimliği,2. Sınıf,3.50
 24181616060,çağatay,oğuz,bilgisayar müh,2,3
 24181616013,Osmancan,Küçdemir,Bilgisayar Müh,2,3
-123,osman,xan,bilgisayar,1. Sınıf,3
+1234,ismail,koru,bilgisayar,1. Sınıf,1
