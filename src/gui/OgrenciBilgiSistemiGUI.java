@@ -85,20 +85,22 @@ public class OgrenciBilgiSistemiGUI extends JFrame {
             String ogrNo = txtNo.getText().trim();
 
             // 1. Validasyon: Boş giriş kontrolü
-            if (ogrNo.isEmpty()) return;
+            if (ogrNo.isEmpty())
+                return;
 
             try {
                 // 2. Servis Katmanı Çağrısı
-                // Veritabanı işlemleri için DosyaIslemleri sınıfı kullanıldı.
+
+      // Veritabanı işlemleri için DosyaIslemleri sınıfı kullanıldı.
                 // Eğer numara bulunamazsa, bu metot 'OgrenciBulunamadiException' fırlatır.
                 String[] bilgiler = DosyaIslemleri.ogrenciGetir(ogrNo);
-
                 // 3. Sonuç Gösterimi
                 String mesaj = String.format(
                         "Ad: %s\nSoyad: %s\nBölüm: %s\nSınıf: %s\nOrtalama: %s",
                         bilgiler[0], bilgiler[1], bilgiler[2], bilgiler[3], bilgiler[4]);
 
                 JOptionPane.showMessageDialog(this, mesaj, "Öğrenci Bulundu", JOptionPane.INFORMATION_MESSAGE);
+
 
             } catch (OgrenciBulunamadiException ex) {
                 // 4. Özel İstisna Yönetimi (Custom Exception Handling)

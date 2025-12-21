@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections; // Sıralama için gerekli
 import java.util.List;
 
-// Ödev Gereksinimi: Generic Sınıf <T>
+// Generic Sınıf <T>
 public class Depo<T extends Kaydedilebilir> {
 
 

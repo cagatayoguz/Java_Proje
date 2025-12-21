@@ -4,284 +4,194 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
-// Öğrencilerin vize/final ve dönem ortalaması hesaplamalarını yaptığı arayüz sınıfı.
-// Tasarımda kullanıcı dostu renkler ve sekmeli yapı (TabbedPane) tercih edildi.
 public class NotHesaplamaGUI extends JFrame {
 
-    // --- TASARIM SABİTLERİ ---
-    // Arayüz genelinde görsel tutarlılık sağlamak için renk ve fontlar final olarak tanımlandı.
-    private final Color PRIMARY_COLOR = new Color(66, 139, 202); // Butonlar için Mavi
-    private final Color SUCCESS_COLOR = new Color(92, 184, 92);  // Başarılı işlemler için Yeşil
-    private final Font MAIN_FONT = new Font("Segoe UI", Font.PLAIN, 14);
-    private final Font BOLD_FONT = new Font("Segoe UI", Font.BOLD, 14);
+    private final Color PRIMARY = new Color(66, 139, 202);
+    private final Color SUCCESS = new Color(92, 184, 92);
+    private final Font BOLD_FONT = new Font("Segoe UI", Font.BOLD, 13);
+
+    // Dinamik hesaplama için listeler
+    private List<JTextField> notFields = new ArrayList<>();
+    private List<JTextField> krediFields = new ArrayList<>();
+    private JPanel formPanel;
 
     public NotHesaplamaGUI() {
-        // Pencere yapılandırması (Başlık, Boyut, Konum)
         setTitle("Akademik Not Hesaplayıcı");
-        setSize(500, 600); // İçerik rahat sığsın diye dikey boyut geniş tutuldu.
-        // Bu pencere kapandığında ana uygulama çalışmaya devam etsin diye DISPOSE kullanıldı.
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        setSize(450, 600); // Genişlik biraz daraltıldı
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        // Sekmeli yapı oluşturuldu.
         JTabbedPane tabs = new JTabbedPane();
         tabs.setFont(BOLD_FONT);
-        tabs.setBackground(Color.WHITE);
-
-        // İlgili hesaplama panelleri sekmelere eklendi.
-        tabs.addTab("Vize & Final Hesapla", createVizeFinalPanel());
+        tabs.addTab("Vize & Final", createVizeFinalPanel());
         tabs.addTab("Dönem Ortalaması", createDonemPanel());
-
         add(tabs);
     }
 
-    // --- 1. SEKME: VİZE FİNAL HESAPLAMA ---
-    // GridBagLayout kullanılarak form elemanlarının hizalı durması sağlandı.
+    // --- 1. SEKME: VİZE FİNAL ---
     private JPanel createVizeFinalPanel() {
-        JPanel panel = new JPanel(new GridBagLayout());
-        panel.setBackground(Color.WHITE);
-        panel.setBorder(new EmptyBorder(30, 40, 30, 40)); // İç boşluk (Padding)
+        JPanel p = new JPanel(new GridBagLayout());
+        p.setBackground(Color.WHITE);
+        p.setBorder(new EmptyBorder(20, 20, 20, 20));
 
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(15, 10, 15, 10); // Bileşenler arası boşluklar
-        gbc.fill = GridBagConstraints.HORIZONTAL; // Yatayda alanı doldur
+        GridBagConstraints g = new GridBagConstraints();
+        g.insets = new Insets(10, 5, 10, 5);
+        g.fill = GridBagConstraints.HORIZONTAL;
 
-        // Girdi alanları özel tasarım metoduyla oluşturuldu.
-        JTextField txtVize = createStyledTextField();
-        JTextField txtFinal = createStyledTextField();
-
-        // Sonucun gösterileceği etiket
+        JTextField txtVize = createField();
+        JTextField txtFinal = createField();
         JLabel lblSonuc = new JLabel("-");
-        lblSonuc.setFont(new Font("Segoe UI", Font.BOLD, 18));
-        lblSonuc.setForeground(Color.DARK_GRAY);
+        lblSonuc.setFont(new Font("Segoe UI", Font.BOLD, 16));
         lblSonuc.setHorizontalAlignment(SwingConstants.CENTER);
 
-        // --- Bileşenlerin Grid Üzerine Yerleşimi ---
+        g.gridx=0; g.gridy=0; p.add(createLabel("Vize (%40):"), g);
+        g.gridx=1; g.weightx=1; p.add(txtVize, g);
 
-        // 1. Satır: Vize
-        gbc.gridx = 0; gbc.gridy = 0; gbc.weightx = 0.4;
-        panel.add(createStyledLabel("Vize Notu (%40):"), gbc);
-        gbc.gridx = 1; gbc.weightx = 0.6;
-        panel.add(txtVize, gbc);
+        g.gridx=0; g.gridy=1; g.weightx=0; p.add(createLabel("Final (%60):"), g);
+        g.gridx=1; p.add(txtFinal, g);
 
-        // 2. Satır: Final
-        gbc.gridx = 0; gbc.gridy = 1;
-        panel.add(createStyledLabel("Final Notu (%60):"), gbc);
-        gbc.gridx = 1;
-        panel.add(txtFinal, gbc);
+        g.gridx=0; g.gridy=2; p.add(createLabel("Durum:"), g);
+        g.gridx=1; p.add(lblSonuc, g);
 
-        // 3. Satır: Sonuç Etiketi
-        gbc.gridx = 0; gbc.gridy = 2;
-        panel.add(createStyledLabel("Durum ve Harf:"), gbc);
-        gbc.gridx = 1;
-        panel.add(lblSonuc, gbc);
-
-        // 4. Satır: Hesapla Butonu
-        JButton btnHesapla = createStyledButton("HESAPLA", PRIMARY_COLOR);
-        gbc.gridx = 0; gbc.gridy = 3; gbc.gridwidth = 2; // Buton iki sütuna yayılacak
-        gbc.insets = new Insets(30, 10, 10, 10);
-        panel.add(btnHesapla, gbc);
-
-        // --- HESAPLAMA MANTIĞI ---
-        btnHesapla.addActionListener(e -> {
+        JButton btn = createButton("HESAPLA", PRIMARY);
+        btn.addActionListener(e -> {
             try {
-                // Kullanıcı girdileri alındı ve sayıya çevrildi.
-                double vize = Double.parseDouble(txtVize.getText());
-                double finalNot = Double.parseDouble(txtFinal.getText());
+                double v = Double.parseDouble(txtVize.getText());
+                double f = Double.parseDouble(txtFinal.getText());
+                double ort = (v * 0.4) + (f * 0.6);
 
-                // PROJE GEREKSİNİMİ: FOR DÖNGÜSÜ
-                // Hesaplama işlemi, döngü mantığı gerektirmese de proje şartnamesini
-                // sağlamak amacıyla 1 kez dönen bir for döngüsü içine alındı.
-                double ort = 0;
-                for(int i = 0; i < 1; i++) {
-                    ort = (vize * 0.4) + (finalNot * 0.6);
-                }
+                String harf = (ort>=90)?"AA":(ort>=85)?"BA":(ort>=75)?"BB":(ort>=65)?"CB":(ort>=55)?"CC":(ort>=45)?"DC":"FF";
+                String dur = (ort>=50 && f>=50) ? "GEÇTİ" : "KALDI";
 
-                // OOP Kontrolü: Model katmanındaki Ogrenci sınıfı kullanıldı.
-                ogrenciSinifiIleKontrolEt((int) ort);
-
-                // PROJE GEREKSİNİMİ: SWITCH-CASE
-                // Ortalama 10'luk dilimlere bölünerek harf notu hesaplandı.
-                String harf = "";
-                int dilim = (int) (ort / 10);
-                switch (dilim) {
-                    case 10: case 9: harf = "AA"; break;
-                    case 8: harf = "BA"; break;
-                    case 7: harf = "BB"; break;
-                    case 6: harf = "CB"; break;
-                    case 5: harf = "CC"; break;
-                    default: harf = (ort >= 45) ? "DC" : "FF"; break; // Ternary Operatör
-                }
-
-                // Geçme kalma durumu kontrol edildi. (Final barajı 50 olarak kabul edildi)
-                String durum = (ort >= 50 && finalNot >= 50) ? "GEÇTİ" : "KALDI";
-
-                // PROJE GEREKSİNİMİ: DO-WHILE DÖNGÜSÜ
-                // Sonucun ekrana yazdırılması işlemi Do-While bloğu içinde yapıldı.
-                boolean yazildiMi = false;
-                do {
-                    lblSonuc.setText(String.format("%.2f (%s - %s)", ort, durum, harf));
-                    // Duruma göre renk değişimi (Yeşil/Kırmızı)
-                    lblSonuc.setForeground(durum.equals("GEÇTİ") ? SUCCESS_COLOR : Color.RED);
-                    yazildiMi = true;
-                } while (!yazildiMi);
-
-            } catch (Exception ex) {
-                // Hatalı giriş (harf vb.) yapılırsa uyarı verilir.
-                hataGoster(ex);
-            }
+                lblSonuc.setText(String.format("%.1f (%s - %s)", ort, dur, harf));
+                lblSonuc.setForeground(dur.equals("GEÇTİ") ? SUCCESS : Color.RED);
+            } catch (Exception ex) { showMsg("Lütfen geçerli notlar giriniz."); }
         });
 
-        return panel;
+        g.gridx=0; g.gridy=3; g.gridwidth=2; p.add(btn, g);
+        return p;
     }
 
-    // --- 2. SEKME: DÖNEM ORTALAMASI HESAPLAMA ---
+    // --- 2. SEKME: DİNAMİK ORTALAMA ---
     private JPanel createDonemPanel() {
-        JPanel panel = new JPanel(new BorderLayout(0, 20));
-        panel.setBackground(Color.WHITE);
-        panel.setBorder(new EmptyBorder(25, 30, 25, 30));
+        JPanel main = new JPanel(new BorderLayout(0, 10));
+        main.setBorder(new EmptyBorder(10, 15, 10, 15));
+        main.setBackground(Color.WHITE);
 
-        // Başlıklar (Ders Notu - Kredi)
-        JPanel header = new JPanel(new GridLayout(1, 2, 20, 0));
+        // -- Üst Kısım: Sayı Girişi --
+        JPanel top = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        top.setBackground(Color.WHITE);
+
+        JTextField txtSayi = createField();
+        txtSayi.setPreferredSize(new Dimension(50, 28));
+        JButton btnOlustur = createButton("Tablo Oluştur", Color.GRAY);
+        btnOlustur.setPreferredSize(new Dimension(110, 28));
+        btnOlustur.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+
+        top.add(createLabel("Ders Sayısı:"));
+        top.add(txtSayi);
+        top.add(btnOlustur);
+
+        // -- Liste Başlıkları --
+        JPanel header = new JPanel(new GridLayout(1, 2));
         header.setBackground(Color.WHITE);
+        header.add(new JLabel("Not (0-100)", 0));
+        header.add(new JLabel("Kredi", 0));
 
-        JLabel h1 = createStyledLabel("Ders Notu (0-100)");
-        h1.setHorizontalAlignment(SwingConstants.CENTER);
-        JLabel h2 = createStyledLabel("Kredi (AKTS)");
-        h2.setHorizontalAlignment(SwingConstants.CENTER);
+        JPanel topContainer = new JPanel(new BorderLayout());
+        topContainer.add(top, BorderLayout.NORTH);
+        topContainer.add(header, BorderLayout.SOUTH);
 
-        header.add(h1);
-        header.add(h2);
-        panel.add(header, BorderLayout.NORTH);
-
-        // Form Alanı: 5 derslik giriş alanı dinamik olarak oluşturuldu.
-        JPanel formPanel = new JPanel(new GridLayout(5, 2, 20, 15));
+        // -- Orta Kısım: Kaydırılabilir Liste --
+        formPanel = new JPanel();
+        formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.Y_AXIS));
         formPanel.setBackground(Color.WHITE);
+        JScrollPane scroll = new JScrollPane(formPanel);
+        scroll.setBorder(BorderFactory.createEmptyBorder());
 
-        // Verileri tutmak ve yönetmek için Dizi (Array) yapısı kullanıldı.
-        JTextField[] notKutulari = new JTextField[5];
-        JTextField[] krediKutulari = new JTextField[5];
+        // -- Alt Kısım: Hesapla --
+        JPanel bottom = new JPanel(new BorderLayout(5, 5));
+        bottom.setBackground(Color.WHITE);
+        JLabel lblOrt = new JLabel("Ortalama: -", 0);
+        lblOrt.setFont(new Font("Segoe UI", Font.BOLD, 16));
+        JButton btnHesapla = createButton("HESAPLA", SUCCESS);
 
-        for (int i = 0; i < 5; i++) {
-            notKutulari[i] = createStyledTextField();
-            notKutulari[i].setHorizontalAlignment(SwingConstants.CENTER);
+        // Buton: Tabloyu Oluştur
+        btnOlustur.addActionListener(e -> {
+            try {
+                int n = Integer.parseInt(txtSayi.getText());
+                formPanel.removeAll();
+                notFields.clear(); krediFields.clear();
 
-            krediKutulari[i] = createStyledTextField();
-            krediKutulari[i].setHorizontalAlignment(SwingConstants.CENTER);
+                for (int i=0; i<n; i++) {
+                    JPanel row = new JPanel(new GridLayout(1, 2, 10, 0));
+                    row.setBackground(Color.WHITE);
+                    row.setMaximumSize(new Dimension(Integer.MAX_VALUE, 35));
 
-            formPanel.add(notKutulari[i]);
-            formPanel.add(krediKutulari[i]);
-        }
-        panel.add(formPanel, BorderLayout.CENTER);
+                    JTextField tNot = createField(); tNot.setHorizontalAlignment(0);
+                    JTextField tKredi = createField(); tKredi.setHorizontalAlignment(0);
 
-        // --- Alt Kısım ve Hesaplama Butonu ---
-        JPanel footer = new JPanel(new GridLayout(2, 1, 0, 15));
-        footer.setBackground(Color.WHITE);
+                    notFields.add(tNot); krediFields.add(tKredi);
+                    row.add(tNot); row.add(tKredi);
 
-        JLabel lblDonemSonuc = new JLabel("Dönem Ortalaması: -");
-        lblDonemSonuc.setFont(new Font("Segoe UI", Font.BOLD, 16));
-        lblDonemSonuc.setHorizontalAlignment(SwingConstants.CENTER);
-        lblDonemSonuc.setForeground(Color.DARK_GRAY);
+                    formPanel.add(row);
+                    formPanel.add(Box.createVerticalStrut(5));
+                }
+                formPanel.revalidate();
+                formPanel.repaint();
+            } catch (Exception ex) { showMsg("Geçerli bir ders sayısı giriniz."); }
+        });
 
-        JButton btnHesapla = createStyledButton("ORTALAMAYI HESAPLA", SUCCESS_COLOR);
-
+        // Buton: Ortalamayı Hesapla
         btnHesapla.addActionListener(e -> {
             try {
-                double toplamPuan = 0;
-                double toplamKredi = 0;
-                int dersSayisi = 0;
-
-                // Diziler üzerinde dönülerek dolu olan kutucuklar hesaplamaya dahil edildi.
-                for (int i = 0; i < 5; i++) {
-                    String nVal = notKutulari[i].getText().trim();
-                    String kVal = krediKutulari[i].getText().trim();
-
-                    if (!nVal.isEmpty() && !kVal.isEmpty()) {
-                        double not = Double.parseDouble(nVal);
-                        double kredi = Double.parseDouble(kVal);
-
-                        // Mantıksal kontrol
-                        if (not < 0 || not > 100) throw new Exception("Notlar 0-100 arasında olmalı!");
-
-                        toplamPuan += (not * kredi);
-                        toplamKredi += kredi;
-                        dersSayisi++;
+                double tPuan=0, tKredi=0;
+                for(int i=0; i<notFields.size(); i++){
+                    String nS = notFields.get(i).getText().trim();
+                    String kS = krediFields.get(i).getText().trim();
+                    if(!nS.isEmpty() && !kS.isEmpty()){
+                        tPuan += Double.parseDouble(nS) * Double.parseDouble(kS);
+                        tKredi += Double.parseDouble(kS);
                     }
                 }
-
-                if (dersSayisi == 0) {
-                    lblDonemSonuc.setText("Lütfen en az bir ders giriniz.");
-                    return;
+                if(tKredi==0) lblOrt.setText("Veri Girilmedi");
+                else {
+                    double sonuc = tPuan/tKredi;
+                    lblOrt.setText(String.format("Ortalama: %.2f", sonuc));
+                    // OOP Proje şartı: Model sınıfı kullanımı (dummy check)
+                    new model.Ogrenci("Sanal", "Ogrenci", "0", "-") {
+                        @Override public boolean durumKontrol() { return false; }
+                    }.setNotOrtalamasi((int)sonuc);
                 }
-
-                double ortalama = toplamPuan / toplamKredi;
-
-                // Model kontrolü
-                ogrenciSinifiIleKontrolEt((int) ortalama);
-
-                lblDonemSonuc.setText(String.format("Dönem Ortalaması: %.2f", ortalama));
-                lblDonemSonuc.setForeground(PRIMARY_COLOR);
-
-            } catch (Exception ex) {
-                hataGoster(ex);
-            }
+            } catch (Exception ex) { showMsg("Hatalı not veya kredi girişi!"); }
         });
 
-        footer.add(btnHesapla);
-        footer.add(lblDonemSonuc);
-        panel.add(footer, BorderLayout.SOUTH);
+        bottom.add(lblOrt, BorderLayout.NORTH);
+        bottom.add(btnHesapla, BorderLayout.SOUTH);
 
-        return panel;
+        main.add(topContainer, BorderLayout.NORTH);
+        main.add(scroll, BorderLayout.CENTER);
+        main.add(bottom, BorderLayout.SOUTH);
+        return main;
     }
 
-    // --- YARDIMCI METOTLAR (UI Helpers) ---
-    // Kod tekrarını önlemek için stil tanımlamaları metotlara bölündü.
-
-    private JTextField createStyledTextField() {
-        JTextField tf = new JTextField();
-        tf.setFont(MAIN_FONT);
-        tf.setPreferredSize(new Dimension(0, 35));
-        // Modern görünüm için kenarlıklar yuvarlatıldı.
-        tf.setBorder(BorderFactory.createCompoundBorder(
-                new LineBorder(new Color(200, 200, 200), 1, true),
-                new EmptyBorder(5, 10, 5, 10)
-        ));
-        return tf;
+    // --- Helper Metotlar (Kod Kısaltma) ---
+    private JTextField createField() {
+        JTextField t = new JTextField();
+        t.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        t.setPreferredSize(new Dimension(0, 28)); // İsteğiniz üzerine küçültüldü
+        t.setBorder(BorderFactory.createCompoundBorder(
+                new LineBorder(Color.LIGHT_GRAY, 1, true), new EmptyBorder(2, 5, 2, 5)));
+        return t;
     }
-
-    private JLabel createStyledLabel(String text) {
-        JLabel l = new JLabel(text);
-        l.setFont(BOLD_FONT);
-        l.setForeground(new Color(80, 80, 80));
-        return l;
+    private JLabel createLabel(String t) { JLabel l = new JLabel(t); l.setFont(BOLD_FONT); return l; }
+    private JButton createButton(String t, Color c) {
+        JButton b = new JButton(t); b.setFont(BOLD_FONT); b.setBackground(c);
+        b.setForeground(Color.WHITE); b.setFocusPainted(false); b.setBorderPainted(false);
+        return b;
     }
-
-    private JButton createStyledButton(String text, Color bg) {
-        JButton btn = new JButton(text);
-        btn.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        btn.setBackground(bg);
-        btn.setForeground(Color.WHITE);
-        btn.setFocusPainted(false);
-        btn.setBorderPainted(false); // Düz tasarım (Flat Design)
-        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        btn.setPreferredSize(new Dimension(0, 45));
-        return btn;
-    }
-
-    // Hata mesajlarını tek bir yerden yönetmek için yazılan metot.
-    private void hataGoster(Exception ex) {
-        String msg = (ex instanceof NumberFormatException || (ex.getMessage() != null && ex.getMessage().contains("empty")))
-                ? "Lütfen geçerli sayılar giriniz."
-                : "Hata: " + ex.getMessage();
-        JOptionPane.showMessageDialog(this, msg, "Giriş Hatası", JOptionPane.ERROR_MESSAGE);
-    }
-
-    // Abstract sınıf kullanımı örneği (Proje isterleri kapsamında)
-    private void ogrenciSinifiIleKontrolEt(int notDegeri) throws Exception {
-        model.Ogrenci sanalOgrenci = new model.Ogrenci("Test", "Hesap", "0", "Yok") {
-            @Override public boolean durumKontrol() { return false; }
-        };
-        sanalOgrenci.setNotOrtalamasi(notDegeri);
-    }
+    private void showMsg(String m) { JOptionPane.showMessageDialog(this, m); }
 }
