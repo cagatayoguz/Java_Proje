@@ -46,4 +46,3 @@ Gurur ve Ceza,Jane Austen,978-975-07-2600-0,Musait,-,-
 İnsan Ne ile Yaşar,Lev Tolstoy,978-975-07-2650-0,Musait,-,-
 Körlük,José Saramago,978-975-07-2700-0,Musait,-,-
 Suç ve Ceza,Dostoyevski,978-605-7798-01-1,Müsait,-,-
-t,g,u,Müsait,-,-
