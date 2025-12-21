@@ -15,7 +15,6 @@ public class SporSalonuUyeYonetimGUI extends JFrame {
     private JTable table;
 
     public SporSalonuUyeYonetimGUI() {
-        // Pencere yapılandırması (Başlık, Boyut, Konumlandırma) gerçekleştirildi.
         setTitle("Spor Salonu - Aktif Üye Listesi");
         setSize(900, 500);
         // Pencere kapatıldığında ana yönetim panelinin açık kalması için DISPOSE tercih edildi.
@@ -26,7 +25,7 @@ public class SporSalonuUyeYonetimGUI extends JFrame {
         mainPanel.setBackground(Color.WHITE);
         setContentPane(mainPanel);
 
-        // --- Başlık Paneli ---
+        // Başlık Paneli
         JPanel header = new JPanel(new FlowLayout(FlowLayout.LEFT));
         header.setBackground(new Color(248, 249, 250)); // Kurumsal gri arka plan
         header.setBorder(new EmptyBorder(15, 20, 15, 20));
@@ -36,10 +35,10 @@ public class SporSalonuUyeYonetimGUI extends JFrame {
         header.add(lblBaslik);
         mainPanel.add(header, BorderLayout.NORTH);
 
-        // --- Tablo Yapılandırması ---
+        // Tablo
         String[] kolonlar = {"Ad Soyad", "Öğrenci No", "Üyelik Tipi", "Ücret", "Durum"};
 
-        // Veri tutarlılığını korumak için hücrelerin elle düzenlenmesi engellendi.
+        // Veri bütünlüğünü korumak için tabloya erişim engellendi
         model = new DefaultTableModel(kolonlar, 0) {
             @Override
             public boolean isCellEditable(int row, int column) { return false; }
@@ -49,7 +48,6 @@ public class SporSalonuUyeYonetimGUI extends JFrame {
         table.setRowHeight(30); // Okunabilirlik için satır yüksekliği artırıldı.
         table.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 
-        // Silme işlemi yapılacağı için seçim rengi kırmızımsı bir ton olarak ayarlandı.
         table.setSelectionBackground(new Color(255, 230, 230));
         table.setSelectionForeground(Color.BLACK);
 
@@ -61,7 +59,7 @@ public class SporSalonuUyeYonetimGUI extends JFrame {
         scrollPane.getViewport().setBackground(Color.WHITE);
         mainPanel.add(scrollPane, BorderLayout.CENTER);
 
-        // --- Alt Panel (İşlem Butonu) ---
+        // Alt Panel
         JPanel altPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 20, 20));
         altPanel.setBackground(Color.WHITE);
 
@@ -77,7 +75,7 @@ public class SporSalonuUyeYonetimGUI extends JFrame {
         mainPanel.add(altPanel, BorderLayout.SOUTH);
     }
 
-    // --- Veri Filtreleme ve Yükleme ---
+    // Veri yükleme ---
     private void verileriYukle() {
         model.setRowCount(0); // Tablo temizlendi.
         List<String[]> uyelikler = DosyaIslemleri.sporUyelikleriOku();
@@ -92,7 +90,7 @@ public class SporSalonuUyeYonetimGUI extends JFrame {
         }
     }
 
-    // --- Üyelik İptal ve Silme İşlemi ---
+    // Üyelik İptal ve Silme İşlemi
     private void silmeIslemi() {
         int row = table.getSelectedRow();
 

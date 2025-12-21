@@ -53,10 +53,7 @@ public class DuyuruYonetimMenuGUI extends JFrame {
         mainPanel.add(gridPanel, BorderLayout.CENTER);
     }
 
-    /**
-     * Kod tekrarını önlemek ve tutarlı bir tasarım sağlamak amacıyla,
-     * menü kartlarını oluşturan parametrik metot tasarlandı.
-     */
+    // Buton stillerini standartlaştıran yardımcı metot.
     private JPanel createCard(String title, String desc, String icon, java.awt.event.ActionListener action) {
         JPanel card = new JPanel(new BorderLayout());
         card.setBackground(CARD_BG);

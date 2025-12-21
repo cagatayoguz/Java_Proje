@@ -11,20 +11,17 @@ import java.awt.event.MouseEvent;
 public class FakulteSecimGUI extends JFrame {
 
     public FakulteSecimGUI() {
-        // Pencere yapılandırması (Başlık, Boyut, Konumlandırma) gerçekleştirildi.
         setTitle("Ders Programı - Fakülte Seçimi");
         setSize(800, 500);
         // Ana menüye dönüşü engellememek için DISPOSE_ON_CLOSE tercih edildi.
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        // Ana panel düzeni BorderLayout olarak ayarlandı.
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.setBackground(new Color(248, 249, 250)); // Kurumsal gri ton
         setContentPane(mainPanel);
 
-        // --- Başlık Paneli ---
-        // Sayfanın üst kısmında kullanıcıyı bilgilendiren başlık alanı oluşturuldu.
+        //  Başlık Paneli
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(new Color(248, 249, 250));
         headerPanel.setBorder(new EmptyBorder(30, 40, 10, 40));
@@ -34,17 +31,13 @@ public class FakulteSecimGUI extends JFrame {
         headerPanel.add(lblTitle, BorderLayout.NORTH);
         mainPanel.add(headerPanel, BorderLayout.NORTH);
 
-        // --- Seçenekler Paneli (Grid Yapısı) ---
-        // Fakülte kartlarının düzenli sıralanması için 2x2 GridLayout kullanıldı.
+        // Seçenekler Paneli
         JPanel gridPanel = new JPanel(new GridLayout(2, 2, 20, 20));
         gridPanel.setBackground(new Color(248, 249, 250));
         gridPanel.setBorder(new EmptyBorder(20, 40, 40, 40));
 
-        // --- LİSTE ELEMANLARININ EKLENMESİ ---
 
-        // Yardımcı metot (createCard) kullanılarak kod tekrarı önlendi ve modüler yapı sağlandı.
         // Her butona tıklandığında 'BolumSecimGUI' sınıfına ilgili fakülte adı parametre olarak gönderildi.
-
         // 1. Teknoloji Fakültesi Kartı
         gridPanel.add(createCard("Teknoloji Fakültesi", "Yazılım, Mekatronik...", "💻",
                 e -> new BolumSecimGUI("Teknoloji Fakültesi").setVisible(true)));
@@ -64,11 +57,8 @@ public class FakulteSecimGUI extends JFrame {
         mainPanel.add(gridPanel, BorderLayout.CENTER);
     }
 
-    /**
-     * UI Tasarım Deseni: Kart Oluşturucu
-     * Tekrar eden görsel bileşenleri (Kartları) parametrik olarak üreten metot.
-     * Bu sayede tasarım değişiklikleri tek bir noktadan yönetilebilir hale getirildi.
-     */
+
+    // Buton stillerini standartlaştıran yardımcı metot.
     private JPanel createCard(String title, String desc, String icon, java.awt.event.ActionListener action) {
         JPanel card = new JPanel(new BorderLayout());
         card.setBackground(Color.WHITE);
@@ -78,7 +68,7 @@ public class FakulteSecimGUI extends JFrame {
                 new LineBorder(new Color(230, 230, 230), 1),
                 new EmptyBorder(20, 20, 20, 20)
         ));
-        card.setCursor(new Cursor(Cursor.HAND_CURSOR)); // Tıklanabilirlik hissi verildi.
+        card.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         // İkon yerleşimi (Sol taraf)
         JLabel lblIcon = new JLabel(icon);
@@ -101,12 +91,10 @@ public class FakulteSecimGUI extends JFrame {
         textPanel.add(lblD);
         card.add(textPanel, BorderLayout.CENTER);
 
-        // --- Etkileşim Yönetimi ---
+        // Mouse üzerine geldiğinde (Hover) kenarlık rengi değiştirilerek görsel geri bildirim sağlandı.
         card.addMouseListener(new MouseAdapter() {
-            // Tıklama olayı yakalandı ve parametre olarak gelen aksiyon çalıştırıldı.
             public void mouseClicked(MouseEvent e) { action.actionPerformed(null); }
 
-            // Hover (Üzerine gelme) durumunda kenarlık rengi mavi yapılarak görsel geri bildirim sağlandı.
             public void mouseEntered(MouseEvent e) {
                 card.setBorder(new LineBorder(new Color(13, 110, 253), 1));
             }

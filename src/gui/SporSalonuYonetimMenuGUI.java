@@ -27,7 +27,7 @@ public class SporSalonuYonetimMenuGUI extends JFrame {
         mainPanel.setBackground(BG_COLOR);
         setContentPane(mainPanel);
 
-        // --- Başlık Alanı ---
+        // Başlık Alanı
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(BG_COLOR);
         headerPanel.setBorder(new EmptyBorder(30, 40, 10, 40));
@@ -37,30 +37,24 @@ public class SporSalonuYonetimMenuGUI extends JFrame {
         headerPanel.add(lblTitle, BorderLayout.NORTH);
         mainPanel.add(headerPanel, BorderLayout.NORTH);
 
-        // --- Menü Kartları (Grid Layout) ---
-        // Kartların yan yana düzenli durması için 1 satır 2 sütunluk Grid yapısı kurgulandı.
+        // Menü Kartları
         JPanel gridPanel = new JPanel(new GridLayout(1, 2, 20, 20));
         gridPanel.setBackground(BG_COLOR);
         gridPanel.setBorder(new EmptyBorder(20, 40, 40, 40));
 
-        // 1. Onay Bekleyenler Kartı
-        // Lambda ifadesi ile başvuru onay ekranının açılması sağlandı.
+        // Onay Bekleyenler Kartı
         gridPanel.add(createCard("Onay Bekleyenler", "Yeni başvuruları yönet.", "📝",
                 e -> new SporSalonuOnayGUI().setVisible(true)));
 
-        // 2. Üye Listesi / İptal Kartı
-        // Aktif üyelerin listelendiği ve silindiği ekran yönlendirmesi.
+        // Üye Listesi / İptal Kartı
         gridPanel.add(createCard("Üye Listesi / İptal", "Üyeleri gör veya sil.", "👥",
                 e -> new SporSalonuUyeYonetimGUI().setVisible(true)));
 
         mainPanel.add(gridPanel, BorderLayout.CENTER);
     }
 
-    /**
-     * Helper Metot: Kart Oluşturucu
-     * Kod tekrarını önlemek (DRY Prensibi) ve tasarım standardını korumak amacıyla
-     * kart üretim süreci parametrik bir metoda devredildi.
-     */
+
+    // Buton stillerini standartlaştıran yardımcı metot.
     private JPanel createCard(String title, String desc, String icon, java.awt.event.ActionListener action) {
         JPanel card = new JPanel(new BorderLayout());
         card.setBackground(CARD_BG);
@@ -90,7 +84,6 @@ public class SporSalonuYonetimMenuGUI extends JFrame {
         textPanel.add(lblD);
         card.add(textPanel, BorderLayout.CENTER);
 
-        // --- Kullanıcı Deneyimi (UX) ---
         // Mouse üzerine geldiğinde (Hover) kenarlık rengi değiştirilerek görsel geri bildirim sağlandı.
         card.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {

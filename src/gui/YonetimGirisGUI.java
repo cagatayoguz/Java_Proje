@@ -21,14 +21,12 @@ public class YonetimGirisGUI extends JFrame {
     private JButton btnGiris;
 
     public YonetimGirisGUI() {
-        // Pencere yapılandırması (Başlık, Boyut, Konumlandırma) gerçekleştirildi.
         setTitle("Yönetim Paneli Girişi");
-        setSize(450, 400); // Kullanıcı odaklı ideal boyut
+        setSize(450, 400);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null); // Ekranın tam ortasında açılması sağlandı.
 
-        // --- Ana Panel (Arka Plan) ---
-        // Modern bir görünüm için açık gri-mavi tonu tercih edildi.
+        // Ana Panel
         JPanel mainPanel = new JPanel();
         mainPanel.setBackground(new Color(240, 242, 245));
 
@@ -36,24 +34,23 @@ public class YonetimGirisGUI extends JFrame {
         mainPanel.setLayout(new GridBagLayout());
         setContentPane(mainPanel);
 
-        // --- Kart Paneli (Giriş Formu) ---
+        // Kart Paneli
         JPanel cardPanel = new JPanel();
         cardPanel.setBackground(Color.WHITE);
         cardPanel.setLayout(new BoxLayout(cardPanel, BoxLayout.Y_AXIS));
 
-        // Karta derinlik katmak için ince gri çerçeve ve geniş iç boşluk (Padding) eklendi.
         cardPanel.setBorder(BorderFactory.createCompoundBorder(
                 new LineBorder(new Color(220, 220, 220), 1, true),
                 new EmptyBorder(40, 40, 40, 40)
         ));
 
-        // --- 1. Başlık ---
+        // Başlık paneli
         JLabel lblBaslik = new JLabel("Yönetici Girişi");
         lblBaslik.setFont(new Font("Segoe UI", Font.BOLD, 24));
         lblBaslik.setForeground(new Color(50, 60, 80));
         lblBaslik.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        // --- 2. Kullanıcı Adı Alanı ---
+        // Kullanıcı Adı Alanı
         JLabel lblUser = new JLabel("Kullanıcı Adı");
         lblUser.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         lblUser.setForeground(Color.GRAY);
@@ -61,7 +58,7 @@ public class YonetimGirisGUI extends JFrame {
 
         txtKullaniciAdi = bilesenTextOlustur();
 
-        // --- 3. Şifre Alanı ---
+        // Şifre Alanı
         JLabel lblPass = new JLabel("Şifre");
         lblPass.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         lblPass.setForeground(Color.GRAY);
@@ -74,7 +71,7 @@ public class YonetimGirisGUI extends JFrame {
                 new EmptyBorder(5, 10, 5, 10)));
         txtSifre.setMaximumSize(new Dimension(Integer.MAX_VALUE, 35));
 
-        // --- 4. Giriş Butonu ---
+        // Giriş Butonu
         btnGiris = new JButton("Giriş Yap");
         btnGiris.setFont(new Font("Segoe UI", Font.BOLD, 15));
         btnGiris.setForeground(Color.WHITE);
@@ -84,7 +81,6 @@ public class YonetimGirisGUI extends JFrame {
         btnGiris.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
         btnGiris.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        // Kullanıcı Deneyimi (UX): Hover Efekti
         // Mouse üzerine geldiğinde buton rengi açılarak etkileşim hissi verildi.
         btnGiris.addMouseListener(new MouseAdapter() {
             public void mouseEntered(MouseEvent evt) {
@@ -95,14 +91,12 @@ public class YonetimGirisGUI extends JFrame {
             }
         });
 
-        // Buton aksiyonu tanımlandı.
         btnGiris.addActionListener(this::girisYapAction);
 
-        // *** UX İyileştirmesi: ENTER Tuşu ***
         // Form üzerindeyken Enter tuşuna basıldığında 'Giriş Yap' butonunun tetiklenmesi sağlandı.
         this.getRootPane().setDefaultButton(btnGiris);
 
-        // --- Bileşenlerin Karta Yerleşimi ---
+        // Bileşenlerin Karta Yerleşimi
         cardPanel.add(lblBaslik);
         cardPanel.add(Box.createVerticalStrut(30));
 
@@ -131,7 +125,7 @@ public class YonetimGirisGUI extends JFrame {
         mainPanel.add(cardPanel);
     }
 
-    // --- Yardımcı Metot: Text Alanı Tasarımı ---
+    // Yardımcı Metot: Text Alanı Tasarımı
     private JTextField bilesenTextOlustur() {
         JTextField txt = new JTextField(15);
         txt.setFont(new Font("Segoe UI", Font.PLAIN, 14));
@@ -142,7 +136,7 @@ public class YonetimGirisGUI extends JFrame {
         return txt;
     }
 
-    // --- Giriş Doğrulama Mantığı ---
+    // Giriş Doğrulama
     private void girisYapAction(ActionEvent e) {
         String kullaniciAdi = txtKullaniciAdi.getText();
         String sifre = new String(txtSifre.getPassword());

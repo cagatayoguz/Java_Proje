@@ -8,16 +8,17 @@ import java.io.IOException;
 
 public class Kutuphane extends Alan {
 
+    //Kitapların tutulduğu yer
     private List<Kitap> kitapListesi;
 
-    // Singleton veya Tekil kullanım için constructor
+    //Kapasite belirleyen constructor
     public Kutuphane(String adi) {
         super(adi, 50); // Kapasite: 50
         this.kitapListesi = new ArrayList<>();
     }
 
-    // --- MANTIKSAL METOTLAR ---
 
+    //Kitap ekleyen metod
     public void kitapEkle(Kitap kitap) throws GecersizGirisBilgisiException {
         // 1. Kapasite Kontrolü
         // Dosyadaki mevcut kitap sayısını da kontrol edebiliriz
@@ -44,8 +45,7 @@ public class Kutuphane extends Alan {
         kitapListesi.add(kitap);
     }
 
-    // --- INTERFACE UYGULAMALARI ---
-
+    //Yeni kitapları dosyaya yazan metod
     @Override
     public boolean kaydet() {
         // Bu sınıfın 'kaydet' metodu, içindeki bekleyen kitapları dosyaya yazar.
@@ -61,6 +61,7 @@ public class Kutuphane extends Alan {
         return basari;
     }
 
+    //Kitapları silen metod
     @Override
     public boolean sil(String isbn) {
         // Kütüphaneden kitap silme işlemi
@@ -73,7 +74,7 @@ public class Kutuphane extends Alan {
         }
     }
 
-    // --- DİĞER METOTLAR ---
+    // DİĞER METOTLAR
 
     @Override
     public boolean kapasiteKontrol(int mevcutSayi) {

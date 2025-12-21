@@ -10,33 +10,27 @@ import java.io.IOException;
 public class TakvimSecimGUI extends JFrame {
 
     public TakvimSecimGUI() {
-        // Pencere yapılandırması (Başlık, Boyut, Konumlandırma) gerçekleştirildi.
         setTitle("Takvim Seçimi");
         setSize(500, 350);
         // Bu pencere kapatıldığında ana menüye dönülmesi için DISPOSE tercih edildi.
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        // Butonların alt alta nizami durması için 2 satır 1 sütunluk GridLayout kullanıldı.
         JPanel mainPanel = new JPanel(new GridLayout(2, 1, 20, 20));
         mainPanel.setBorder(new EmptyBorder(40, 40, 40, 40)); // Kenar boşlukları
         mainPanel.setBackground(new Color(248, 249, 250)); // Açık gri arka plan
 
-        // --- 1. AKADEMİK TAKVİM BUTONU ---
+        // AKADEMİK TAKVİM BUTONU
         JButton btnAkademik = new JButton("📅 Akademik Takvim");
         styleButton(btnAkademik, new Color(13, 110, 253)); // Mavi Buton
 
         // Lambda ifadesi ile yerel diskteki PDF dosyasının açılması sağlandı.
-        // Dosya yolu statik olarak tanımlanmıştır.
         btnAkademik.addActionListener(e -> dosyaAc("C:\\Users\\cagat\\Downloads\\akademik takvim.pdf"));
 
-        // --- 2. SINAV TAKVİMİ BUTONU ---
+        // SINAV TAKVİMİ BUTONU
         JButton btnSinav = new JButton("📝 Sınav Takvimi");
         styleButton(btnSinav, new Color(25, 135, 84)); // Yeşil Buton
 
-        // Navigasyon Mantığı:
-        // Sınav takvimleri fakülte bazlı ayrıldığı için doğrudan dosya açmak yerine,
-        // kullanıcının fakülte seçebileceği ara ekrana ('SinavFakulteSecimGUI') yönlendirme yapıldı.
         btnSinav.addActionListener(e -> new SinavFakulteSecimGUI().setVisible(true));
 
         mainPanel.add(btnAkademik);
@@ -45,8 +39,7 @@ public class TakvimSecimGUI extends JFrame {
         add(mainPanel);
     }
 
-    // --- UI Helper: Buton Stilleme ---
-    // Kod tekrarını önlemek ve arayüz standardizasyonu sağlamak için yardımcı metot kullanıldı.
+    // Buton stillerini standartlaştıran yardımcı metot.
     private void styleButton(JButton btn, Color bgColor) {
         btn.setFont(new Font("Segoe UI", Font.BOLD, 18));
         btn.setBackground(bgColor);
@@ -55,7 +48,7 @@ public class TakvimSecimGUI extends JFrame {
         btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
     }
 
-    // --- Dosya Açma Servisi ---
+    // Dosya Açma Metodu
     // Java Desktop API kullanılarak, dosya uzantısından bağımsız (PDF, JPG vb.)
     // işletim sisteminin varsayılan görüntüleyicisi ile açılması sağlandı.
     private void dosyaAc(String path) {

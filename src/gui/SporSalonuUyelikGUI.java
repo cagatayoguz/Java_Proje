@@ -65,9 +65,6 @@ public class SporSalonuUyelikGUI extends JFrame {
         add(mainPanel);
     }
 
-    // --- UI Helper: Etiket Oluşturucu ---
-    // Arayüzde görsel bütünlük sağlamak ve kod tekrarını önlemek amacıyla
-    // etiket oluşturma işlemi parametrik bir metoda devredildi.
     private JLabel boldLabel(String text) {
         JLabel label = new JLabel(text);
         label.setFont(new Font("Arial", Font.BOLD, 14));
@@ -75,8 +72,7 @@ public class SporSalonuUyelikGUI extends JFrame {
         return label;
     }
 
-    // --- Fiyat Güncelleme Mantığı ---
-    // Kullanıcının seçtiği üyelik tipine göre ödenecek tutar dinamik olarak güncellendi.
+    // Fiyat Güncelleme
     private void fiyatGuncelle() {
         String secim = (String) cmbUyelikTipi.getSelectedItem();
         if ("Aylık Üyelik".equals(secim)) lblUcret.setText("500 TL");
@@ -84,16 +80,15 @@ public class SporSalonuUyelikGUI extends JFrame {
         else if ("Yıllık Üyelik".equals(secim)) lblUcret.setText("5000 TL");
     }
 
-    // --- Kayıt İşlemi ---
+    // Kayıt İşlemi
     private void kayitOlAction() {
-        // 1. Validasyon: Boş alan kontrolü sağlandı.
+        // Boş alan kontrolü sağlandı.
         if (txtAdSoyad.getText().trim().isEmpty() || txtOgrenciNo.getText().trim().isEmpty()) {
             JOptionPane.showMessageDialog(this, "Lütfen tüm alanları doldurunuz!", "Hata", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
         try {
-            // 2. Veri Kaydı: Servis katmanı çağrılarak üyelik talebi sisteme iletildi.
             // Talep varsayılan olarak "Bekliyor" statüsünde kaydedildi, yönetici onayı beklenecek.
             DosyaIslemleri.sporUyelikEkle(
                     txtAdSoyad.getText(),
@@ -103,7 +98,7 @@ public class SporSalonuUyelikGUI extends JFrame {
                     "Bekliyor"
             );
 
-            // 3. Kullanıcı Geri Bildirimi
+            // Kullanıcı Geri Bildirimi
             String mesaj = "Sayın " + txtAdSoyad.getText() + ",\n" +
                     "Kayıt talebiniz alınmıştır. Yönetici onayından sonra üyeliğiniz aktifleşecektir.";
             JOptionPane.showMessageDialog(this, mesaj, "Talep Oluşturuldu", JOptionPane.INFORMATION_MESSAGE);

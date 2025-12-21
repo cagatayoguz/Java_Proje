@@ -15,9 +15,9 @@ public class DosyaIslemleri {
     private static final String SPOR_DOSYASI = "veriler/spor_uyelikleri.txt";
     private static final String DUYURU_DOSYASI = "veriler/duyurular.txt";
 
-    // --- ÖĞRENCİ İŞLEMLERİ ---
+    // ÖĞRENCİ İŞLEMLERİ
 
-    // Yeni öğrenciyi dosyaya ekleme modunda (append: true) kaydeder.
+    // Yeni öğrenciyi dosyaya ekleme
     public static void ogrenciEkle(String ad, String soyad, String bolum, String no, String sinif, String ort) throws IOException {
         File file = new File(OGRENCI_DOSYASI);
         if (file.getParentFile() != null) file.getParentFile().mkdirs(); // Klasör yoksa oluştur
@@ -37,9 +37,8 @@ public class DosyaIslemleri {
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(","); // CSV formatını parçala
+                String[] parts = line.split(",");
                 if (parts.length >= 6) {
-                    // Key: Öğrenci No, Value: Diğer Bilgiler
                     ogrenciler.put(parts[0], new String[]{parts[1], parts[2], parts[3], parts[4], parts[5]});
                 }
             }
@@ -61,7 +60,7 @@ public class DosyaIslemleri {
             }
         }
 
-        // Dosyanın üzerine yazma modu (append: false)
+        // Dosyanın üzerine yazma modu
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(dosya, false))) {
             for (String satir : satirlar) {
                 writer.write(satir);
@@ -70,12 +69,12 @@ public class DosyaIslemleri {
         }
     }
 
-    // Polimorfizm (Overloading) örneği: İsimle silme simülasyonu
+    // İsimle silme
     public static void ogrenciSil(String ad, String soyad) throws IOException {
         System.out.println(ad + " " + soyad + " isimli öğrenci aranıyor ve siliniyor...");
     }
 
-    // --- KİTAP İŞLEMLERİ (TALEP VE ONAY SİSTEMİ) ---
+    // KİTAP İŞLEMLERİ (TALEP VE ONAY SİSTEMİ)
 
     public static void kitapEkle(String KitapAdi, String yazar, String isbn, String durum) throws IOException {
         File file = new File(KITAP_DOSYASI);
@@ -87,8 +86,7 @@ public class DosyaIslemleri {
         }
     }
 
-    public static List<String[]> kitaplariOku() { return kitaplariOkuDetayli(); }
-
+    //Kitapları dosyadan okur
     public static List<String[]> kitaplariOkuDetayli() {
         List<String[]> list = new ArrayList<>();
         File file = new File(KITAP_DOSYASI);
@@ -109,12 +107,12 @@ public class DosyaIslemleri {
         return list;
     }
 
-    // Adım 1: Öğrenci talep ettiğinde durumu "Bekliyor" yapar.
+    // Öğrenci talep ettiğinde durumu "Bekliyor" yapar.
     public static void kitapTalepEt(String isbn, String ogrenciAd) throws IOException {
         degistirVeKaydet(isbn, "Bekliyor", "-", ogrenciAd);
     }
 
-    // Adım 2: Yönetici onayladığında tarihi hesaplar ve durumu "Oduncte" yapar.
+    // Yönetici onayladığında tarihi hesaplar ve durumu "Oduncte" yapar.
     public static void kitapOnayla(String isbn) throws IOException {
         // İade tarihi hesabı (Bugün + 2 Hafta)
         LocalDate iadeTarihi = LocalDate.now().plusWeeks(2);
@@ -123,11 +121,12 @@ public class DosyaIslemleri {
         degistirVeKaydet(isbn, "Oduncte", tarihStr, null);
     }
 
-    // Adım 3: İade veya Ret durumunda kitap tekrar boşa çıkar.
+    // İade veya Ret durumunda kitap tekrar boşa çıkar.
     public static void kitapReddet(String isbn) throws IOException {
         degistirVeKaydet(isbn, "Müsait", "-", "-");
     }
 
+    //İade edilen kitabı sisteme geri müsait olarak kaydeder
     public static void kitapIadeEt(String isbn) throws IOException {
         degistirVeKaydet(isbn, "Müsait", "-", "-");
     }
@@ -145,7 +144,7 @@ public class DosyaIslemleri {
         }
     }
 
-    // --- YARDIMCI METOTLAR (Utility Methods) ---
+    // YARDIMCI METOTLAR
 
     // Belirtilen ISBN'ye sahip kitabın durumunu günceller ve dosyayı yeniden yazar.
     private static void degistirVeKaydet(String isbn, String yeniDurum, String yeniTarih, String yeniKisi) throws IOException {
@@ -196,6 +195,7 @@ public class DosyaIslemleri {
         }
     }
 
+    //Dosyaları okuyan metod
     public static List<String[]> duyurulariOku() {
         List<String[]> list = new ArrayList<>();
         File file = new File(DUYURU_DOSYASI);
@@ -210,6 +210,7 @@ public class DosyaIslemleri {
         return list;
     }
 
+    //Duyuru silen metod
     public static void duyuruSil(String silinecekBaslik) throws IOException {
         List<String[]> duyurular = duyurulariOku();
         File file = new File(DUYURU_DOSYASI);
@@ -223,6 +224,7 @@ public class DosyaIslemleri {
         }
     }
 
+    //Spor üyeliği ekleyen metod
     public static void sporUyelikEkle(String ad, String no, String tip, String ucret, String durum) throws IOException {
         File file = new File(SPOR_DOSYASI);
         if (file.getParentFile() != null) file.getParentFile().mkdirs();
@@ -232,6 +234,7 @@ public class DosyaIslemleri {
         }
     }
 
+    //spor Uyeliklerini Okuyan metod
     public static List<String[]> sporUyelikleriOku() {
         List<String[]> list = new ArrayList<>();
         File file = new File(SPOR_DOSYASI);
@@ -246,6 +249,7 @@ public class DosyaIslemleri {
         return list;
     }
 
+    //Spor üyeliklerini güncelleyen metod
     public static void sporUyelikGuncelle(String ogrenciNo, String yeniDurum) throws IOException {
         List<String[]> liste = sporUyelikleriOku();
         File file = new File(SPOR_DOSYASI);
@@ -258,6 +262,7 @@ public class DosyaIslemleri {
         }
     }
 
+    //Spor üyeliklerini silen metod
     public static boolean sporUyelikSil(String silinecekNo) throws IOException {
         List<String[]> liste = sporUyelikleriOku();
         File dosya = new File(SPOR_DOSYASI);
@@ -274,19 +279,19 @@ public class DosyaIslemleri {
         return bulundu;
     }
 
-    // --- ÖZEL EXCEPTION KULLANIMI ---
+    //  ÖZEL EXCEPTION KULLANIMI
     public static String[] ogrenciGetir(String ogrNo) throws OgrenciBulunamadiException {
         Map<String, String[]> ogrenciler = DosyaIslemleri.ogrencileriOku();
 
         if (!ogrenciler.containsKey(ogrNo)) {
-            // Aranan öğrenci yoksa özel hata sınıfı (Custom Exception) fırlatılır.
+            // Aranan öğrenci yoksa özel hata fırlatılır.
             throw new OgrenciBulunamadiException(ogrNo);
         }
 
         return ogrenciler.get(ogrNo);
     }
 
-    // --- FINALLY BLOĞU ÖRNEĞİ ---
+    // FINALLY BLOĞU ÖRNEĞİ
     // Kaynakların (Resource) güvenli bir şekilde kapatılmasını garanti eder.
     public static boolean dosyaKontrolTest(String dosyaYolu) {
         java.io.FileReader fr = null;

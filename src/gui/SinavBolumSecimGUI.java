@@ -13,7 +13,6 @@ import java.io.IOException;
 public class SinavBolumSecimGUI extends JFrame {
 
     public SinavBolumSecimGUI(String fakulteAdi) {
-        // Pencere yapılandırması (Başlık, Boyut, Konumlandırma) gerçekleştirildi.
         setTitle(fakulteAdi + " - Sınav Takvimi");
         setSize(900, 600);
         // Bu pencere kapatıldığında ana menüye dönülmesi için DISPOSE tercih edildi.
@@ -24,12 +23,11 @@ public class SinavBolumSecimGUI extends JFrame {
         mainPanel.setBackground(new Color(248, 249, 250)); // Kurumsal gri arka plan
         setContentPane(mainPanel);
 
-        // --- 1. Başlık ve Navigasyon Paneli ---
+        // Başlık Paneli
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(new Color(248, 249, 250));
         headerPanel.setBorder(new EmptyBorder(30, 40, 10, 40));
 
-        // Fakülte ismi başlık olarak set edildi.
         JLabel lblTitle = new JLabel(fakulteAdi);
         lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 26));
         lblTitle.setForeground(new Color(33, 37, 41));
@@ -43,8 +41,7 @@ public class SinavBolumSecimGUI extends JFrame {
 
         mainPanel.add(headerPanel, BorderLayout.NORTH);
 
-        // --- 2. Bölüm Listesi (Grid Yapısı) ---
-        // Bölümlerin düzenli sıralanması için 2 sütunlu GridLayout kullanıldı.
+        // Bölüm Listesi
         JPanel gridPanel = new JPanel(new GridLayout(0, 2, 20, 20));
         gridPanel.setBackground(new Color(248, 249, 250));
         gridPanel.setBorder(new EmptyBorder(20, 40, 40, 40));
@@ -64,13 +61,11 @@ public class SinavBolumSecimGUI extends JFrame {
         mainPanel.add(scrollPane, BorderLayout.CENTER);
     }
 
-    /**
-     * Fakülte adına göre ilgili bölüm kartlarını ve dosya yollarını yükleyen metot.
-     * Sınav takvimleri (PDF, Excel, JPG) yerel diskten çağrılmaktadır.
-     */
+    //Fakülte adına göre ilgili bölüm kartlarını ve dosya yollarını yükleyen metot.
+    // Sınav takvimleri (PDF, Excel, JPG) yerel diskten çağrılmaktadır.
     private void bolumleriYukle(String fakulte, JPanel panel) {
 
-        // --- TEKNOLOJİ FAKÜLTESİ KONTROLÜ ---
+        // TEKNOLOJİ FAKÜLTESİ KONTROLÜ
         if (fakulte.contains("Teknoloji")) {
             panel.add(createCard("Yazılım Mühendisliği", "Vize/Final Takvimi...", "💾", () -> {
                 dosyaAc("C:\\Users\\cagat\\Downloads\\Bilgisayar teknoloji Final.xlsx");
@@ -89,7 +84,7 @@ public class SinavBolumSecimGUI extends JFrame {
             }));
         }
 
-        // --- MÜHENDİSLİK FAKÜLTESİ KONTROLÜ ---
+        // MÜHENDİSLİK FAKÜLTESİ KONTROLÜ
         else if (fakulte.contains("Mühendislik")) {
             panel.add(createCard("Bilgisayar Mühendisliği", "Sınav Takvimi...", "💻", () -> {
                 dosyaAc("C:\\Users\\cagat\\Downloads\\Mühendislk Bilgisayar Final.pdf");
@@ -108,7 +103,7 @@ public class SinavBolumSecimGUI extends JFrame {
             }));
         }
 
-        // --- FEN FAKÜLTESİ KONTROLÜ ---
+        // FEN FAKÜLTESİ KONTROLÜ
         else if (fakulte.contains("Fen")) {
             panel.add(createCard("Matematik", "Analiz, Cebir Sınavları...", "📐", () -> {
                 dosyaAc("C:\\Users\\cagat\\Downloads\\Matematik Final.pdf");
@@ -123,7 +118,7 @@ public class SinavBolumSecimGUI extends JFrame {
             }));
         }
 
-        // --- EĞİTİM FAKÜLTESİ KONTROLÜ ---
+        // EĞİTİM FAKÜLTESİ KONTROLÜ
         else if (fakulte.contains("Eğitim")) {
             panel.add(createCard("Sınıf Öğretmenliği", "Sınavlar...", "abc", () -> {
                 dosyaAc("C:\\Users\\cagat\\Downloads\\Sınıf Öğretmenliği Final.pdf");
@@ -139,8 +134,7 @@ public class SinavBolumSecimGUI extends JFrame {
         }
     }
 
-    // --- UI HELPER: KART OLUŞTURMA ---
-    // Tekrar eden kod bloklarını önlemek için arayüz bileşenleri parametrik metot ile üretildi.
+    // Buton stillerini standartlaştıran yardımcı metot.
     private JPanel createCard(String title, String desc, String icon, Runnable onClickAction) {
         JPanel card = new JPanel(new BorderLayout());
         card.setBackground(Color.WHITE);
@@ -194,7 +188,7 @@ public class SinavBolumSecimGUI extends JFrame {
         return card;
     }
 
-    // --- DOSYA AÇMA İŞLEMİ ---
+    // -DOSYA AÇMA İŞLEMİ
     // Java Desktop API kullanılarak, dosya türünden bağımsız (PDF, Excel, IMG)
     // sistemin varsayılan uygulamasıyla açılması sağlandı.
     private void dosyaAc(String path) {

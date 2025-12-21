@@ -215,7 +215,7 @@ public class YemekVeriTabani {
         // Bugünün tarihini al (Örn: 17.12.2025 formatında)
         String bugunTarih = LocalDate.now().format(DateTimeFormatter.ofPattern("dd.MM.yyyy"));
 
-        // Listede var mı bak
+        // Listede var mı bakıyor
         if (menuListesi.containsKey(bugunTarih)) {
             return "TARİH: " + bugunTarih + "\n----------------------------\n" + menuListesi.get(bugunTarih);
         } else {

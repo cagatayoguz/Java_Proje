@@ -10,20 +10,19 @@ import java.awt.*;
 public class SporSalonuSaatlerGUI extends JFrame {
 
     public SporSalonuSaatlerGUI() {
-        // Pencere yapılandırması (Başlık, Boyut, Konumlandırma) gerçekleştirildi.
         setTitle("Spor Salonu - Çalışma Saatleri");
         setSize(650, 450);
         // Bilgi ekranı olduğu için, kapatıldığında sadece bu pencerenin yok edilmesi (DISPOSE) sağlandı.
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        // --- Ana Panel ---
+        // Ana Panel
         // İçeriklerin yerleşimi için BorderLayout tercih edildi.
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.setBackground(Color.WHITE);
         setContentPane(mainPanel);
 
-        // --- Başlık Alanı ---
+        // Başlık Alanı
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(new Color(248, 249, 250)); // Açık gri arka plan
         headerPanel.setBorder(new EmptyBorder(20, 20, 20, 20));
@@ -35,8 +34,7 @@ public class SporSalonuSaatlerGUI extends JFrame {
         headerPanel.add(lblTitle, BorderLayout.WEST);
         mainPanel.add(headerPanel, BorderLayout.NORTH);
 
-        // --- Tablo Veri Seti ---
-        // Program sabit olduğu için veritabanı yerine statik bir dizi (2D Array) kullanıldı.
+        //  Tablo Veri Seti
         String[] kolonlar = {"Günler", "Açılış", "Kapanış", "Notlar"};
         Object[][] veriler = {
                 {"Pazartesi", "Kapalı", "Kapalı", "Genel Temizlik ve Bakım"},
@@ -48,37 +46,32 @@ public class SporSalonuSaatlerGUI extends JFrame {
                 {"Pazar",     "08:00", "20:00", "-"}
         };
 
-        // --- Tablo Modeli ---
-        // Kullanıcının saatleri değiştirmesini engellemek için hücre düzenlemesi kapatıldı.
+        //  Tablo
+        // Veri bütünlüğünü korumak için tabloya erişim engellendi
         DefaultTableModel model = new DefaultTableModel(veriler, kolonlar) {
             @Override
             public boolean isCellEditable(int row, int column) { return false; }
         };
 
-        // --- Tablo Görselleştirme (UI Customization) ---
+        // Tablo Görselleştirme
         JTable table = new JTable(model);
         table.setRowHeight(35); // Okunabilirlik için satır yüksekliği artırıldı.
         table.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         table.setShowVerticalLines(false); // Modern görünüm için dikey çizgiler kaldırıldı.
         table.setIntercellSpacing(new Dimension(0, 0));
 
-        // Seçim rengi göz yormayan bir mavi tonu olarak ayarlandı.
         table.setSelectionBackground(new Color(232, 240, 254));
         table.setSelectionForeground(Color.BLACK);
 
-        // Tablo Başlığı (Header) Tasarımı
+        // Tablo Başlığı Tasarımı
         table.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 14));
         table.getTableHeader().setBackground(new Color(240, 240, 240));
         table.getTableHeader().setForeground(new Color(50, 50, 50));
-        // Başlığın altına ince bir çizgi eklendi.
         table.getTableHeader().setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY));
 
-        // Sütun Genişlik Ayarları
-        // 'Günler' ve 'Notlar' sütunlarına içeriğe uygun genişlik verildi.
         table.getColumnModel().getColumn(0).setPreferredWidth(100);
         table.getColumnModel().getColumn(3).setPreferredWidth(200);
 
-        // --- ScrollPane Entegrasyonu ---
         JScrollPane scrollPane = new JScrollPane(table);
         // Çerçeve kenar boşlukları ayarlanarak ferah bir görünüm sağlandı.
         scrollPane.setBorder(new EmptyBorder(10, 20, 20, 20));

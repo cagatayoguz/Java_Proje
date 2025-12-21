@@ -12,23 +12,21 @@ import java.awt.*;
 public class KitapEkleGUI extends JFrame {
 
     public KitapEkleGUI() {
-        // Pencerenin başlığını ve boyutlarını ayarladım
+        // Pencerenin başlığını ve boyutlarını ayarlandı
         setTitle("Hızlı Kitap Ekle");
         setSize(400, 450);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Kapatınca ana menü gitmesin diye dispose yaptım
         setLocationRelativeTo(null); // Ekranın ortasında açılsın
 
-        // Ana paneli oluşturuyoruz, düzen için GridBagLayout kullandım
+        // Ana paneli oluşturuyoruz
         JPanel mainPanel = new JPanel(new GridBagLayout());
-        mainPanel.setBackground(new Color(248, 249, 250)); // Arka plan rengi açık gri
+        mainPanel.setBackground(new Color(248, 249, 250));
         setContentPane(mainPanel);
 
-        // --- Tasarım Kısmı ---
-        // Kitap bilgilerini gireceğimiz beyaz kart görünümü
+        //  Tasarım Kısmı
         JPanel card = new JPanel();
         card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS)); // Alt alta dizilsinler
         card.setBackground(Color.WHITE);
-        // Kenarlarına ince çizgi ve iç boşluk ekledim ki güzel dursun
         card.setBorder(BorderFactory.createCompoundBorder(
                 new LineBorder(new Color(230, 230, 230), 1),
                 new EmptyBorder(30, 30, 30, 30)
@@ -42,7 +40,6 @@ public class KitapEkleGUI extends JFrame {
         card.add(Box.createVerticalStrut(20)); // Araya biraz boşluk attım
 
         // Kullanıcının yazı yazacağı kutucukları oluşturuyoruz
-        // createField metodunu aşağıda ben yazdım, sürekli aynı kodu yazmamak için
         JTextField txtAd = createField();
         JTextField txtYazar = createField();
         JTextField txtIsbn = createField();
@@ -60,8 +57,7 @@ public class KitapEkleGUI extends JFrame {
         btnKaydet.setAlignmentX(Component.CENTER_ALIGNMENT);
         btnKaydet.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
 
-        // --- BUTONA BASINCA NE OLACAK? ---
-        // ... KitapEkleGUI buton aksiyonu kısmı ...
+        //Kaydet butonu metodu
 
         btnKaydet.addActionListener(e -> {
             try {
@@ -70,9 +66,7 @@ public class KitapEkleGUI extends JFrame {
                     throw new GecersizGirisBilgisiException("Kitap adı ve ISBN zorunludur.");
                 }
 
-                // --- İŞTE BURADA KUTUPHANE SINIFINI KULLANIYORUZ ---
-
-                // Sanal bir kütüphane yöneticisi oluşturuyoruz
+                //Kutuphane sınıfından nesne oluşturuyoruz
                 Kutuphane merkezKutuphane = new Kutuphane("Merkez Kütüphane");
 
                 // Eklenecek adayı oluşturuyoruz
@@ -83,14 +77,11 @@ public class KitapEkleGUI extends JFrame {
                         "Müsait"
                 );
 
-                // 2. Kütüphaneye "Bunu ekleyebilir miyim?" diye soruyoruz.
                 // Bu metot; Kapasite 50'yi geçti mi? Aynı ISBN var mı? diye bakar.
-                // Eğer sorun varsa HATA FIRLATIR ve kod catch bloğuna atlar (Kaydetmez).
                 merkezKutuphane.kitapEkle(adayKitap);
 
                 // 3. Eğer yukarıdaki satır hata vermediyse, onay alınmıştır. Kaydedebiliriz.
-                // İsterseniz direkt kitap üzerinden, isterseniz kütüphane üzerinden kaydedebilirsiniz.
-                if (adayKitap.kaydet()) { // Veya merkezKutuphane.kaydet();
+                if (adayKitap.kaydet()) {
                     JOptionPane.showMessageDialog(this, "Kitap başarıyla eklendi.");
                     this.dispose();
                 } else {
@@ -111,7 +102,7 @@ public class KitapEkleGUI extends JFrame {
         mainPanel.add(card);
     }
 
-    // --- Yardımcı Metotlar ---
+    // Yardımcı Metotlar
     // Kod tekrarı yapmamak için text alanlarını burada oluşturuyorum
     private JTextField createField() {
         JTextField tf = new JTextField(15);

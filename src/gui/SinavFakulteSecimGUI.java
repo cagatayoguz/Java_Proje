@@ -11,7 +11,6 @@ import java.awt.event.MouseEvent;
 public class SinavFakulteSecimGUI extends JFrame {
 
     public SinavFakulteSecimGUI() {
-        // Pencere yapılandırması (Başlık, Boyut, Konumlandırma) gerçekleştirildi.
         setTitle("Sınav Takvimi - Fakülte Seçimi");
         setSize(850, 550);
         // Ana menüye dönüşü engellememek için DISPOSE_ON_CLOSE tercih edildi.
@@ -22,7 +21,7 @@ public class SinavFakulteSecimGUI extends JFrame {
         mainPanel.setBackground(new Color(248, 249, 250)); // Kurumsal gri arka plan
         setContentPane(mainPanel);
 
-        // --- 1. Başlık Alanı ---
+        // Başlık Alanı
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(new Color(248, 249, 250));
         headerPanel.setBorder(new EmptyBorder(30, 40, 10, 40));
@@ -34,16 +33,12 @@ public class SinavFakulteSecimGUI extends JFrame {
         headerPanel.add(lblTitle, BorderLayout.WEST);
         mainPanel.add(headerPanel, BorderLayout.NORTH);
 
-        // --- 2. Fakülte Listesi (Grid Yapısı) ---
-        // Seçeneklerin düzenli bir matris yapısında (2x2) görüntülenmesi için GridLayout tercih edildi.
+        // Fakülte Listesi
         JPanel gridPanel = new JPanel(new GridLayout(2, 2, 20, 20));
         gridPanel.setBackground(new Color(248, 249, 250));
         gridPanel.setBorder(new EmptyBorder(20, 40, 40, 40));
 
-        // --- LİSTE ELEMANLARININ EKLENMESİ ---
-        // Kod tekrarını önlemek amacıyla 'createCard' yardımcı metodu kullanıldı.
-        // Tıklama olayında, seçilen fakülte bilgisi 'SinavBolumSecimGUI' sınıfına parametre olarak aktarıldı.
-
+        // LİSTE ELEMANLARININ EKLENMESİ
         // 1. Teknoloji Fakültesi
         gridPanel.add(createCard("Teknoloji Fakültesi", "Yazılım, EEM, Enerji...", "💻",
                 e -> new SinavBolumSecimGUI("Teknoloji Fakültesi").setVisible(true)));
@@ -63,11 +58,7 @@ public class SinavFakulteSecimGUI extends JFrame {
         mainPanel.add(gridPanel, BorderLayout.CENTER);
     }
 
-    /**
-     * UI Helper: Kart Oluşturucu Metot
-     * Tekrar eden görsel bileşenleri (Kartları) parametrik olarak üreten metot.
-     * Bu sayede tasarım standardizasyonu sağlandı ve kod bakımı kolaylaştırıldı.
-     */
+    // Buton stillerini standartlaştıran yardımcı metot.
     private JPanel createCard(String title, String desc, String icon, java.awt.event.ActionListener action) {
         JPanel card = new JPanel(new BorderLayout());
         card.setBackground(Color.WHITE);
@@ -101,16 +92,14 @@ public class SinavFakulteSecimGUI extends JFrame {
         textPanel.add(lblD);
         card.add(textPanel, BorderLayout.CENTER);
 
-        // --- Kullanıcı Deneyimi (UX) ---
+        // Kullanıcı Paneli
         // Mouse üzerine geldiğinde (Hover) kenarlık ve yazı rengi değiştirilerek
-        // interaktif bir görünüm sağlandı.
         card.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 action.actionPerformed(null);
             }
 
             public void mouseEntered(MouseEvent e) {
-                // Odaklanma rengi (Mavi)
                 card.setBorder(new LineBorder(new Color(13, 110, 253), 1));
                 lblT.setForeground(new Color(13, 110, 253));
             }

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class KutuphaneServisi {
 
-    // Ödev Gereksinimi: Generic Sınıf Kullanımı (Depo<T>)
+    // Generic Sınıf
     private Depo<Kitap> kitapDeposu;
 
     public KutuphaneServisi() {
@@ -18,24 +18,22 @@ public class KutuphaneServisi {
 
     private void baslangicVerisiYukle() {
         try {
-            // Dosyadan verileri detaylı okuyoruz (Ad, Yazar, ISBN, Durum, Tarih, AlanKişi)
+            // Dosyadan verileri detaylı okuyoruz
             List<String[]> dosyaVerileri = DosyaIslemleri.kitaplariOkuDetayli();
 
             if (dosyaVerileri.isEmpty()) {
-                // DURUM 1: Dosya boşsa varsayılan 50 kitabı yükle
-                // (KitapBaslangicVerisi sınıfının da yeni Kitap yapısına uygun olduğunu varsayıyoruz)
+                // Dosya boşsa varsayılan 50 kitabı yükle
                 List<Kitap> baslangicKitaplari = KitapBaslangicVerisi.get50Kitap();
 
                 for (Kitap k : baslangicKitaplari) {
-                    // 1. Depoya (RAM) ekle
+                    // Depoya ekle
                     kitapDeposu.ekle(k);
 
-                    // 2. Dosyaya kalıcı olarak kaydet
-                    // (Artık k.kaydet() metodu DosyaIslemleri'ni otomatik çağırıyor)
+                    // Dosyaya kalıcı olarak kaydet
                     k.kaydet();
                 }
             } else {
-                // DURUM 2: Dosyada veri varsa onları RAM'e (Depo'ya) al
+                // Dosyada veri varsa onları Depo'ya al
                 for (String[] veri : dosyaVerileri) {
                     // En az Ad, Yazar, ISBN olmalı
                     if (veri.length >= 3) {
@@ -44,8 +42,6 @@ public class KutuphaneServisi {
                         String yazar = veri[1];
                         String isbn = veri[2];
 
-                        // DÜZELTME: Artık karmaşık boolean kontrolüne gerek yok.
-                        // Dosyadan gelen 3. indeks zaten durumu (String) tutuyor.
                         // Eğer veri eksikse varsayılan olarak "Müsait" atıyoruz.
                         String durum = (veri.length > 3) ? veri[3] : "Müsait";
 
@@ -64,9 +60,9 @@ public class KutuphaneServisi {
         }
     }
 
-    // Ödev Gereksinimi: Listeyi Sıralı Getirme
+    // Listeyi Sıralı Getirme
     public List<Kitap> getSiraliKitapListesi() {
-        // Depo içindeki sıralama metodunu tetikliyoruz (Kitap sınıfındaki CompareTo çalışır)
+        // Depo içindeki sıralama metodunu tetikliyoruz
         kitapDeposu.ismeGoreSirala();
         return kitapDeposu.getListe();
     }
@@ -82,7 +78,6 @@ public class KutuphaneServisi {
         List<Kitap> filtreli = new ArrayList<>();
 
         for (Kitap k : tumu) {
-            // Kitap sınıfındaki getter metodunun adı 'getYazar' olmalı
             if (k.getYazar().equalsIgnoreCase(yazarAdi)) {
                 filtreli.add(k);
             }

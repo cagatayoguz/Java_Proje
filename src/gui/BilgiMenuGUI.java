@@ -10,18 +10,17 @@ import java.awt.event.MouseEvent;
 public class BilgiMenuGUI extends JFrame {
 
     // Arayüzde tutarlılık sağlamak amacıyla sabit renk paleti tanımlandı.
-    private final Color BG_COLOR = new Color(248, 249, 250); // Açık gri arka plan
-    private final Color CARD_BG = Color.WHITE;               // Kartlar beyaz olsun
-    private final Color ACCENT_BLUE = new Color(13, 110, 253); // Vurgu rengi (Mavi)
+    private final Color BG_COLOR = new Color(248, 249, 250);
+    private final Color CARD_BG = Color.WHITE;
+    private final Color ACCENT_BLUE = new Color(13, 110, 253);
 
     public BilgiMenuGUI() {
         setTitle("Bilgi Sistemi");
         setSize(1000, 800); // İçerik çok olduğu için pencere boyutu dikeyde geniş tutuldu
-        // Bu pencere kapandığında ana uygulama çalışmaya devam etsin diye DISPOSE seçildi
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null); // Ekran ortasında başlaması sağlandı
 
-        // --- Ana Panel ---
+        // Ana Panel
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.setBackground(BG_COLOR);
 
@@ -31,10 +30,9 @@ public class BilgiMenuGUI extends JFrame {
         scrollPane.getVerticalScrollBar().setUnitIncrement(16); // Kaydırma hızı artırıldı (daha akıcı)
         setContentPane(scrollPane);
 
-        // --- 1. Başlık (Header) ---
+        // Başlık (Header)
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(BG_COLOR);
-        // Yazıların kenara yapışmaması için boşluk (padding) verildi
         headerPanel.setBorder(new EmptyBorder(40, 50, 20, 50));
 
         JLabel lblTitle = new JLabel("Bilgi Sistemi");
@@ -49,10 +47,6 @@ public class BilgiMenuGUI extends JFrame {
         headerPanel.add(lblSubtitle, BorderLayout.SOUTH);
         mainPanel.add(headerPanel, BorderLayout.NORTH);
 
-        // --- 2. Kartlar Alanı (Grid) ---
-        // Kartların düzenli durması için GridLayout kullanıldı.
-        // (0, 2) -> Satır sayısı dinamik, sütun sayısı sabit 2 olacak şekilde ayarlandı.
-        // 25, 25 -> Kartlar arasındaki boşluklar.
         JPanel gridPanel = new JPanel(new GridLayout(0, 2, 25, 25));
         gridPanel.setBackground(BG_COLOR);
         gridPanel.setBorder(new EmptyBorder(10, 50, 50, 50));
@@ -150,7 +144,7 @@ public class BilgiMenuGUI extends JFrame {
 
         mainPanel.add(gridPanel, BorderLayout.CENTER);
 
-        // --- 3. Alt Kısım (Geri Dön Butonu) ---
+        // Geri Dön Butonu
         JPanel footerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         footerPanel.setBackground(BG_COLOR);
         footerPanel.setBorder(new EmptyBorder(0, 0, 30, 0));
@@ -159,6 +153,7 @@ public class BilgiMenuGUI extends JFrame {
         btnBack.setFont(new Font("Segoe UI", Font.BOLD, 14));
         btnBack.setForeground(new Color(100, 100, 100));
         btnBack.setBackground(Color.WHITE);
+
         // Buton etrafına ince gri çizgi eklendi
         btnBack.setBorder(BorderFactory.createCompoundBorder(
                 new LineBorder(new Color(200, 200, 200), 1),
@@ -180,10 +175,7 @@ public class BilgiMenuGUI extends JFrame {
         mainPanel.add(footerPanel, BorderLayout.SOUTH);
     }
 
-    /**
-     * Modern Kart Bileşeni Oluşturucu Metot
-     * Her buton için aynı kodları yazmamak adına, parametre alan dinamik bir yapı kuruldu.
-     */
+    // Buton stillerini standartlaştıran yardımcı metot.
     private JPanel createCard(String title, String desc, String icon, java.awt.event.ActionListener action) {
         JPanel card = new JPanel(new BorderLayout());
         card.setBackground(CARD_BG);

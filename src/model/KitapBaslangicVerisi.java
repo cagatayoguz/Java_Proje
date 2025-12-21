@@ -8,7 +8,7 @@ public class KitapBaslangicVerisi {
     public static List<Kitap> get50Kitap() {
         List<Kitap> kitaplar = new ArrayList<>();
 
-        // Kitap listesi - boolean 'true' yerine String "Müsait" kullanıyoruz
+        //Başlangıçtaki kitap listesi
         kitaplar.add(new Kitap("Suç ve Ceza", "Dostoyevski", "978-605-7798-01-1", "Müsait"));
         kitaplar.add(new Kitap("Kürk Mantolu Madonna", "Sabahattin Ali", "978-975-07-2720-0", "Müsait"));
         kitaplar.add(new Kitap("1984", "George Orwell", "978-975-07-3531-1", "Müsait"));

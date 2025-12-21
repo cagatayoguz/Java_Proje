@@ -15,7 +15,6 @@ public class SporSalonuOnayGUI extends JFrame {
     private JTable table;
 
     public SporSalonuOnayGUI() {
-        // Pencere yapılandırması (Başlık, Boyut, Konumlandırma) gerçekleştirildi.
         setTitle("Spor Salonu - Başvuru Onay Ekranı");
         setSize(850, 500);
         // Pencere kapatıldığında ana yönetim panelinin açık kalması için DISPOSE tercih edildi.
@@ -26,7 +25,7 @@ public class SporSalonuOnayGUI extends JFrame {
         mainPanel.setBackground(Color.WHITE);
         setContentPane(mainPanel);
 
-        // --- Başlık Paneli ---
+        // Başlık Paneli
         JPanel header = new JPanel(new FlowLayout(FlowLayout.LEFT));
         header.setBackground(new Color(248, 249, 250)); // Kurumsal gri arka plan
         header.setBorder(new EmptyBorder(15, 20, 15, 20));
@@ -36,10 +35,10 @@ public class SporSalonuOnayGUI extends JFrame {
         header.add(lblTitle);
         mainPanel.add(header, BorderLayout.NORTH);
 
-        // --- Tablo Yapılandırması ---
+        // Tablo Yapılandırması
         String[] cols = {"Ad Soyad", "Öğrenci No", "Üyelik Tipi", "Ücret", "Durum"};
 
-        // Veri tutarlılığını korumak ve hatalı girişi önlemek için hücre düzenlemesi kapatıldı.
+        // Veri bütünlüğünü korumak için tabloya erişim engellendi
         model = new DefaultTableModel(cols, 0) {
             @Override
             public boolean isCellEditable(int row, int column) { return false; }
@@ -49,7 +48,6 @@ public class SporSalonuOnayGUI extends JFrame {
         table.setRowHeight(30); // Okunabilirlik için satır yüksekliği artırıldı.
         table.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 
-        // Seçim yapıldığında belirgin olması için sarımsı bir vurgu rengi kullanıldı.
         table.setSelectionBackground(new Color(255, 243, 205));
         table.setSelectionForeground(Color.BLACK);
 
@@ -61,7 +59,7 @@ public class SporSalonuOnayGUI extends JFrame {
         // Mevcut başvuruların yüklenmesi sağlandı.
         verileriYukle();
 
-        // --- Alt Panel (Butonlar) ---
+        // Alt Panel
         JPanel footer = new JPanel(new FlowLayout(FlowLayout.RIGHT, 20, 20));
         footer.setBackground(Color.WHITE);
 
@@ -84,7 +82,7 @@ public class SporSalonuOnayGUI extends JFrame {
         mainPanel.add(footer, BorderLayout.SOUTH);
     }
 
-    // --- Veri Filtreleme ve Yükleme ---
+    // Veri yükleme
     private void verileriYukle() {
         model.setRowCount(0); // Tablo temizlendi.
         List<String[]> list = DosyaIslemleri.sporUyelikleriOku();
@@ -98,7 +96,7 @@ public class SporSalonuOnayGUI extends JFrame {
         }
     }
 
-    // --- İşlem Mantığı ---
+    // İşlemler
     private void islemYap(boolean onay) {
         int row = table.getSelectedRow();
 

@@ -11,7 +11,6 @@ import java.io.File;
 public class YemekhaneGUI extends JFrame {
 
     public YemekhaneGUI() {
-        // Pencere yapılandırması (Başlık, Boyut, Konumlandırma) gerçekleştirildi.
         setTitle("Yemekhane Bilgi Sistemi");
         setSize(900, 600);
         // Bu pencere kapatıldığında ana menüye dönülmesi için DISPOSE tercih edildi.
@@ -22,7 +21,7 @@ public class YemekhaneGUI extends JFrame {
         mainPanel.setBackground(new Color(248, 249, 250)); // Kurumsal gri arka plan
         setContentPane(mainPanel);
 
-        // --- 1. Başlık Alanı ---
+        // Başlık Alanı
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(new Color(248, 249, 250));
         headerPanel.setBorder(new EmptyBorder(30, 40, 10, 40));
@@ -32,25 +31,25 @@ public class YemekhaneGUI extends JFrame {
         headerPanel.add(lblTitle, BorderLayout.NORTH);
         mainPanel.add(headerPanel, BorderLayout.NORTH);
 
-        // --- 2. Yemekhane Kartları (Grid Yapısı) ---
-        // Merkez ve Dökümhane yemekhanelerinin yan yana durması için GridLayout kurgulandı.
+        // Yemekhane Kartları
         JPanel gridPanel = new JPanel(new GridLayout(1, 2, 25, 0));
         gridPanel.setBackground(new Color(248, 249, 250));
         gridPanel.setBorder(new EmptyBorder(20, 40, 20, 40));
 
-        // Kart bileşenleri yardımcı metot ile oluşturuldu ve panele eklendi.
+        // Kart oluşturuldu ve panele eklendi.
         gridPanel.add(createYemekhaneCard("Merkez Yemekhane", "Kapasite: 800 | Doluluk: %45", "C:\\Users\\cagat\\Downloads\\Merkez yemekhane.jpg"));
         gridPanel.add(createYemekhaneCard("Dökümhane Yemekhane", "Kapasite: 600 | Doluluk: %70", "C:\\Users\\cagat\\Downloads\\dökümhane yemekhane.jpg"));
 
         mainPanel.add(gridPanel, BorderLayout.CENTER);
 
-        // --- 3. Alt Butonlar (Footer) ---
+        // Alt Butonlar
         JPanel footerPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 30));
         footerPanel.setBackground(new Color(248, 249, 250));
 
         // Günün Menüsü Butonu
         JButton btnMenu = createActionButton("Günün Menüsü", new Color(13, 110, 253)); // Mavi
         btnMenu.addActionListener(e -> {
+
             // Servis katmanından (YemekVeriTabani) güncel menü verisi çekildi.
             String menu = service.YemekVeriTabani.gununMenusuGetir();
 
@@ -71,28 +70,23 @@ public class YemekhaneGUI extends JFrame {
         mainPanel.add(footerPanel, BorderLayout.SOUTH);
     }
 
-    /**
-     * UI Helper: Yemekhane Kartı Oluşturucu
-     * Görsel ve bilgilerin yer aldığı kart yapısını parametrik olarak üretir.
-     */
     private JPanel createYemekhaneCard(String title, String info, String imagePath) {
         JPanel card = new JPanel(new BorderLayout());
         card.setBackground(Color.WHITE);
 
-        // Kart sınırları ve gölgelendirme benzeri çerçeve yapısı.
         card.setBorder(BorderFactory.createCompoundBorder(
                 new LineBorder(new Color(230, 230, 230), 1),
                 new EmptyBorder(15, 15, 15, 15)
         ));
 
-        // --- Resim Alanı ---
+        // Resim Alanı
         JLabel lblImage = new JLabel();
         lblImage.setHorizontalAlignment(SwingConstants.CENTER);
         lblImage.setBackground(new Color(240, 240, 240));
         lblImage.setOpaque(true);
         lblImage.setPreferredSize(new Dimension(300, 200));
 
-        // Dosya kontrolü ve görüntü ölçeklendirme (Scaling) işlemi.
+        // Dosya kontrolü ve görüntü ölçeklendirme işlemi.
         File imgFile = new File(imagePath);
         if (imgFile.exists()) {
             ImageIcon icon = new ImageIcon(new ImageIcon(imagePath).getImage().getScaledInstance(350, 220, Image.SCALE_SMOOTH));
@@ -102,7 +96,7 @@ public class YemekhaneGUI extends JFrame {
         }
         card.add(lblImage, BorderLayout.CENTER);
 
-        // --- Bilgi Alanı ---
+        // Bilgi Alanı
         JPanel infoPanel = new JPanel(new GridLayout(2, 1));
         infoPanel.setBackground(Color.WHITE);
         infoPanel.setBorder(new EmptyBorder(10, 0, 0, 0));

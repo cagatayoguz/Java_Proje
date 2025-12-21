@@ -20,7 +20,7 @@ public class Depo<T extends Kaydedilebilir> {
     }
 
     public void ekle(List<T> topluListe) {
-        // Tek tek eklemek yerine koca listeyi ekler
+        // Tek tek eklemek yerine listeyi ekler
         this.liste.addAll(topluListe);
     }
 

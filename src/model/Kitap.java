@@ -10,6 +10,7 @@ public class Kitap implements Kaydedilebilir, Yazdirilabilir {
     private String isbn;
     private String durum; // "Müsait", "Oduncte" vb.
 
+    //Constructo
     public Kitap(String kitapAdi, String yazar, String isbn, String durum) {
         this.kitapAdi = kitapAdi;
         this.yazar = yazar;
@@ -17,8 +18,7 @@ public class Kitap implements Kaydedilebilir, Yazdirilabilir {
         this.durum = durum;
     }
 
-    // --- INTERFACE (KAYDEDİLEBİLİR) METOTLARI ---
-
+    //Yeni kitapları dosyaya yazan metod
     @Override
     public boolean kaydet() {
         try {
@@ -31,6 +31,7 @@ public class Kitap implements Kaydedilebilir, Yazdirilabilir {
         }
     }
 
+    //Kitapları silen metod
     @Override
     public boolean sil(String id) {
         try {
@@ -43,6 +44,7 @@ public class Kitap implements Kaydedilebilir, Yazdirilabilir {
         }
     }
 
+    //Geliştirilecek metod
     @Override
     public boolean guncelle() {
         if (sil(this.isbn)) {
@@ -51,8 +53,7 @@ public class Kitap implements Kaydedilebilir, Yazdirilabilir {
         return false;
     }
 
-    // --- DİĞER METOTLAR ---
-
+    // DİĞER METOTLAR
     @Override
     public String detayliRaporOlustur() {
         return String.format("Kitap: %s | Yazar: %s | ISBN: %s | Durum: %s", kitapAdi, yazar, isbn, durum);

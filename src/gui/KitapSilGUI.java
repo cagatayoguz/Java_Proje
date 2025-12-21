@@ -19,7 +19,6 @@ public class KitapSilGUI extends JFrame {
         setTitle("Kitap Sil");
         setSize(800, 500);
 
-        // Pencere kapatıldığında ana menünün açık kalması için DISPOSE işlemi tercih edildi.
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null); // Pencerenin ekranın ortasında açılması sağlandı.
 
@@ -28,8 +27,7 @@ public class KitapSilGUI extends JFrame {
         mainPanel.setBackground(Color.WHITE);
         setContentPane(mainPanel);
 
-        // --- Üst Panel (Header) ---
-        // Sayfa başlığının yer alacağı panel oluşturuldu.
+        // Üst Panel
         JPanel header = new JPanel(new FlowLayout(FlowLayout.LEFT));
         header.setBackground(new Color(248, 249, 250));
 
@@ -38,10 +36,10 @@ public class KitapSilGUI extends JFrame {
         header.add(lbl);
         mainPanel.add(header, BorderLayout.NORTH);
 
-        // --- Tablo Yapısı ---
+        // Tablo Yapısı
         String[] cols = {"Kitap Adı", "Yazar", "ISBN", "Durum"};
 
-        // Veri bütünlüğünü korumak amacıyla tablo hücrelerinin doğrudan düzenlenmesi engellendi.
+        // Veri bütünlüğünü korumak için tabloya erişim engellendi
         model = new DefaultTableModel(cols, 0) {
             @Override
             public boolean isCellEditable(int r, int c) { return false; }
@@ -60,25 +58,24 @@ public class KitapSilGUI extends JFrame {
         sp.getViewport().setBackground(Color.WHITE);
         mainPanel.add(sp, BorderLayout.CENTER);
 
-        // --- Alt Panel (İşlem Butonu) ---
+        //Alt Panel
         JPanel footer = new JPanel();
         footer.setBackground(Color.WHITE);
 
         JButton btnSil = new JButton("Seçili Kitabı Sil");
 
-        // Silme işlemi kritik olduğu için buton rengi kırmızı (Danger) olarak belirlendi.
         btnSil.setBackground(new Color(220, 53, 69));
         btnSil.setForeground(Color.WHITE);
         btnSil.setFont(new Font("Segoe UI", Font.BOLD, 14));
 
-        // Butona tıklandığında silme metodunun tetiklenmesi sağlandı.
+        // Butona tıklandığında silme metodu çalışıyor
         btnSil.addActionListener(e -> sil());
 
         footer.add(btnSil);
         mainPanel.add(footer, BorderLayout.SOUTH);
     }
 
-    // --- Veri Yükleme Metodu ---
+    // Veri Yükleme Metodu
     private void listeyiYukle() {
         model.setRowCount(0); // Tablo içeriği temizlendi.
 
@@ -89,7 +86,7 @@ public class KitapSilGUI extends JFrame {
         }
     }
 
-    // --- OOP ENTEGRE EDİLMİŞ SİLME İŞLEMİ ---
+    //  OOP ENTEGRE EDİLMİŞ SİLME İŞLEMİ
     private void sil() {
         int r = table.getSelectedRow();
 
@@ -99,7 +96,7 @@ public class KitapSilGUI extends JFrame {
             return;
         }
 
-        // Silme işlemi için benzersiz anahtar (Primary Key) olan ISBN değeri seçili satırdan alındı.
+        // Silme işlemi için ISBN değeri seçili satırdan alındı.
         String isbn = (String) model.getValueAt(r, 2);
 
         // Veri güvenliği için kullanıcıdan son onay istendi.
@@ -109,8 +106,7 @@ public class KitapSilGUI extends JFrame {
 
         if(c == JOptionPane.YES_OPTION) {
             try {
-                // OOP prensiplerine uygun olarak, silme işlemi Kitap nesnesi üzerinden gerçekleştirildi.
-                // Constructor parametreleri boş geçildi, sadece sil(isbn) metodu kullanıldı.
+                // Silme işlemi Kitap nesnesi üzerinden gerçekleştirildi.
                 boolean sonuc = new Kitap("", "", "", "Müsait").sil(isbn);
 
                 if (sonuc) {

@@ -20,7 +20,7 @@ public class NotHesaplamaGUI extends JFrame {
 
     public NotHesaplamaGUI() {
         setTitle("Akademik Not Hesaplayıcı");
-        setSize(450, 600); // Genişlik biraz daraltıldı
+        setSize(450, 600);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
@@ -31,7 +31,7 @@ public class NotHesaplamaGUI extends JFrame {
         add(tabs);
     }
 
-    // --- 1. SEKME: VİZE FİNAL ---
+    // VİZE FİNAL PANELİ
     private JPanel createVizeFinalPanel() {
         JPanel p = new JPanel(new GridBagLayout());
         p.setBackground(Color.WHITE);
@@ -75,7 +75,7 @@ public class NotHesaplamaGUI extends JFrame {
         return p;
     }
 
-    // --- 2. SEKME: DİNAMİK ORTALAMA ---
+    // --- 2. SEKME: DİNAMİK ORTALAMA
     private JPanel createDonemPanel() {
         JPanel main = new JPanel(new BorderLayout(0, 10));
         main.setBorder(new EmptyBorder(10, 15, 10, 15));

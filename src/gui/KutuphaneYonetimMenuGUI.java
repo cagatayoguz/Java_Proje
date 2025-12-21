@@ -8,17 +8,14 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 // Yönetici panelinde; kütüphane envanter yönetimi ve ödünç alma taleplerinin
-// onaylanması işlemlerini tek bir merkezde toplayan arayüz sınıfı.
 public class KutuphaneYonetimMenuGUI extends JFrame {
 
-    // Arayüz genelinde görsel bütünlüğü sağlamak amacıyla kurumsal renk kodları sabit (final) olarak tanımlandı.
     private final Color BG_COLOR = new Color(248, 249, 250);
     private final Color CARD_BG = Color.WHITE;
-    private final Color ACCENT_COLOR = new Color(230, 126, 34); // Dikkat çekici Turuncu ton
+    private final Color ACCENT_COLOR = new Color(230, 126, 34);
 
     public KutuphaneYonetimMenuGUI() {
         setTitle("Kütüphane Yönetimi");
-        // Pencere boyutları, üç adet işlem kartını yan yana sığdıracak şekilde genişletildi.
         setSize(800, 400);
         // Ana menü akışını bozmamak adına pencere kapatıldığında uygulamanın çalışmaya devam etmesi sağlandı.
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -28,7 +25,7 @@ public class KutuphaneYonetimMenuGUI extends JFrame {
         mainPanel.setBackground(BG_COLOR);
         setContentPane(mainPanel);
 
-        // --- Başlık Alanı ---
+        // Başlık Alanı
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(BG_COLOR);
         headerPanel.setBorder(new EmptyBorder(30, 40, 10, 40));
@@ -38,35 +35,27 @@ public class KutuphaneYonetimMenuGUI extends JFrame {
         headerPanel.add(lblTitle, BorderLayout.NORTH);
         mainPanel.add(headerPanel, BorderLayout.NORTH);
 
-        // --- Kartların Yerleşimi (Grid Layout) ---
-        // İşlem kartlarının yan yana nizami sıralanması için 1 satır 3 sütunluk yapı kurgulandı.
+        // Kartların Yerleşimi
         JPanel gridPanel = new JPanel(new GridLayout(1, 3, 20, 20));
         gridPanel.setBackground(BG_COLOR);
         gridPanel.setBorder(new EmptyBorder(20, 40, 40, 40));
 
-        // --- Modüllerin Entegrasyonu ---
-
-        // 1. Kitap Ekleme Modülü
+        // Kitap Ekleme Modülü
         gridPanel.add(createCard("Kitap Ekle", "Yeni kitap kaydı.", "📘",
                 e -> new KitapEkleGUI().setVisible(true)));
 
-        // 2. Kitap Silme Modülü
+        // Kitap Silme Modülü
         gridPanel.add(createCard("Kitap Sil", "Envanterden kitap sil.", "🗑️",
                 e -> new KitapSilGUI().setVisible(true)));
 
-        // 3. Talep Onay Modülü (YENİ EKLENDİ)
-        // Öğrencilerin gönderdiği ödünç alma isteklerinin yönetildiği ekrana yönlendirme yapıldı.
+        // Talep Onay Modülü (YENİ EKLENDİ)
         gridPanel.add(createCard("Talepler", "Ödünç onay listesi.", "⏳",
                 e -> new KutuphaneOnayGUI().setVisible(true)));
 
         mainPanel.add(gridPanel, BorderLayout.CENTER);
     }
 
-    /**
-     * Yazılım Tasarım Prensibi (DRY): Yardımcı Kart Oluşturucu
-     * Tekrar eden arayüz bileşenlerini parametrik olarak üreten metot.
-     * Bu sayede tasarım değişiklikleri tek merkezden yönetilebilir hale getirildi.
-     */
+    // Buton stillerini standartlaştıran yardımcı metot.
     private JPanel createCard(String title, String desc, String icon, java.awt.event.ActionListener action) {
         JPanel card = new JPanel(new BorderLayout());
         card.setBackground(CARD_BG);
@@ -96,7 +85,7 @@ public class KutuphaneYonetimMenuGUI extends JFrame {
         textPanel.add(lblD);
         card.add(textPanel, BorderLayout.CENTER);
 
-        // --- Kullanıcı Deneyimi (UX) ---
+
         // Mouse hareketlerine duyarlı görsel efektler (Hover) implemente edildi.
         card.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {

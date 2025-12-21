@@ -6,8 +6,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
 
-// Yönetici panelinde, öğrencilerden gelen ödünç alma taleplerinin görüntülendiği
-// ve onay/ret işlemlerinin yönetildiği arayüz sınıfı.
+// onay/ret işlemlerinin yönetildiği arayüz sınıfı.
 public class KutuphaneOnayGUI extends JFrame {
 
     private DefaultTableModel model;
@@ -24,7 +23,7 @@ public class KutuphaneOnayGUI extends JFrame {
         JPanel mainPanel = new JPanel(new BorderLayout());
         setContentPane(mainPanel);
 
-        // --- TABLO YAPILANDIRMASI ---
+        // TABLO YAPILANDIRMASI
         String[] kolonlar = {"Kitap Adı", "ISBN", "Talep Eden Öğrenci", "Durum"};
 
         // Veri tutarlılığını korumak için hücre düzenlemesi kapatıldı.
@@ -39,7 +38,7 @@ public class KutuphaneOnayGUI extends JFrame {
         // Bekleyen taleplerin tabloya yüklenmesi sağlandı.
         verileriYukle();
 
-        // --- BUTONLAR VE AKSİYONLAR ---
+        // BUTONLAR
         JPanel btnPanel = new JPanel();
         JButton btnOnayla = new JButton("Onayla");
         JButton btnReddet = new JButton("Reddet");
@@ -50,7 +49,7 @@ public class KutuphaneOnayGUI extends JFrame {
         btnReddet.setBackground(new Color(220, 53, 69));
         btnReddet.setForeground(Color.WHITE);
 
-        // Tek bir metot üzerinden (islemYap) parametrik olarak aksiyon yönetimi sağlandı.
+        // Tek bir metot üzerinden (islemYap) işlemler tanımlandı
         btnOnayla.addActionListener(e -> islemYap(true));
         btnReddet.addActionListener(e -> islemYap(false));
 
@@ -59,20 +58,20 @@ public class KutuphaneOnayGUI extends JFrame {
         mainPanel.add(btnPanel, BorderLayout.SOUTH);
     }
 
-    // --- Veri Filtreleme ve Yükleme ---
+    // Veri Filtreleme ve Yükleme
     private void verileriYukle() {
         model.setRowCount(0); // Tablo temizlendi.
         List<String[]> kitaplar = DosyaIslemleri.kitaplariOkuDetayli();
 
         for (String[] k : kitaplar) {
-            // Yalnızca statüsü "Bekliyor" olan kayıtlar filtrelenerek yönetici onayına sunuldu.
+            // Yalnızca "Bekliyor" olan kayıtlar yönetici onayına sunuldu.
             if (k[3].equalsIgnoreCase("Bekliyor")) {
                 model.addRow(new Object[]{k[0], k[2], k[5], "Onay Bekliyor"});
             }
         }
     }
 
-    // --- İşlem Mantığı ---
+    // İşlem metodu
     private void islemYap(boolean onay) {
         int row = table.getSelectedRow();
 

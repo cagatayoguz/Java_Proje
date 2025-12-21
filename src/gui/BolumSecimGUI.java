@@ -12,9 +12,7 @@ import java.io.IOException;
 // Seçilen fakülteye ait bölümlerin listelendiği ve ders programlarının görüntülendiği arayüz sınıfı.
 public class BolumSecimGUI extends JFrame {
 
-    // Yapıcı metot (Constructor), seçilen fakülte ismini parametre olarak alır.
     public BolumSecimGUI(String fakulteAdi) {
-        // Pencere başlığı dinamik olarak fakülte adına göre ayarlandı.
         setTitle(fakulteAdi + " - Ders Programları");
         setSize(900, 600);
         // Bu pencere kapatıldığında ana uygulama çalışmaya devam etsin diye DISPOSE kullanıldı.
@@ -25,7 +23,7 @@ public class BolumSecimGUI extends JFrame {
         mainPanel.setBackground(new Color(248, 249, 250)); // Göz yormayan açık gri ton
         setContentPane(mainPanel);
 
-        // --- 1. Başlık ve Navigasyon ---
+        // Başlık
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(new Color(248, 249, 250));
         headerPanel.setBorder(new EmptyBorder(30, 40, 10, 40));
@@ -39,14 +37,14 @@ public class BolumSecimGUI extends JFrame {
         // Geri Dön butonu sağ üste konumlandırıldı
         JButton btnBack = new JButton("← Geri Dön");
         styleButton(btnBack);
+
         // Butona tıklandığında sadece bu pencerenin kapanması sağlandı
         btnBack.addActionListener(e -> this.dispose());
         headerPanel.add(btnBack, BorderLayout.EAST);
 
         mainPanel.add(headerPanel, BorderLayout.NORTH);
 
-        // --- 2. Bölüm Listesi (Grid Yapısı) ---
-        // Bölümler yan yana 2 sütun olacak şekilde sıralandı.
+        // Bölüm Listesi
         JPanel gridPanel = new JPanel(new GridLayout(0, 2, 20, 20));
         gridPanel.setBackground(new Color(248, 249, 250));
         gridPanel.setBorder(new EmptyBorder(20, 40, 40, 40));
@@ -61,23 +59,16 @@ public class BolumSecimGUI extends JFrame {
 
         // Bölüm sayısı ekranı taşarsa aşağı kaydırma özelliği eklendi.
         JScrollPane scrollPane = new JScrollPane(wrapperPanel);
-        scrollPane.setBorder(null); // Varsayılan kenarlık kaldırıldı
-        scrollPane.getVerticalScrollBar().setUnitIncrement(16); // Kaydırma hızı optimize edildi
+        scrollPane.setBorder(null);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
         mainPanel.add(scrollPane, BorderLayout.CENTER);
     }
 
-    /**
-     * Fakülte adına göre ilgili bölüm kartlarını yükleyen mantıksal metot.
-     * Dosya yolları lokal makineye göre tanımlanmıştır.
-     */
+
     private void bolumleriYukle(String fakulte, JPanel panel) {
 
-        // ---------------------------------------------------------
         // TEKNOLOJİ FAKÜLTESİ KONTROLÜ
-        // ---------------------------------------------------------
         if (fakulte.contains("Teknoloji")) {
-            // Her bölüm için 'createCard' metodu çağrılarak kod tekrarı önlendi.
-            // Lambda fonksiyonu ile tıklama olayında 'dosyaAc' metodu tetiklendi.
 
             panel.add(createCard("Yazılım Mühendisliği", "Uygulama, Geliştirme...", "💾", () -> {
                 dosyaAc("C:\\Users\\cagat\\Downloads\\teknoloji bilgisayar.xls");
@@ -98,9 +89,8 @@ public class BolumSecimGUI extends JFrame {
             }));
         }
 
-        // ---------------------------------------------------------
         // MÜHENDİSLİK FAKÜLTESİ KONTROLÜ
-        // ---------------------------------------------------------
+
         else if (fakulte.contains("Mühendislik")) {
 
             panel.add(createCard("Bilgisayar Mühendisliği", "Donanım, Algoritma...", "💻", () -> {
@@ -120,9 +110,7 @@ public class BolumSecimGUI extends JFrame {
             }));
         }
 
-        // ---------------------------------------------------------
         // FEN FAKÜLTESİ KONTROLÜ
-        // ---------------------------------------------------------
         else if (fakulte.contains("Fen")) {
 
             panel.add(createCard("Matematik", "Analiz, Cebir...", "📐", () -> {
@@ -138,9 +126,7 @@ public class BolumSecimGUI extends JFrame {
             }));
         }
 
-        // ---------------------------------------------------------
         // EĞİTİM FAKÜLTESİ KONTROLÜ
-        // ---------------------------------------------------------
         else if (fakulte.contains("Eğitim")) {
 
             panel.add(createCard("Sınıf Öğretmenliği", "İlköğretim...", "abc", () -> {
@@ -157,10 +143,7 @@ public class BolumSecimGUI extends JFrame {
         }
     }
 
-    /**
-     * Modern UI Tasarımı: Kart Oluşturma Metodu
-     * Tekrar eden arayüz kodları, parametrik bir yapıya dönüştürüldü.
-     */
+    // Buton stillerini standartlaştıran yardımcı metot.
     private JPanel createCard(String title, String desc, String icon, Runnable onClickAction) {
         JPanel card = new JPanel(new BorderLayout());
         card.setBackground(Color.WHITE);
@@ -214,7 +197,7 @@ public class BolumSecimGUI extends JFrame {
         return card;
     }
 
-    // --- DOSYA AÇMA İŞLEMİ ---
+    // -DOSYA AÇMA İŞLEMİ
     // Java'nın Desktop sınıfı kullanılarak, dosya uzantısı ne olursa olsun (PDF, Excel, vb.)
     // işletim sisteminin varsayılan uygulaması ile açılması sağlandı.
     private void dosyaAc(String path) {

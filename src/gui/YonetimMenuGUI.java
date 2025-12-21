@@ -11,8 +11,7 @@ import java.awt.event.MouseEvent;
 // erişim sağladığı ana kontrol paneli (Dashboard) sınıfı.
 public class YonetimMenuGUI extends JFrame {
 
-    // --- Tasarım Sabitleri (Modern UI) ---
-    // Arayüz genelinde görsel tutarlılığı sağlamak için kurumsal renk paleti tanımlandı.
+    // Tasarım Sabitleri
     private final Color BG_COLOR = new Color(248, 249, 250); // Arka plan (Bootstrap light gray)
     private final Color CARD_BG = Color.WHITE;
     private final Color TEXT_DARK = new Color(33, 37, 41);
@@ -20,22 +19,20 @@ public class YonetimMenuGUI extends JFrame {
     private final Color ACCENT_BLUE = new Color(13, 110, 253); // Vurgu rengi (Primary Blue)
 
     public YonetimMenuGUI() {
-        // Pencere yapılandırması (Başlık, Boyut, Konumlandırma) gerçekleştirildi.
         setTitle("Yönetim Paneli");
         setSize(800, 600); // Dashboard görünümü için geniş ekran boyutu tercih edildi.
         // Bu pencere kapatıldığında sadece kendisinin kapanması (Login ekranı arkada kalabilir) sağlandı.
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        // --- Ana Panel ---
+        // Ana Panel
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.setBackground(BG_COLOR);
         setContentPane(mainPanel);
 
-        // --- 1. Üst Başlık (Header) ---
+        // Üst Başlık
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(BG_COLOR);
-        // İçerik kenarlardan uzaklaştırılarak ferah bir görünüm elde edildi.
         headerPanel.setBorder(new EmptyBorder(40, 50, 20, 50));
 
         JLabel lblTitle = new JLabel("Kontrol Paneli");
@@ -50,15 +47,12 @@ public class YonetimMenuGUI extends JFrame {
         headerPanel.add(lblSubtitle, BorderLayout.SOUTH);
         mainPanel.add(headerPanel, BorderLayout.NORTH);
 
-        // --- 2. Kartlar Alanı (Grid Layout) ---
-        // 4 ana modül olduğu için 2x2'lik bir matris yapısı kurgulandı.
-        // Kartlar arasına 25px boşluk bırakıldı.
+        // Kartlar Alanı
         JPanel gridPanel = new JPanel(new GridLayout(2, 2, 25, 25));
         gridPanel.setBackground(BG_COLOR);
         gridPanel.setBorder(new EmptyBorder(10, 50, 50, 50));
 
-        // --- Modül Kartlarının Oluşturulması ---
-
+        // Kartların Oluşturulması
         // 1. Öğrenci Yönetimi Modülü
         gridPanel.add(createMenuCard(
                 "Öğrenci Yönetimi",
@@ -94,11 +88,7 @@ public class YonetimMenuGUI extends JFrame {
         mainPanel.add(gridPanel, BorderLayout.CENTER);
     }
 
-    /**
-     * UI Helper: İnteraktif Menü Kartı Oluşturucu
-     * Standart bir JButton yerine, özelleştirilmiş JPanel kullanılarak
-     * modern ve detaylı bir buton görünümü elde edildi.
-     */
+    // Buton stillerini standartlaştıran yardımcı metot.
     private JPanel createMenuCard(String title, String description, String iconSymbol, java.awt.event.ActionListener action) {
         // Kart Paneli
         JPanel card = new JPanel();
@@ -112,13 +102,13 @@ public class YonetimMenuGUI extends JFrame {
         ));
         card.setCursor(new Cursor(Cursor.HAND_CURSOR)); // Tıklanabilirlik imleci
 
-        // --- Sol Taraf (İkon) ---
+        // Sol Taraf (İkon)
         JLabel lblIcon = new JLabel(iconSymbol);
         lblIcon.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 32)); // Emoji desteği
         lblIcon.setBorder(new EmptyBorder(0, 0, 0, 20));
         card.add(lblIcon, BorderLayout.WEST);
 
-        // --- Sağ Taraf (Metin Bilgileri) ---
+        // -Sağ Taraf (Metin Bilgileri)
         JPanel textPanel = new JPanel(new GridLayout(2, 1, 0, 5));
         textPanel.setBackground(CARD_BG);
 
@@ -134,7 +124,7 @@ public class YonetimMenuGUI extends JFrame {
         textPanel.add(lblDesc);
         card.add(textPanel, BorderLayout.CENTER);
 
-        // --- Kullanıcı Deneyimi (UX): Hover ve Click Efektleri ---
+        // Hover ve Click Efektleri
         card.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -145,9 +135,9 @@ public class YonetimMenuGUI extends JFrame {
             @Override
             public void mouseEntered(MouseEvent e) {
                 // Mouse üzerine geldiğinde kart rengi ve kenarlığı değiştirilerek odaklanma sağlandı.
-                card.setBackground(new Color(250, 251, 255)); // Çok açık mavi arka plan
+                card.setBackground(new Color(250, 251, 255));
                 card.setBorder(BorderFactory.createCompoundBorder(
-                        new LineBorder(ACCENT_BLUE, 1), // Mavi Çerçeve
+                        new LineBorder(ACCENT_BLUE, 1),
                         new EmptyBorder(25, 25, 25, 25)
                 ));
                 lblTitle.setForeground(ACCENT_BLUE); // Başlık rengi maviye döndü

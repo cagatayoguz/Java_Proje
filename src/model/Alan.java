@@ -11,10 +11,10 @@ public abstract class Alan implements Yazdirilabilir,Kaydedilebilir {
         this.kapasite = kapasite;
     }
 
-    // --- Abstract Metotlar (Miras alanlar doldurmak zorunda) ---
+    // Kütüphaneye eklenek kitap sayısına karar veren metod
     public abstract boolean kapasiteKontrol(int mevcutSayi);
 
-    // Getter
+    // Getter ve setterlar
     public int getAdi() {
         return adi.length();
     }

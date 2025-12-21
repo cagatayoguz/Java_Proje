@@ -7,12 +7,10 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-// Spor salonu modülüne ait alt işlemlerin (Üyelik, Çalışma Saatleri)
-// seçildiği ana menü arayüzü.
+// Spor salonu menüsünün olduğu sınıf (Üyelik, Çalışma Saatleri)
 public class SporSalonuMenuGUI extends JFrame {
 
     public SporSalonuMenuGUI() {
-        // Pencere yapılandırması (Başlık, Boyut, Konumlandırma) gerçekleştirildi.
         setTitle("Spor Salonu");
         setSize(600, 400);
 
@@ -24,7 +22,7 @@ public class SporSalonuMenuGUI extends JFrame {
         mainPanel.setBackground(new Color(248, 249, 250));
         setContentPane(mainPanel);
 
-        // --- Başlık Alanı ---
+        // Başlık Alanı
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(new Color(248, 249, 250));
         headerPanel.setBorder(new EmptyBorder(30, 40, 10, 40));
@@ -34,15 +32,12 @@ public class SporSalonuMenuGUI extends JFrame {
         headerPanel.add(lblTitle, BorderLayout.NORTH);
         mainPanel.add(headerPanel, BorderLayout.NORTH);
 
-        // --- Menü Kartları (Grid Düzeni) ---
-        // Seçeneklerin yan yana ve düzenli durması için 1 satır 2 sütunlu Grid yapısı kurgulandı.
+        // Menü Kartları
         JPanel gridPanel = new JPanel(new GridLayout(1, 2, 20, 20));
         gridPanel.setBackground(new Color(248, 249, 250));
         gridPanel.setBorder(new EmptyBorder(20, 40, 40, 40));
 
-        // --- Modüllerin Entegrasyonu ---
         // Kod tekrarını önlemek amacıyla 'createCard' yardımcı metodu kullanılarak menü elemanları eklendi.
-
         // 1. Üyelik Başvuru Kartı
         gridPanel.add(createCard("Üyelik Başvurusu", "Aylık/Yıllık kayıt ol.", "📝",
                 e -> new SporSalonuUyelikGUI().setVisible(true)));
@@ -55,11 +50,8 @@ public class SporSalonuMenuGUI extends JFrame {
         mainPanel.add(gridPanel, BorderLayout.CENTER);
     }
 
-    /**
-     * UI Helper: Kart Oluşturucu Metot
-     * Tekrar eden görsel bileşenleri (Kartları) parametrik olarak üreten metot.
-     * Bu sayede tasarım standardizasyonu sağlandı ve kod bakımı kolaylaştırıldı.
-     */
+
+    // Buton stillerini standartlaştıran yardımcı metot.
     private JPanel createCard(String title, String desc, String icon, java.awt.event.ActionListener action) {
         JPanel card = new JPanel(new BorderLayout());
         card.setBackground(Color.WHITE);
@@ -69,7 +61,7 @@ public class SporSalonuMenuGUI extends JFrame {
                 new LineBorder(new Color(230, 230, 230), 1),
                 new EmptyBorder(20, 20, 20, 20)
         ));
-        card.setCursor(new Cursor(Cursor.HAND_CURSOR)); // Tıklanabilirlik hissi verildi.
+        card.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         // İkon Yapılandırması
         JLabel lblIcon = new JLabel(icon);
@@ -89,7 +81,6 @@ public class SporSalonuMenuGUI extends JFrame {
         textPanel.add(lblD);
         card.add(textPanel, BorderLayout.CENTER);
 
-        // --- Kullanıcı Deneyimi (UX) ---
         // Mouse üzerine geldiğinde (Hover) kenarlık rengi yeşil yapılarak görsel geri bildirim sağlandı.
         card.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
@@ -97,7 +88,6 @@ public class SporSalonuMenuGUI extends JFrame {
             }
 
             public void mouseEntered(MouseEvent e) {
-                // Spor salonu temasına uygun olarak Yeşil renk tercih edildi.
                 card.setBorder(new LineBorder(new Color(46, 204, 113), 1));
             }
 

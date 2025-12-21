@@ -7,8 +7,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 
-// Uygulamanın giriş kapısı olan Ana Menü ekranı.
-// JFrame'den miras aldık, standart pencere özellikleri için.
+// Ana Menü ekranı
 public class AnaMenuGUI extends JFrame {
 
     // Arka plan resminin yolu.
@@ -16,18 +15,18 @@ public class AnaMenuGUI extends JFrame {
 
     public AnaMenuGUI() {
         setTitle("Üniversite Otomasyon Sistemi");
-        setSize(1000, 600); // Ekranı doldursun diye geniş bir boyut verdim
+        setSize(1000, 600); // Ekranı doldursun diye geniş bir boyut verildi
 
         // Çarpıya basınca program tamamen kapansın (Ana menü olduğu için)
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null); // Pencere tam ortada açılsın
 
-        // --- 1. Arka Plan Paneli ---
+        // Arka Plan Paneli
         BackgroundPanel backgroundPanel = new BackgroundPanel(ARKA_PLAN_RESMI);
         backgroundPanel.setLayout(new BorderLayout()); // Elemanları Kuzey-Güney diye dizeceğiz
         setContentPane(backgroundPanel); // Bu paneli ana içerik paneli yap
 
-        // --- 2. Üst Kısım (Başlık) ---
+        //Üst Kısım
         JLabel lblBaslik = new JLabel("Üniversite Bilgi ve Yönetim Sistemi", SwingConstants.CENTER);
         lblBaslik.setFont(new Font("SansSerif", Font.BOLD, 25));
 
@@ -38,32 +37,29 @@ public class AnaMenuGUI extends JFrame {
         lblBaslik.setBorder(new EmptyBorder(5, 0, 0, 0));
         backgroundPanel.add(lblBaslik, BorderLayout.NORTH);
 
-        // --- 3. Alt Kısım (Butonlar) ---
-        // Butonları yan yana ortalayarak dizmek için FlowLayout kullandım
+        // Alt Kısım (Butonlar)
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 40, 20));
         buttonPanel.setOpaque(false); // Şeffaf yaptım ki arkadaki üniversite resmi görünsün
         buttonPanel.setBorder(new EmptyBorder(0, 0, 60, 0)); // Alt taraftan biraz yukarı itelim
 
-        // Buton 1: Bilgi Sistemi
-        // Aşağıdaki 'zarifButonOlustur' metodunu kullanarak kod tekrarından kurtuldum
+        // Bilgi Sistemi
         JButton btnBilgi = createCard("Bilgi Sistemi");
         btnBilgi.addActionListener(e -> {
             // Bilgi menüsünü aç
             new BilgiMenuGUI().setVisible(true);
-            // Eğer ana menü kapansın istersek buraya this.dispose() ekleyebiliriz ama kalsın.
         });
 
-        // Buton 2: Yönetim Paneli
+        // Yönetim Paneli
         JButton btnYonetim = createCard("Yönetim Paneli");
         btnYonetim.addActionListener(e -> {
+
             // Yönetim paneline herkes giremez, önce Giriş (Login) ekranına yönlendiriyorum
             new YonetimGirisGUI().setVisible(true);
         });
 
-        // Buton 3: Çıkış
+        // Çıkış butonu
         JButton btnCikis = createCard("Çıkış");
 
-        // Çıkış butonu dikkat çeksin diye kırmızımsı yaptım
         btnCikis.setBackground(new Color(180, 60, 60, 220));
 
         // Çıkış butonuna özel hover (üzerine gelince renk değişimi) ekledim
@@ -87,8 +83,7 @@ public class AnaMenuGUI extends JFrame {
         backgroundPanel.add(buttonPanel, BorderLayout.SOUTH);
     }
 
-    // --- Yardımcı Metot: Zarif Buton Tasarımı ---
-    // Her buton için aynı kodları kopyala-yapıştır yapmamak için bu metodu yazdım.
+    // Buton stillerini standartlaştıran yardımcı metot.
     private JButton createCard(String text) {
         JButton btn = new JButton(text);
         btn.setFont(new Font("SansSerif", Font.BOLD, 18));
@@ -120,9 +115,7 @@ public class AnaMenuGUI extends JFrame {
         return btn;
     }
 
-    // --- İç Sınıf (Inner Class): Arka Plan Resmi ---
-    // JPanel normalde sadece düz renk boyar. Resim çizdirmek için paintComponent metodunu
-    // ezmemiz (override) gerekiyor. Bu yüzden bu özel sınıfı yazdım.
+    // Arka Plan Resmi
     private class BackgroundPanel extends JPanel {
         private Image backgroundImage;
 
