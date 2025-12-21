@@ -46,7 +46,7 @@ public class AnaMenuGUI extends JFrame {
 
         // Buton 1: Bilgi Sistemi
         // Aşağıdaki 'zarifButonOlustur' metodunu kullanarak kod tekrarından kurtuldum
-        JButton btnBilgi = zarifButonOlustur("Bilgi Sistemi");
+        JButton btnBilgi = createCard("Bilgi Sistemi");
         btnBilgi.addActionListener(e -> {
             // Bilgi menüsünü aç
             new BilgiMenuGUI().setVisible(true);
@@ -54,14 +54,15 @@ public class AnaMenuGUI extends JFrame {
         });
 
         // Buton 2: Yönetim Paneli
-        JButton btnYonetim = zarifButonOlustur("Yönetim Paneli");
+        JButton btnYonetim = createCard("Yönetim Paneli");
         btnYonetim.addActionListener(e -> {
             // Yönetim paneline herkes giremez, önce Giriş (Login) ekranına yönlendiriyorum
             new YonetimGirisGUI().setVisible(true);
         });
 
         // Buton 3: Çıkış
-        JButton btnCikis = zarifButonOlustur("Çıkış");
+        JButton btnCikis = createCard("Çıkış");
+
         // Çıkış butonu dikkat çeksin diye kırmızımsı yaptım
         btnCikis.setBackground(new Color(180, 60, 60, 220));
 
@@ -88,7 +89,7 @@ public class AnaMenuGUI extends JFrame {
 
     // --- Yardımcı Metot: Zarif Buton Tasarımı ---
     // Her buton için aynı kodları kopyala-yapıştır yapmamak için bu metodu yazdım.
-    private JButton zarifButonOlustur(String text) {
+    private JButton createCard(String text) {
         JButton btn = new JButton(text);
         btn.setFont(new Font("SansSerif", Font.BOLD, 18));
         btn.setForeground(Color.WHITE); // Yazı rengi beyaz

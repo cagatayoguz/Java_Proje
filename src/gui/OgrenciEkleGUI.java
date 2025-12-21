@@ -86,7 +86,7 @@ public class OgrenciEkleGUI extends JFrame {
 
                 if (!txtOrt.getText().trim().isEmpty()) {
                     try {
-                        int ort = Integer.parseInt(txtOrt.getText().trim());
+                        double ort = Double.parseDouble(txtOrt.getText().trim());
                         yeniOgrenci.setNotOrtalamasi(ort);
                     } catch (NumberFormatException nfe) {
                         throw new GecersizGirisBilgisiException("Ortalama sayısal bir değer olmalıdır.");

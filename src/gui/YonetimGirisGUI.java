@@ -31,12 +31,12 @@ public class YonetimGirisGUI extends JFrame {
         // Modern bir görünüm için açık gri-mavi tonu tercih edildi.
         JPanel mainPanel = new JPanel();
         mainPanel.setBackground(new Color(240, 242, 245));
+
         // Giriş kartını tam ortaya sabitlemek için GridBagLayout kullanıldı.
         mainPanel.setLayout(new GridBagLayout());
         setContentPane(mainPanel);
 
         // --- Kart Paneli (Giriş Formu) ---
-        // Form elemanlarını barındıran beyaz zeminli kart yapısı oluşturuldu.
         JPanel cardPanel = new JPanel();
         cardPanel.setBackground(Color.WHITE);
         cardPanel.setLayout(new BoxLayout(cardPanel, BoxLayout.Y_AXIS));

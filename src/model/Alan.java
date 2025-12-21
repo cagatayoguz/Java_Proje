@@ -1,6 +1,6 @@
 package model;
 
-public abstract class Alan {
+public abstract class Alan implements Yazdirilabilir,Kaydedilebilir {
 
     private String adi;
     private int kapasite;

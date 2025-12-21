@@ -3,7 +3,7 @@ package model;
 import service.DosyaIslemleri; // Gelecekte kullanılacak
 import java.io.IOException;
 
-public abstract class Akademisyen extends Kisiler implements Kaydedilebilir, Yazdirilabilir {
+public abstract class Akademisyen extends Kisiler {
 
     private String sicilNo;
     private String unvan;

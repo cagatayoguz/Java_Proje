@@ -4,11 +4,11 @@ import service.DosyaIslemleri;
 import exception.GecersizGirisBilgisiException;
 import java.io.IOException;
 
-public class Ogrenci extends Kisiler implements Kaydedilebilir, Yazdirilabilir {
+public class Ogrenci extends Kisiler{
 
     private String ogrenciNo;
     private String bolum;
-    private int notOrtalamasi;
+    private double notOrtalamasi;
 
     public Ogrenci(String ad, String soyad, String ogrenciNo, String bolum) {
         super(ad, soyad);
@@ -86,12 +86,12 @@ public class Ogrenci extends Kisiler implements Kaydedilebilir, Yazdirilabilir {
         this.bolum = bolum;
     }
 
-    public void setNotOrtalamasi(int not) throws GecersizGirisBilgisiException {
+    public void setNotOrtalamasi(double not) throws GecersizGirisBilgisiException {
         if (not < 0 || not > 100) throw new GecersizGirisBilgisiException("Not 0-100 arası olmalı.");
         this.notOrtalamasi = not;
     }
 
     public String getOgrenciNo() { return ogrenciNo; }
     public String getBolum() { return bolum; }
-    public int getNotOrtalamasi() { return notOrtalamasi; }
+    public double getNotOrtalamasi() { return notOrtalamasi; }
 }

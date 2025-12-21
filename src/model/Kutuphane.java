@@ -6,7 +6,7 @@ import service.DosyaIslemleri; // Dosya işlemlerini bağladık
 import exception.GecersizGirisBilgisiException;
 import java.io.IOException;
 
-public class Kutuphane extends Alan implements Kaydedilebilir, Yazdirilabilir {
+public class Kutuphane extends Alan {
 
     private List<Kitap> kitapListesi;
 

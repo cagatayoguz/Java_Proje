@@ -24,7 +24,6 @@ public class Depo<T extends Kaydedilebilir> {
         this.liste.addAll(topluListe);
     }
 
-    // Ödev Gereksinimi: Collections.sort kullanımı
     public void ismeGoreSirala() {
         // Nesnelerin toString() metoduna (Kitap Adına) göre sıralar
         Collections.sort(liste, (o1, o2) -> o1.toString().compareToIgnoreCase(o2.toString()));

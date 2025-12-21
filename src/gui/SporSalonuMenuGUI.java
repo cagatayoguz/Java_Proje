@@ -15,12 +15,13 @@ public class SporSalonuMenuGUI extends JFrame {
         // Pencere yapılandırması (Başlık, Boyut, Konumlandırma) gerçekleştirildi.
         setTitle("Spor Salonu");
         setSize(600, 400);
+
         // Bu pencere kapatıldığında ana uygulamanın çalışmaya devam etmesi için DISPOSE tercih edildi.
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
         JPanel mainPanel = new JPanel(new BorderLayout());
-        mainPanel.setBackground(new Color(248, 249, 250)); // Kurumsal gri arka plan
+        mainPanel.setBackground(new Color(248, 249, 250));
         setContentPane(mainPanel);
 
         // --- Başlık Alanı ---
