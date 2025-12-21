@@ -2,7 +2,6 @@ package main;
 
 import service.KutuphaneServisi;
 import gui.AnaMenuGUI;
-// ... (Diğer gerekli import'lar)
 
 public class Main { // Ana Sınıf (main metodu içeren, projeyi başlatan sınıf)
 
@@ -24,8 +23,5 @@ public class Main { // Ana Sınıf (main metodu içeren, projeyi başlatan sın�
         java.awt.EventQueue.invokeLater(() -> {
             new AnaMenuGUI().setVisible(true);
         });
-
     }
-
-    // ... (Diğer statik getter metotları)
 }

@@ -1,6 +1,7 @@
 package gui;
 
 import service.DosyaIslemleri;
+import service.TarihIslemleri; // EKLEME: Tarih formatlayıcı sınıfı import ettik.
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
@@ -14,7 +15,7 @@ public class DuyuruEkleGUI extends JFrame {
         // Pencere temel özellikleri (Başlık, Boyut, Konum) ayarlandı.
         setTitle("Yeni Duyuru Yayınla");
         setSize(500, 550);
-        // Pencere kapatıldığında sadece bu ekranın kapanması sağlandı (Ana uygulama çalışmaya devam eder).
+        // Pencere kapatıldığında sadece bu ekranın kapanması sağlandı.
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
@@ -24,9 +25,7 @@ public class DuyuruEkleGUI extends JFrame {
         setContentPane(mainPanel);
 
         // --- Kart Paneli Tasarımı ---
-        // İçeriklerin bir arada ve düzenli durması için beyaz bir kart paneli oluşturuldu.
         JPanel cardPanel = new JPanel();
-        // Bileşenlerin yukarıdan aşağıya (Dikey) sıralanması için BoxLayout kullanıldı.
         cardPanel.setLayout(new BoxLayout(cardPanel, BoxLayout.Y_AXIS));
         cardPanel.setBackground(Color.WHITE);
 
@@ -34,37 +33,32 @@ public class DuyuruEkleGUI extends JFrame {
         cardPanel.setBorder(BorderFactory.createCompoundBorder(
                 new LineBorder(new Color(230, 230, 230), 1),
                 new EmptyBorder(30, 30, 30, 30)));
-        cardPanel.setPreferredSize(new Dimension(400, 450)); // Kart boyutu sabitlendi.
+        cardPanel.setPreferredSize(new Dimension(400, 450));
 
         // Form Başlığı
         JLabel lblTitle = new JLabel("Duyuru Oluştur");
         lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 20));
-        lblTitle.setAlignmentX(Component.CENTER_ALIGNMENT); // Ortaya hizalandı
+        lblTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
         cardPanel.add(lblTitle);
 
-        // Görsel boşluk bırakmak için dikey strut eklendi.
         cardPanel.add(Box.createVerticalStrut(20));
 
         // --- Başlık Giriş Alanı ---
         JLabel l1 = new JLabel("Duyuru Başlığı:");
-        l1.setAlignmentX(Component.LEFT_ALIGNMENT); // Sola hizalı
+        l1.setAlignmentX(Component.LEFT_ALIGNMENT);
         JTextField txtBaslik = new JTextField();
-        // Text alanının yatayda genişlemesi ancak dikeyde sabit kalması sağlandı.
         txtBaslik.setMaximumSize(new Dimension(Integer.MAX_VALUE, 35));
 
         // --- İçerik Giriş Alanı ---
         JLabel l2 = new JLabel("İçerik:");
         l2.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        // Çok satırlı veri girişi için TextArea kullanıldı.
         JTextArea txtIcerik = new JTextArea(8, 20);
-        txtIcerik.setLineWrap(true); // Satır sonuna gelince alt satıra geçmesi sağlandı.
+        txtIcerik.setLineWrap(true);
 
-        // İçerik alanı taşarsa kaydırma çubuğu çıkması için ScrollPane içine alındı.
         JScrollPane scroll = new JScrollPane(txtIcerik);
         scroll.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        // Bileşenler sırasıyla panele eklendi ve aralarına boşluklar koyuldu.
         cardPanel.add(l1);
         cardPanel.add(Box.createVerticalStrut(5));
         cardPanel.add(txtBaslik);
@@ -77,30 +71,32 @@ public class DuyuruEkleGUI extends JFrame {
 
         // --- Yayınla Butonu ---
         JButton btnYayinla = new JButton("Yayınla");
-        btnYayinla.setBackground(new Color(155, 89, 182)); // Dikkat çekici mor renk seçildi
+        btnYayinla.setBackground(new Color(155, 89, 182)); // Mor renk
         btnYayinla.setForeground(Color.WHITE);
         btnYayinla.setFont(new Font("Segoe UI", Font.BOLD, 14));
         btnYayinla.setAlignmentX(Component.CENTER_ALIGNMENT);
         btnYayinla.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
 
-        // Buton Aksiyonu: Verilerin dosyaya kaydedilmesi
+        // Buton Aksiyonu
         btnYayinla.addActionListener(e -> {
             try {
-                // Sistemden güncel tarih bilgisi alındı.
-                String tarih = LocalDate.now().toString();
+                // --- DEĞİŞİKLİK BURADA YAPILDI ---
+                // Eskiden: LocalDate.now().toString(); -> 2025-12-21 veriyordu.
+                // Şimdi: TarihIslemleri sınıfını kullanarak "21.12.2025" formatına çeviriyoruz.
+                String tarih = TarihIslemleri.tarihFormatla(LocalDate.now());
 
                 // Servis katmanındaki metot çağrılarak duyuru dosyaya eklendi.
                 DosyaIslemleri.duyuruEkle(tarih, txtBaslik.getText(), txtIcerik.getText());
 
-                // Kullanıcıya geri bildirim verildi ve pencere kapatıldı.
-                JOptionPane.showMessageDialog(this, "Duyuru yayınlandı.");
-                this.dispose();
+                JOptionPane.showMessageDialog(this, "Duyuru başarıyla yayınlandı.");
+                this.dispose(); // Pencereyi kapat
+
             } catch (Exception ex) {
-                ex.printStackTrace(); // Hata durumunda konsola log düşüldü.
+                ex.printStackTrace();
             }
         });
 
         cardPanel.add(btnYayinla);
-        mainPanel.add(cardPanel); // Kart paneli ana panele eklendi.
+        mainPanel.add(cardPanel);
     }
 }

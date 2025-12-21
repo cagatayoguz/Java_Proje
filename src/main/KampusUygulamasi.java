@@ -29,6 +29,4 @@ public class KampusUygulamasi {
     public static KutuphaneServisi getKutuphaneServisi() {
         return kutuphaneServisi;
     }
-
-    // Not: Bu statik metot ve alanlar, Bölüm 10 gereksinimini karşılar.
 }

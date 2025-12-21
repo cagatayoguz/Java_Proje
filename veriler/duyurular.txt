@@ -1,15 +1,12 @@
-01.09.2023|Akademik Yıl Açılışı|2023-2024 Akademik yılı açılış töreni rektörlük binasında yapılacaktır.
-15.09.2023|Ders Kayıtları|Güz dönemi ders kayıtları sistem üzerinden başlamıştır.
-29.10.2023|Cumhuriyet Bayramı|29 Ekim Cumhuriyet Bayramı kutlamaları stadyumda gerçekleşecektir.
-10.11.2023|10 Kasım Töreni|Atatürk'ü anma programı saat 09:05'te saygı duruşu ile başlayacaktır.
-20.11.2023|Vize Sınav Takvimi|Fakültelerin vize sınav programları web sitesinde yayınlanmıştır.
-15.12.2023|Kış Festivali|Öğrenci kulüplerinin düzenlediği Kış Festivali kampüs alanında yapılacaktır.
-01.01.2024|Yılbaşı Tatili|1 Ocak Pazartesi günü resmi tatil nedeniyle ders yapılmayacaktır.
-10.01.2024|Final Sınavları|Güz dönemi final sınavları başlamıştır. Tüm öğrencilere başarılar dileriz.
-20.01.2024|Yemekhane Menüsü|Yemekhane menüsünde öğrencilerimizin isteği üzerine güncelleme yapılmıştır.
-15.02.2024|Bahar Dönemi|Bahar dönemi ders başlangıç tarihi 20 Şubat olarak güncellenmiştir.
-17.12.2025|osmal codenames oynayamıyor|1234
-17.12.2025|ismal|berkmal
-2025-12-17::deneme::deneme yapılıyor
-2025-12-18::yeni deneme::tarih denemesi
-2025-12-20::deneme::1
+20.12.2025::Final Sınav Programı::2025-2026 Eğitim-Öğretim Yılı Güz Dönemi final sınav programları OBS sistemi ve fakülte web sitelerinde ilan edilmiştir.
+18.12.2025::Kütüphane 7/24 Hizmeti::Merkez Kütüphanemiz, yaklaşan final sınavları nedeniyle 2 Ocak - 15 Ocak tarihleri arasında 7 gün 24 saat kesintisiz hizmet verecektir. Çorba ikramımız gece 23:00'da yapılacaktır.
+15.12.2025::Yemekhane Menü Güncellemesi::Ocak ayı yemek listesi güncellenmiştir. Artan maliyetler sebebiyle misafir yemek ücretlerinde düzenleme yapılmıştır, öğrenci fiyatları sabittir.
+12.12.2025::Erasmus+ Başvuruları::2026-2027 Akademik Yılı Erasmus+ Öğrenim ve Staj Hareketliliği başvuruları 15 Ocak'ta başlayacaktır. Yabancı dil sınavı tarihi ayrıca duyurulacaktır.
+10.12.2025::Ring Seferleri Düzenlemesi::Kış saati uygulaması kapsamında Beşevler ve Gölbaşı yerleşkeleri arası ring sefer saatleri güncellenmiştir. Yeni liste Ulaşım Müdürlüğü sayfasındadır.
+08.12.2025::TEKNOFEST Takım Başvuruları::Üniversitemizi TEKNOFEST 2026'da temsil edecek takımlar için proje başvuruları başlamıştır. Teknoloji Fakültesi dekanlığından detaylı bilgi alabilirsiniz.
+05.12.2025::Konferans: Yapay Zeka::Mühendislik Fakültesi Konferans Salonu'nda 25 Aralık'ta düzenlenecek olan 'Geleceğin Mühendisliği ve Yapay Zeka' paneline tüm öğrencilerimiz davetlidir.
+01.12.2025::Burs Sonuçları Açıklandı::Gazi Üniversitesi Vakfı yemek ve nakdi burs başvuruları sonuçlanmış olup, kazanan öğrencilerin listesi Sağlık Kültür ve Spor Daire Başkanlığı sayfasında yayınlanmıştır.
+28.11.2025::Seçmeli Ders Kayıtları::Bahar yarıyılı için Üniversite Ortak Seçmeli Ders (UOS) havuzu güncellenmiştir. Kontenjan artırımı yapılmayacaktır.
+25.11.2025::Grip Aşısı ve Sağlık Taraması::Medico-Sosyal Merkezimizde öğrencilerimiz ve personelimiz için ücretsiz grip taraması ve bilgilendirme günleri başlamıştır.
+2025-12-21::deneme::1
+21.12.2025::ismal::1 saat
