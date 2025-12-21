@@ -8,7 +8,7 @@ public class KampusUygulamasi {
     private static KutuphaneServisi kutuphaneServisi;
 
     public static void main(String[] args) {
-        System.out.println("Kampüs Yönetim ve Bilgi Sistemi Başlatılıyor...");
+        System.out.println("Kampüs Yönetim ve Bilgi Sistemi Başlatılıyor....");
 
         // Kütüphane Servisini başlat ve başlangıç verilerini yükle
         try {
