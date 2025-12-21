@@ -20,16 +20,6 @@ public abstract class Akademisyen extends Kisiler {
 
     @Override
     public boolean kaydet() {
-        // NOT: DosyaIslemleri sınıfında henüz 'akademisyenEkle' metodu olmadığı için
-        // burası şimdilik işlem yapmaz. Servise o metot eklendiğinde buradaki yorumu kaldırabilirsin.
-        /*
-        try {
-            DosyaIslemleri.akademisyenEkle(getAd(), getSoyad(), sicilNo, unvan, bolum);
-            return true;
-        } catch (IOException e) {
-            return false;
-        }
-        */
         System.out.println("UYARI: Akademisyen kayıt servisi henüz aktif değil.");
         return false;
     }

@@ -26,7 +26,6 @@ public class HaritaGUI extends JFrame {
             ImageIcon icon = new ImageIcon(dosyaYolu);
 
             // Eğer resim çok büyükse biraz küçültelim (Opsiyonel)
-            // Image img = icon.getImage().getScaledInstance(950, 750, Image.SCALE_SMOOTH);
             // lblResim.setIcon(new ImageIcon(img));
 
             lblResim.setIcon(icon);

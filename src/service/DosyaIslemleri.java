@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import java.util.*;
 import exception.OgrenciBulunamadiException;
 
-// Projenin Veri Erişim Katmanı (Data Access Layer).
+// Projenin Veri Erişim Katmanı
 // Tüm verilerin (Öğrenci, Kitap, Duyuru, Spor) metin dosyalarına yazılmasını ve okunmasını yönetir.
 public class DosyaIslemleri {
 

@@ -28,7 +28,7 @@ public class KutuphaneListeGUI extends JFrame {
         setLocationRelativeTo(null);
 
         JPanel mainPanel = new JPanel(new BorderLayout());
-        mainPanel.setBackground(new Color(248, 249, 250)); // Göz yormayan gri ton
+        mainPanel.setBackground(new Color(248, 249, 250));
         setContentPane(mainPanel);
 
         // Başlık ve Arama
