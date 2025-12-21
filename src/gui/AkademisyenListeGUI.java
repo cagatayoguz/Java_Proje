@@ -49,7 +49,7 @@ public class AkademisyenListeGUI extends JFrame {
 
         // --- TABLO KISMI ---
         // Modelimizdeki verilere uygun sütunlar:
-        String[] kolonlar = {"Unvan", "Ad Soyad", "Bölüm", "Sicil No"};
+        String[] kolonlar = {"Unvan", "Ad Soyad", "Bölüm", "e posta"};
 
         model = new DefaultTableModel(kolonlar, 0) {
             @Override
@@ -64,7 +64,7 @@ public class AkademisyenListeGUI extends JFrame {
                     hoca.getUnvan(),
                     hoca.getAd() + " " + hoca.getSoyad(), // Modeldeki getterları kullandık
                     hoca.getBolum(),
-                    hoca.getSicilNo()
+                    hoca.getPosta()
             });
         }
 

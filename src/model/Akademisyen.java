@@ -5,15 +5,15 @@ import java.io.IOException;
 
 public abstract class Akademisyen extends Kisiler {
 
-    private String sicilNo;
     private String unvan;
     private String bolum;
+    private String posta;
 
     public Akademisyen(String ad, String soyad, String sicilNo, String unvan, String bolum) {
         super(ad, soyad);
-        this.sicilNo = sicilNo;
-        this.unvan = unvan;
-        this.bolum = bolum;
+        this.unvan = sicilNo;
+        this.bolum = unvan;
+        this.posta = bolum;
     }
 
     // --- INTERFACE (KAYDEDİLEBİLİR) METOTLARI ---
@@ -49,16 +49,16 @@ public abstract class Akademisyen extends Kisiler {
 
     @Override
     public String getPozisyon() {
-        return unvan + " - " + bolum;
+        return bolum + " - " + posta;
     }
 
     @Override
     public String detayliRaporOlustur() {
-        return String.format("%s %s %s | Sicil: %s", unvan, getAd(), getSoyad(), sicilNo);
+        return String.format("%s %s %s | Sicil: %s", bolum, getAd(), getSoyad(), unvan);
     }
 
     // Getterlar
-    public String getSicilNo() { return sicilNo; }
     public String getUnvan() { return unvan; }
     public String getBolum() { return bolum; }
+    public String getPosta() { return posta; }
 }
