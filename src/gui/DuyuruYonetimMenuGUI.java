@@ -10,7 +10,7 @@ import java.awt.event.MouseEvent;
 // Yönetici panelinde, duyuru ekleme ve silme işlemlerinin seçildiği ara menü sınıfı.
 public class DuyuruYonetimMenuGUI extends JFrame {
 
-    // Arayüz standartlarını korumak için sabit renkler tanımlandı.
+    //renk paleti
     private final Color BG_COLOR = new Color(248, 249, 250);
     private final Color CARD_BG = Color.WHITE;
     private final Color ACCENT_COLOR = new Color(155, 89, 182); // Vurgu rengi (Mor)
@@ -26,7 +26,7 @@ public class DuyuruYonetimMenuGUI extends JFrame {
         mainPanel.setBackground(BG_COLOR);
         setContentPane(mainPanel);
 
-        // --- Başlık Alanı ---
+        //başlık Alanı
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(BG_COLOR);
         headerPanel.setBorder(new EmptyBorder(30, 40, 10, 40));
@@ -36,14 +36,14 @@ public class DuyuruYonetimMenuGUI extends JFrame {
         headerPanel.add(lblTitle, BorderLayout.NORTH);
         mainPanel.add(headerPanel, BorderLayout.NORTH);
 
-        // --- Menü Seçenekleri (Grid) ---
-        // Seçeneklerin yan yana (1 satır, 2 sütun) ve düzenli durması için GridLayout tercih edildi.
+        //menü seçenekleri
+        //  GridLayout Seçeneklerin yan yana 1 satır 2 sütun şeklinde düzenli durması için tercih ediiyor
         JPanel gridPanel = new JPanel(new GridLayout(1, 2, 20, 20));
         gridPanel.setBackground(BG_COLOR);
         gridPanel.setBorder(new EmptyBorder(20, 40, 40, 40));
 
-        // 'Ekle' ve 'Sil' seçenekleri, yardımcı metot kullanılarak panele eklendi.
-        // Lambda ifadeleri ile ilgili GUI sınıflarının açılması sağlandı.
+        // ekle ve sil yardımcı metot kullanılarak panele eklendi.
+        //Lambda ifadeleri ile ilgili GUI sınıflarının açılması sağlandı.
         gridPanel.add(createCard("Duyuru Ekle", "Yeni duyuru yayınla.", "📢",
                 e -> new DuyuruEkleGUI().setVisible(true)));
 
@@ -53,7 +53,10 @@ public class DuyuruYonetimMenuGUI extends JFrame {
         mainPanel.add(gridPanel, BorderLayout.CENTER);
     }
 
-    // Buton stillerini standartlaştıran yardımcı metot.
+
+    // Kod tekrarını önlemek ve tutarlı bir tasarım sağlamak amacıyla,
+    //menü kartlarını oluşturan parametrik metot tasarlandı.
+
     private JPanel createCard(String title, String desc, String icon, java.awt.event.ActionListener action) {
         JPanel card = new JPanel(new BorderLayout());
         card.setBackground(CARD_BG);
@@ -81,7 +84,7 @@ public class DuyuruYonetimMenuGUI extends JFrame {
         textPanel.add(lblD);
         card.add(textPanel, BorderLayout.CENTER);
 
-        // Kullanıcı deneyimini artırmak için Mouse olayları dinlendi (Hover efekti).
+        // Mouse olayları dinlendi
         card.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 // Tıklama anında parametre olarak gelen aksiyon tetiklendi.

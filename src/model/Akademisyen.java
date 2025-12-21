@@ -16,17 +16,18 @@ public abstract class Akademisyen extends Kisiler {
         this.posta = bolum;
     }
 
-    // --- INTERFACE (KAYDEDİLEBİLİR) METOTLARI ---
+    //interface kaydedilenilir metotları
 
     @Override
     public boolean kaydet() {
+
         System.out.println("UYARI: Akademisyen kayıt servisi henüz aktif değil.");
         return false;
     }
 
     @Override
     public boolean sil(String id) {
-        // DosyaIslemleri.akademisyenSil(id); eklendiğinde burası aktif edilecek.
+        // DosyaIslemleri.akademisyenSil(id); eklendiğinde burası aktif edilecek
         return false;
     }
 
@@ -35,7 +36,7 @@ public abstract class Akademisyen extends Kisiler {
         return false;
     }
 
-    // --- DİĞER METOTLAR ---
+    //diğer metotolar
 
     @Override
     public String getPozisyon() {

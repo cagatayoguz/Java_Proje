@@ -13,7 +13,6 @@ public class HaritaGUI extends JFrame {
         setLocationRelativeTo(null);
 
         // Resim Dosyası Yolu
-        // Senin atacağın SS'in adı "kampus_harita.jpg" olmalı ve veriler/resimler klasöründe olmalı.
         String dosyaYolu = "C:\\Users\\cagat\\Downloads\\gazi kampüs harita.jpg";
 
         JLabel lblResim = new JLabel();
@@ -25,8 +24,7 @@ public class HaritaGUI extends JFrame {
             // Resmi yükle
             ImageIcon icon = new ImageIcon(dosyaYolu);
 
-            // Eğer resim çok büyükse biraz küçültelim (Opsiyonel)
-            // lblResim.setIcon(new ImageIcon(img));
+            // Eğer resim çok büyükse biraz küçültelim
 
             lblResim.setIcon(icon);
         } else {

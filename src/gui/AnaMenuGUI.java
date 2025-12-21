@@ -7,7 +7,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 
-// Ana Menü ekranı
+// Uygulamanın giriş kapısı olan Ana Menü ekranı.
+// JFrame'den miras aldı  standart pencere özellikleri için.
 public class AnaMenuGUI extends JFrame {
 
     // Arka plan resminin yolu.
@@ -15,60 +16,62 @@ public class AnaMenuGUI extends JFrame {
 
     public AnaMenuGUI() {
         setTitle("Üniversite Otomasyon Sistemi");
-        setSize(1000, 600); // Ekranı doldursun diye geniş bir boyut verildi
+        setSize(1000, 600); // Ekranı doldursun diye geniş bir boyut verdi
 
         // Çarpıya basınca program tamamen kapansın (Ana menü olduğu için)
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null); // Pencere tam ortada açılsın
 
-        // Arka Plan Paneli
+        // arka plan paneli
         BackgroundPanel backgroundPanel = new BackgroundPanel(ARKA_PLAN_RESMI);
-        backgroundPanel.setLayout(new BorderLayout()); // Elemanları Kuzey-Güney diye dizeceğiz
-        setContentPane(backgroundPanel); // Bu paneli ana içerik paneli yap
+        backgroundPanel.setLayout(new BorderLayout());
+        setContentPane(backgroundPanel);
 
-        //Üst Kısım
+        // başlık
         JLabel lblBaslik = new JLabel("Üniversite Bilgi ve Yönetim Sistemi", SwingConstants.CENTER);
         lblBaslik.setFont(new Font("SansSerif", Font.BOLD, 25));
 
         // Yazı rengi ayarlandı
         lblBaslik.setForeground(new Color(42, 15, 31));
 
-        // Yazı tavana yapışmasın diye üstten biraz boşluk bıraktım
+        // Yazı tavana yapışmasın diye üstten biraz boşluk bıraktı
         lblBaslik.setBorder(new EmptyBorder(5, 0, 0, 0));
         backgroundPanel.add(lblBaslik, BorderLayout.NORTH);
 
-        // Alt Kısım (Butonlar)
+        // Butonları yan yana ortalayarak dizmek için FlowLayout kullandı
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 40, 20));
         buttonPanel.setOpaque(false); // Şeffaf yaptım ki arkadaki üniversite resmi görünsün
         buttonPanel.setBorder(new EmptyBorder(0, 0, 60, 0)); // Alt taraftan biraz yukarı itelim
 
-        // Bilgi Sistemi
+//bilgi sistemi        // Aşağıdaki 'zarifButonOlustur' metodunu kullanarak kod tekrarından kurtulundu
         JButton btnBilgi = createCard("Bilgi Sistemi");
         btnBilgi.addActionListener(e -> {
             // Bilgi menüsünü aç
             new BilgiMenuGUI().setVisible(true);
+            // Eğer ana menü kapansın istersek buraya this.dispose() ekleyebiliriz ama kalsın.
         });
 
-        // Yönetim Paneli
+
+        //Yönetim Paneli
         JButton btnYonetim = createCard("Yönetim Paneli");
         btnYonetim.addActionListener(e -> {
-
-            // Yönetim paneline herkes giremez, önce Giriş (Login) ekranına yönlendiriyorum
+            // Yönetim paneline herkes giremez, önce Giriş (Login) ekranına yönlendiriyor
             new YonetimGirisGUI().setVisible(true);
         });
 
-        // Çıkış butonu
+        // Çıkış
         JButton btnCikis = createCard("Çıkış");
 
+        // Çıkış butonu dikkat çeksin diye kırmızımsı yaptı
         btnCikis.setBackground(new Color(180, 60, 60, 220));
 
-        // Çıkış butonuna özel hover (üzerine gelince renk değişimi) ekledim
+        // Çıkış butonuna özel hover (üzerine gelince renk değişimi) eklendi
         btnCikis.addMouseListener(new MouseAdapter() {
             public void mouseEntered(MouseEvent evt) {
-                btnCikis.setBackground(new Color(200, 80, 80, 240)); // Daha açık kırmızı
+                btnCikis.setBackground(new Color(200, 80, 80, 240));
             }
             public void mouseExited(MouseEvent evt) {
-                btnCikis.setBackground(new Color(180, 60, 60, 220)); // Eski haline dön
+                btnCikis.setBackground(new Color(180, 60, 60, 220));
             }
         });
 
@@ -83,27 +86,27 @@ public class AnaMenuGUI extends JFrame {
         backgroundPanel.add(buttonPanel, BorderLayout.SOUTH);
     }
 
-    // Buton stillerini standartlaştıran yardımcı metot.
+    // Yardımcı Metot: Zarif Buton Tasarımı
+    // Her buton için aynı kodları kopyala-yapıştır yapmamak için  metodu
     private JButton createCard(String text) {
         JButton btn = new JButton(text);
         btn.setFont(new Font("SansSerif", Font.BOLD, 18));
-        btn.setForeground(Color.WHITE); // Yazı rengi beyaz
-        btn.setBackground(new Color(40, 60, 100, 220)); // Lacivert, biraz saydam (220)
-        btn.setFocusPainted(false); // Tıklayınca çıkan o çirkin çerçeveyi kaldır
+        btn.setForeground(Color.WHITE);
+        btn.setBackground(new Color(40, 60, 100, 220));
+        btn.setFocusPainted(false);
 
-        // Kenarlık ayarları: Dışta beyaz çizgi, içte boşluk
         btn.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(new Color(255, 255, 255, 150), 2),
                 BorderFactory.createEmptyBorder(15, 40, 15, 40)
         ));
-        btn.setCursor(new Cursor(Cursor.HAND_CURSOR)); // Üzerine gelince el işareti çıksın
+        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        // Butonların üzerine gelince renk değişsin (Hover Efekti)
+        // Butonların üzerine gelince renk değişsin
         btn.addMouseListener(new MouseAdapter() {
             public void mouseEntered(MouseEvent evt) {
-                // Çıkış butonu kırmızı kalsın, onu mavi yapmayalım diye kontrol ediyorum
+                // Çıkış butonu kırmızı kalır
                 if (!btn.getText().equals("Çıkış")) {
-                    btn.setBackground(new Color(60, 80, 140, 240)); // Daha açık mavi
+                    btn.setBackground(new Color(60, 80, 140, 240));
                 }
             }
             public void mouseExited(MouseEvent evt) {
@@ -114,8 +117,9 @@ public class AnaMenuGUI extends JFrame {
         });
         return btn;
     }
-
-    // Arka Plan Resmi
+    //arka plan
+    // JPanel normalde sadece düz renk boyar. Resim çizdirmek için paintComponent metodunu
+    // ezmemiz (override) gerekiyor. Bu yüzden bu özel sınıfı yazdım.
     private class BackgroundPanel extends JPanel {
         private Image backgroundImage;
 
@@ -127,7 +131,7 @@ public class AnaMenuGUI extends JFrame {
                     backgroundImage = new ImageIcon(fileName).getImage();
                 }
             } catch (Exception e) {
-                // Hata olursa (dosya yoksa vs.) konsola bas ama programı çökertme
+                // Hata olursa (dosya yoksa vs.) konsolda göster ama programı çökertme
                 e.printStackTrace();
             }
         }
@@ -137,7 +141,7 @@ public class AnaMenuGUI extends JFrame {
         protected void paintComponent(Graphics g) {
             super.paintComponent(g); // Önce paneli temizle
             if (backgroundImage != null) {
-                // Resmi panelin genişlik ve yüksekliğine göre sündürerek (scale) çiz
+                // Resmi panelin genişlik ve yüksekliğine göre  (scale) çiz
                 g.drawImage(backgroundImage, 0, 0, this.getWidth(), this.getHeight(), this);
             }
         }

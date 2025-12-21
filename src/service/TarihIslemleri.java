@@ -14,4 +14,4 @@ public class TarihIslemleri {
         return tarih.format(TARİH_FORMATI);
 
     }
-    }
+}

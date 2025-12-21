@@ -1,5 +1,4 @@
 package model;
-
 import service.DosyaIslemleri;
 import exception.GecersizGirisBilgisiException;
 import java.io.IOException;

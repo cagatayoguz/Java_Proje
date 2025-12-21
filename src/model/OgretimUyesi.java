@@ -1,5 +1,6 @@
 package model;
 
+//Akademisyenden kalıttığımız alt sınıfımız
 public class OgretimUyesi extends Akademisyen {
 
     public OgretimUyesi(String ad, String soyad, String sicilNo, String unvan, String bolum) {
