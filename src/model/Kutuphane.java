@@ -5,7 +5,7 @@ import java.util.List;
 import exception.GecersizGirisBilgisiException;
 
 // Kütüphane, fiziksel bir 'Alan'dır, içinde kitaplar barındırır.
-public class Kutuphane extends Alan implements Kaydedilebilir {
+public class Kutuphane extends Alan implements Kaydedilebilir,Yazdirilabilir {
 
     private List<Kitap> kitapListesi;
 
@@ -66,7 +66,7 @@ public class Kutuphane extends Alan implements Kaydedilebilir {
         return kitapListesi;
     }
 
-    // --- KAYDEDİLEBİLİR INTERFACE METOTLARI ---
+    //Kaydetmemize yarayan metod
     @Override
     public boolean kaydet() {
         boolean hepsiBasarili = true;
@@ -83,4 +83,24 @@ public class Kutuphane extends Alan implements Kaydedilebilir {
 
     @Override
     public boolean guncelle() { return true; }
+
+    @Override
+    public String bilgiRaporuOlustur() {
+        return "";
+    }
+
+    @Override
+    public String detayliRaporOlustur() {
+        return "";
+    }
+
+    @Override
+    public boolean durumKontrol() {
+        return false;
+    }
+
+    @Override
+    public void ciktiAl() {
+
+    }
 }

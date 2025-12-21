@@ -10,7 +10,7 @@ public class YemekVeriTabani {
     private static Map<String, String> menuListesi = new HashMap<>();
 
     static {
-        // --- 1. HAFTA (1-5 Aralık 2025) ---
+       //Yemek listesi
         menuListesi.put("01.12.2025",
                 "Çorba: Sebze Çorba\n" +
                         "Ana Yemek: Et Sote / Elma Dil. Pat.\n" +

@@ -7,12 +7,14 @@ public abstract class Akademisyen extends Kisiler {
     private String unvan;
     private String uzmanlikAlani;
 
+    //Akademisyen Constructor
     public Akademisyen(String ad, String soyad, String unvan, String uzmanlikAlani) {
         super(ad, soyad);
         this.unvan = unvan;
         this.uzmanlikAlani = uzmanlikAlani;
     }
 
+    //Akademisyenin ünvanını alıyoruz
     @Override
     public String getPozisyon() { return unvan + " - " + uzmanlikAlani; }
 

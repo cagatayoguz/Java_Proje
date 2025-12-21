@@ -2,108 +2,133 @@ package gui;
 
 import service.DosyaIslemleri;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
 
+// Yönetici panelinde, spor salonunu aktif olarak kullanan üyelerin listelendiği
+// ve üyelik iptal işlemlerinin yönetildiği arayüz sınıfı.
 public class SporSalonuUyeYonetimGUI extends JFrame {
 
     private DefaultTableModel model;
     private JTable table;
 
     public SporSalonuUyeYonetimGUI() {
+        // Pencere yapılandırması (Başlık, Boyut, Konumlandırma) gerçekleştirildi.
         setTitle("Spor Salonu - Aktif Üye Listesi");
         setSize(900, 500);
+        // Pencere kapatıldığında ana yönetim panelinin açık kalması için DISPOSE tercih edildi.
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setLayout(new BorderLayout());
+        setLocationRelativeTo(null);
 
-        // Başlık
-        JLabel lblBaslik = new JLabel("Spor Salonu Aktif Üye Listesi", SwingConstants.CENTER);
-        lblBaslik.setFont(new Font("Arial", Font.BOLD, 18));
-        lblBaslik.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
-        add(lblBaslik, BorderLayout.NORTH);
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        mainPanel.setBackground(Color.WHITE);
+        setContentPane(mainPanel);
 
-        // Tablo
+        // --- Başlık Paneli ---
+        JPanel header = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        header.setBackground(new Color(248, 249, 250)); // Kurumsal gri arka plan
+        header.setBorder(new EmptyBorder(15, 20, 15, 20));
+
+        JLabel lblBaslik = new JLabel(" Spor Salonu Aktif Üye Listesi");
+        lblBaslik.setFont(new Font("Segoe UI", Font.BOLD, 18));
+        header.add(lblBaslik);
+        mainPanel.add(header, BorderLayout.NORTH);
+
+        // --- Tablo Yapılandırması ---
         String[] kolonlar = {"Ad Soyad", "Öğrenci No", "Üyelik Tipi", "Ücret", "Durum"};
+
+        // Veri tutarlılığını korumak için hücrelerin elle düzenlenmesi engellendi.
         model = new DefaultTableModel(kolonlar, 0) {
             @Override
-            public boolean isCellEditable(int row, int column) {
-                return false; // Tablo üzerinde düzenleme yapılamasın
-            }
+            public boolean isCellEditable(int row, int column) { return false; }
         };
 
         table = new JTable(model);
-        table.setRowHeight(25);
+        table.setRowHeight(30); // Okunabilirlik için satır yüksekliği artırıldı.
+        table.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 
-        // Verileri Yükle
+        // Silme işlemi yapılacağı için seçim rengi kırmızımsı bir ton olarak ayarlandı.
+        table.setSelectionBackground(new Color(255, 230, 230));
+        table.setSelectionForeground(Color.BLACK);
+
+        // Mevcut aktif üyelerin tabloya yüklenmesi sağlandı.
         verileriYukle();
-        add(new JScrollPane(table), BorderLayout.CENTER);
 
-        // Alt Panel (Silme Butonu)
-        JPanel altPanel = new JPanel();
-        JButton btnSil = new JButton("Seçili Üyeliği Sil (Ücret İadesi)");
-        btnSil.setFont(new Font("Arial", Font.BOLD, 14));
-        btnSil.setBackground(new Color(255, 100, 100)); // Kırmızımsı
+        JScrollPane scrollPane = new JScrollPane(table);
+        scrollPane.setBorder(new EmptyBorder(10, 20, 10, 20));
+        scrollPane.getViewport().setBackground(Color.WHITE);
+        mainPanel.add(scrollPane, BorderLayout.CENTER);
+
+        // --- Alt Panel (İşlem Butonu) ---
+        JPanel altPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 20, 20));
+        altPanel.setBackground(Color.WHITE);
+
+        JButton btnSil = new JButton("Seçili Üyeliği İptal Et (İade)");
+        btnSil.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        btnSil.setBackground(new Color(220, 53, 69)); // Kritik işlem (Kırmızı)
         btnSil.setForeground(Color.WHITE);
 
+        // Butona tıklandığında silme/iptal metodu tetiklendi.
         btnSil.addActionListener(e -> silmeIslemi());
 
         altPanel.add(btnSil);
-        add(altPanel, BorderLayout.SOUTH);
-
-        setLocationRelativeTo(null);
+        mainPanel.add(altPanel, BorderLayout.SOUTH);
     }
 
+    // --- Veri Filtreleme ve Yükleme ---
     private void verileriYukle() {
-        model.setRowCount(0); // Tabloyu temizle
+        model.setRowCount(0); // Tablo temizlendi.
         List<String[]> uyelikler = DosyaIslemleri.sporUyelikleriOku();
 
-        boolean veriVar = false;
         for (String[] u : uyelikler) {
-            // FİLTRELEME BURADA YAPILIYOR
-            // Sadece durumu "Aktif" olanları ekle (Bekleyenler görünmesin)
+            // FİLTRELEME MANTIĞI:
+            // Yöneticinin bu ekranda sadece "Aktif" üyeleri görmesi amaçlandı.
+            // "Bekliyor" durumundaki kayıtlar Onay ekranında gösterilmektedir.
             if ("Aktif".equals(u[4])) {
                 model.addRow(u);
-                veriVar = true;
             }
-        }
-
-        if (!veriVar) {
-            model.addRow(new Object[]{"Kayıtlı aktif üye yok.", "-", "-", "-", "-"});
         }
     }
 
+    // --- Üyelik İptal ve Silme İşlemi ---
     private void silmeIslemi() {
         int row = table.getSelectedRow();
 
-        // Seçim yapılmadıysa veya boş satır seçildiyse uyar
-        if (row == -1 || model.getValueAt(row, 1).equals("-")) {
-            JOptionPane.showMessageDialog(this, "Lütfen silinecek bir üye seçin.");
+        // Satır seçimi kontrolü yapıldı.
+        if (row == -1) {
+            JOptionPane.showMessageDialog(this, "Lütfen iptal edilecek üyeliği seçiniz.");
             return;
         }
 
+        // Seçilen satırdan gerekli bilgiler (Ad, No, Ücret) alındı.
         String adSoyad = (String) model.getValueAt(row, 0);
         String ogrenciNo = (String) model.getValueAt(row, 1);
         String ucret = (String) model.getValueAt(row, 3);
 
+        // Kritik bir işlem olduğu için kullanıcıdan son onay istendi.
         int onay = JOptionPane.showConfirmDialog(this,
-                "Sayın " + adSoyad + " isimli öğrencinin üyeliği silinecek.\n" +
-                        "Ödenecek İade Tutarı: " + ucret + "\n\nOnaylıyor musunuz?",
+                "Sayın " + adSoyad + " isimli öğrencinin üyeliği iptal edilecek.\n" +
+                        "Ödenecek İade Tutarı: " + ucret + "\n\nBu işlemi onaylıyor musunuz?",
                 "Üyelik İptali ve İade", JOptionPane.YES_NO_OPTION);
 
         if (onay == JOptionPane.YES_OPTION) {
             try {
+                // Servis katmanı üzerinden silme işlemi gerçekleştirildi.
                 boolean sonuc = DosyaIslemleri.sporUyelikSil(ogrenciNo);
+
                 if (sonuc) {
                     JOptionPane.showMessageDialog(this,
-                            "Üyelik başarıyla silindi.\nÜcret iadesi yapıldı.",
+                            "Üyelik başarıyla sonlandırıldı.\nSistemden kayıt silindi ve iade işlemi yapıldı.",
                             "İşlem Tamamlandı", JOptionPane.INFORMATION_MESSAGE);
-                    verileriYukle(); // Listeyi yenile
+                    verileriYukle(); // Güncel listeyi göstermek için tablo yenilendi.
                 } else {
-                    JOptionPane.showMessageDialog(this, "Hata: Kayıt dosyada bulunamadı.");
+                    JOptionPane.showMessageDialog(this, "Hata: Kayıt dosyada bulunamadı.", "Hata", JOptionPane.ERROR_MESSAGE);
                 }
             } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Hata oluştu: " + ex.getMessage());
+                ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, "İşlem sırasında hata oluştu: " + ex.getMessage());
             }
         }
     }

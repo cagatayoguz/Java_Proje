@@ -5,32 +5,41 @@ import java.time.LocalDate;
 import java.util.*;
 import exception.OgrenciBulunamadiException;
 
+// Projenin Veri Erişim Katmanı (Data Access Layer).
+// Tüm verilerin (Öğrenci, Kitap, Duyuru, Spor) metin dosyalarına yazılmasını ve okunmasını yönetir.
 public class DosyaIslemleri {
 
+    // Verilerin saklanacağı dosya yolları sabit (final) olarak tanımlandı.
     private static final String OGRENCI_DOSYASI = "veriler/ogrenciler.txt";
     private static final String KITAP_DOSYASI = "veriler/kitaplar.txt";
     private static final String SPOR_DOSYASI = "veriler/spor_uyelikleri.txt";
     private static final String DUYURU_DOSYASI = "veriler/duyurular.txt";
 
     // --- ÖĞRENCİ İŞLEMLERİ ---
+
+    // Yeni öğrenciyi dosyaya ekleme modunda (append: true) kaydeder.
     public static void ogrenciEkle(String ad, String soyad, String bolum, String no, String sinif, String ort) throws IOException {
         File file = new File(OGRENCI_DOSYASI);
-        if (file.getParentFile() != null) file.getParentFile().mkdirs();
+        if (file.getParentFile() != null) file.getParentFile().mkdirs(); // Klasör yoksa oluştur
+
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, true))) {
             writer.write(no + "," + ad + "," + soyad + "," + bolum + "," + sinif + "," + ort);
             writer.newLine();
         }
     }
 
+    // Dosyadaki verileri okuyup hızlı erişim için bir Map yapısına aktarır.
     public static Map<String, String[]> ogrencileriOku() {
         Map<String, String[]> ogrenciler = new HashMap<>();
         File file = new File(OGRENCI_DOSYASI);
         if (!file.exists()) return ogrenciler;
+
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",");
+                String[] parts = line.split(","); // CSV formatını parçala
                 if (parts.length >= 6) {
+                    // Key: Öğrenci No, Value: Diğer Bilgiler
                     ogrenciler.put(parts[0], new String[]{parts[1], parts[2], parts[3], parts[4], parts[5]});
                 }
             }
@@ -38,9 +47,11 @@ public class DosyaIslemleri {
         return ogrenciler;
     }
 
+    // Silme Mantığı: Dosyadaki her şeyi oku, silinecek hariç diğerlerini yeniden yaz.
     public static void ogrenciSil(String silinecekNo) throws IOException {
         File dosya = new File(OGRENCI_DOSYASI);
         if (!dosya.exists()) return;
+
         List<String> satirlar = new ArrayList<>();
         try (BufferedReader reader = new BufferedReader(new FileReader(dosya))) {
             String line;
@@ -49,6 +60,8 @@ public class DosyaIslemleri {
                 if (parts.length > 0 && !parts[0].equals(silinecekNo)) satirlar.add(line);
             }
         }
+
+        // Dosyanın üzerine yazma modu (append: false)
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(dosya, false))) {
             for (String satir : satirlar) {
                 writer.write(satir);
@@ -57,8 +70,8 @@ public class DosyaIslemleri {
         }
     }
 
+    // Polimorfizm (Overloading) örneği: İsimle silme simülasyonu
     public static void ogrenciSil(String ad, String soyad) throws IOException {
-        // Burada öğrenciyi numarası yerine Ad ve Soyadına göre bulup silen kod simülasyonu
         System.out.println(ad + " " + soyad + " isimli öğrenci aranıyor ve siliniyor...");
     }
 
@@ -68,6 +81,7 @@ public class DosyaIslemleri {
         File file = new File(KITAP_DOSYASI);
         if (file.getParentFile() != null) file.getParentFile().mkdirs();
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, true))) {
+            // Varsayılan olarak Tarih ve Alan Kişi bilgileri boş (-) girilir.
             writer.write(KitapAdi + "," + yazar + "," + isbn + "," + durum + ",-,-");
             writer.newLine();
         }
@@ -84,6 +98,7 @@ public class DosyaIslemleri {
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(",");
                 if (parts.length >= 3) {
+                    // Eksik veri varsa (eski kayıtlar gibi) varsayılan değerlerle tamamla
                     String p3 = (parts.length > 3) ? parts[3] : "Müsait";
                     String p4 = (parts.length > 4) ? parts[4] : "-";
                     String p5 = (parts.length > 5) ? parts[5] : "-";
@@ -94,37 +109,30 @@ public class DosyaIslemleri {
         return list;
     }
 
-    // 1. ADIM: TALEP ETME (Durumu "Bekliyor" yapar, Tarih atmaz)
+    // Adım 1: Öğrenci talep ettiğinde durumu "Bekliyor" yapar.
     public static void kitapTalepEt(String isbn, String ogrenciAd) throws IOException {
         degistirVeKaydet(isbn, "Bekliyor", "-", ogrenciAd);
     }
 
-    // 2. ADIM: ONAYLAMA (Durumu "Oduncte" yapar, Tarihi BUGÜN atar)
-    // 2. ADIM: ONAYLAMA (Durumu "Oduncte" yapar, Tarihi BUGÜN atar)
+    // Adım 2: Yönetici onayladığında tarihi hesaplar ve durumu "Oduncte" yapar.
     public static void kitapOnayla(String isbn) throws IOException {
-
-        // --- BURASI DEĞİŞTİ: ARTIK SENİN FORMATLAYICI SINIFIN KULLANILIYOR ---
-        // LocalDate ile 2 hafta sonrasını hesaplıyoruz
+        // İade tarihi hesabı (Bugün + 2 Hafta)
         LocalDate iadeTarihi = LocalDate.now().plusWeeks(2);
-
-        // TarihIslemleri sınıfındaki statik metodu çağırarak String'e çeviriyoruz
         String tarihStr = TarihIslemleri.tarihFormatla(iadeTarihi);
-        // -------------------------------------------------------------------
 
-        // İsmi dosyadan bulup korumamız lazım ama burada basitçe o anki satırı güncelleyen yardımcı metod kullanıyoruz
         degistirVeKaydet(isbn, "Oduncte", tarihStr, null);
     }
 
-    // 2. ADIM (ALTERNATİF): REDDETME (Durumu "Müsait" yapar)
+    // Adım 3: İade veya Ret durumunda kitap tekrar boşa çıkar.
     public static void kitapReddet(String isbn) throws IOException {
         degistirVeKaydet(isbn, "Müsait", "-", "-");
     }
 
-    // İADE ETME
     public static void kitapIadeEt(String isbn) throws IOException {
         degistirVeKaydet(isbn, "Müsait", "-", "-");
     }
 
+    // Kitabı tamamen sistemden (dosyadan) siler.
     public static void kitapSil(String silinecekISBN) throws IOException {
         List<String[]> kitaplar = kitaplariOkuDetayli();
         File file = new File(KITAP_DOSYASI);
@@ -137,9 +145,9 @@ public class DosyaIslemleri {
         }
     }
 
-    // --- YARDIMCI METOTLAR ---
-    // Bu metot dosyadaki belirli bir ISBN'ye sahip satırın durumunu, tarihini ve kişisini günceller.
-    // Eğer yeniDeger 'null' ise eski değerini korur.
+    // --- YARDIMCI METOTLAR (Utility Methods) ---
+
+    // Belirtilen ISBN'ye sahip kitabın durumunu günceller ve dosyayı yeniden yazar.
     private static void degistirVeKaydet(String isbn, String yeniDurum, String yeniTarih, String yeniKisi) throws IOException {
         List<String[]> kitaplar = kitaplariOkuDetayli();
         File file = new File(KITAP_DOSYASI);
@@ -147,7 +155,7 @@ public class DosyaIslemleri {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, false))) {
             for (String[] k : kitaplar) {
                 if (k[2].equals(isbn)) {
-                    k = genislet(k);
+                    k = genislet(k); // Array boyutu kontrolü
                     if (yeniDurum != null) k[3] = yeniDurum;
                     if (yeniTarih != null) k[4] = yeniTarih;
                     if (yeniKisi != null) k[5] = yeniKisi;
@@ -157,12 +165,14 @@ public class DosyaIslemleri {
         }
     }
 
+    // Dosya yazma işlemini standartlaştıran yardımcı metot.
     private static void yaziciYardimcisi(BufferedWriter writer, String[] k) throws IOException {
         k = genislet(k);
         writer.write(k[0] + "," + k[1] + "," + k[2] + "," + k[3] + "," + k[4] + "," + k[5]);
         writer.newLine();
     }
 
+    // Eski verilerde sütun eksikliği varsa ArrayOutOfBounds hatasını önlemek için diziyi genişletir.
     private static String[] genislet(String[] k) {
         if (k.length < 6) {
             String[] yeni = new String[6];
@@ -173,15 +183,19 @@ public class DosyaIslemleri {
         return k;
     }
 
-    // --- DUYURU VE SPOR İŞLEMLERİ (AYNI) ---
+    // --- DUYURU VE SPOR İŞLEMLERİ ---
+    // (Mantık olarak Öğrenci ve Kitap işlemleriyle aynı CRUD yapısını kullanır)
+
     public static void duyuruEkle(String tarih, String baslik, String icerik) throws IOException {
         File file = new File(DUYURU_DOSYASI);
         if (file.getParentFile() != null) file.getParentFile().mkdirs();
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, true))) {
+            // Duyuru içeriğindeki enter karakterlerini temizle (Tek satırda tutmak için)
             writer.write(tarih + "::" + baslik + "::" + icerik.replace("\n", " "));
             writer.newLine();
         }
     }
+
     public static List<String[]> duyurulariOku() {
         List<String[]> list = new ArrayList<>();
         File file = new File(DUYURU_DOSYASI);
@@ -189,12 +203,13 @@ public class DosyaIslemleri {
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = reader.readLine()) != null) {
-                String[] parts = line.split("::");
+                String[] parts = line.split("::"); // Duyurular "::" ile ayrılır
                 if (parts.length >= 3) list.add(parts);
             }
         } catch (IOException e) { e.printStackTrace(); }
         return list;
     }
+
     public static void duyuruSil(String silinecekBaslik) throws IOException {
         List<String[]> duyurular = duyurulariOku();
         File file = new File(DUYURU_DOSYASI);
@@ -207,6 +222,7 @@ public class DosyaIslemleri {
             }
         }
     }
+
     public static void sporUyelikEkle(String ad, String no, String tip, String ucret, String durum) throws IOException {
         File file = new File(SPOR_DOSYASI);
         if (file.getParentFile() != null) file.getParentFile().mkdirs();
@@ -215,6 +231,7 @@ public class DosyaIslemleri {
             writer.newLine();
         }
     }
+
     public static List<String[]> sporUyelikleriOku() {
         List<String[]> list = new ArrayList<>();
         File file = new File(SPOR_DOSYASI);
@@ -228,6 +245,7 @@ public class DosyaIslemleri {
         } catch (IOException e) { e.printStackTrace(); }
         return list;
     }
+
     public static void sporUyelikGuncelle(String ogrenciNo, String yeniDurum) throws IOException {
         List<String[]> liste = sporUyelikleriOku();
         File file = new File(SPOR_DOSYASI);
@@ -239,6 +257,7 @@ public class DosyaIslemleri {
             }
         }
     }
+
     public static boolean sporUyelikSil(String silinecekNo) throws IOException {
         List<String[]> liste = sporUyelikleriOku();
         File dosya = new File(SPOR_DOSYASI);
@@ -254,31 +273,35 @@ public class DosyaIslemleri {
         }
         return bulundu;
     }
+
+    // --- ÖZEL EXCEPTION KULLANIMI ---
     public static String[] ogrenciGetir(String ogrNo) throws OgrenciBulunamadiException {
         Map<String, String[]> ogrenciler = DosyaIslemleri.ogrencileriOku();
 
         if (!ogrenciler.containsKey(ogrNo)) {
-            // Öğrenci yoksa hata nesnesini fırlatıyoruz
-            throw new OgrenciBulunamadiException(ogrNo); //
+            // Aranan öğrenci yoksa özel hata sınıfı (Custom Exception) fırlatılır.
+            throw new OgrenciBulunamadiException(ogrNo);
         }
 
         return ogrenciler.get(ogrNo);
     }
 
+    // --- FINALLY BLOĞU ÖRNEĞİ ---
+    // Kaynakların (Resource) güvenli bir şekilde kapatılmasını garanti eder.
     public static boolean dosyaKontrolTest(String dosyaYolu) {
         java.io.FileReader fr = null;
         try {
             fr = new java.io.FileReader(dosyaYolu);
-            int i = fr.read(); // İlk karakteri okumayı dene
+            int i = fr.read();
             return i != -1;
         } catch (java.io.IOException e) {
             System.out.println("Dosya okuma testi hatası: " + e.getMessage());
             return false;
         } finally {
-            // ZORUNLULUK: Finally bloğu kullanımı
+            // PROJE GEREKSİNİMİ: Finally bloğu ile kaynak yönetimi
             try {
                 if (fr != null) {
-                    fr.close(); // Dosyayı manuel kapatıyoruz
+                    fr.close(); // Dosya manuel olarak kapatılıyor.
                     System.out.println("Kaynaklar finally bloğunda serbest bırakıldı.");
                 }
             } catch (java.io.IOException ex) {

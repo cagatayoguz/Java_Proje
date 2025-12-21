@@ -6,10 +6,10 @@ import java.time.format.DateTimeFormatter; // DateTimeFormatter kullanımı (Bö
 
 public class TarihIslemleri {
 
-    // Statik alan (Format, Bölüm 10)
+    // Tarih formatı belirledik
     public static final DateTimeFormatter TARİH_FORMATI = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
-    // Statik metot (Tarih Formatlama, Bölüm 6 gereksinimi)
+    // Tarih format işlemi
     public static String tarihFormatla(LocalDate tarih) {
         return tarih.format(TARİH_FORMATI);
 

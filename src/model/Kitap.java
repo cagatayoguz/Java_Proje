@@ -45,7 +45,7 @@ public class Kitap implements Yazdirilabilir, Kaydedilebilir {
             return false;
         }
     }
-
+//Sil metodu
     @Override
     public boolean sil(String id) {
         try {
@@ -55,7 +55,7 @@ public class Kitap implements Yazdirilabilir, Kaydedilebilir {
             return false;
         }
     }
-
+//Güncelle metodu
     @Override
     public boolean guncelle() {
         sil(this.isbn);   // Eskisini sil

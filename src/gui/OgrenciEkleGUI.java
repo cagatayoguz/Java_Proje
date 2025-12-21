@@ -1,8 +1,8 @@
 package gui;
 
 import service.DosyaIslemleri;
-import model.LisansOgrenci; // Yeni oluşturduğumuz sınıf
-import model.Ogrenci;       // Abstract sınıfımız
+import model.LisansOgrenci; // Polimorfizm için kullanılan alt sınıf
+import model.Ogrenci;       // Soyut (Abstract) temel sınıf
 import exception.GecersizGirisBilgisiException;
 
 import javax.swing.*;
@@ -10,22 +10,30 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 
+// Yönetici panelinden sisteme yeni öğrenci kaydı yapılmasını sağlayan arayüz sınıfı.
+// Bu sınıf, veri doğrulama işlemlerini model katmanındaki (Ogrenci) sınıflar üzerinden gerçekleştirir.
 public class OgrenciEkleGUI extends JFrame {
 
     public OgrenciEkleGUI() {
+        // Pencere yapılandırması (Başlık, Boyut, Konum) ayarlandı.
         setTitle("Yeni Öğrenci Kaydı");
         setSize(500, 600);
+        // Bu pencere kapandığında ana menü açık kalsın diye DISPOSE tercih edildi.
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
+        // GridBagLayout kullanılarak form elemanlarının ortalanması sağlandı.
         JPanel mainPanel = new JPanel(new GridBagLayout());
-        mainPanel.setBackground(new Color(248, 249, 250));
+        mainPanel.setBackground(new Color(248, 249, 250)); // Açık gri arka plan
         setContentPane(mainPanel);
 
         // --- FORM KARTI ---
+        // Bileşenlerin görsel bütünlüğü için dikey (Y_AXIS) hizalanmış bir kart paneli oluşturuldu.
         JPanel cardPanel = new JPanel();
         cardPanel.setLayout(new BoxLayout(cardPanel, BoxLayout.Y_AXIS));
         cardPanel.setBackground(Color.WHITE);
+
+        // Karta çerçeve ve iç boşluk (Padding) eklendi.
         cardPanel.setBorder(BorderFactory.createCompoundBorder(
                 new LineBorder(new Color(230, 230, 230), 1),
                 new EmptyBorder(40, 40, 40, 40)
@@ -36,9 +44,9 @@ public class OgrenciEkleGUI extends JFrame {
         lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 22));
         lblTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
         cardPanel.add(lblTitle);
-        cardPanel.add(Box.createVerticalStrut(20));
+        cardPanel.add(Box.createVerticalStrut(20)); // Dikey boşluk
 
-        // Form Alanları
+        // Form Girdi Alanları (Yardımcı metot ile üretildi)
         JTextField txtAd = createField();
         JTextField txtSoyad = createField();
         JTextField txtNo = createField();
@@ -46,7 +54,7 @@ public class OgrenciEkleGUI extends JFrame {
         JTextField txtSinif = createField();
         JTextField txtOrt = createField();
 
-        // Panele Ekleme
+        // Alanların Etiketleriyle Birlikte Panele Eklenmesi
         addLabeledField(cardPanel, "Adı:", txtAd);
         addLabeledField(cardPanel, "Soyadı:", txtSoyad);
         addLabeledField(cardPanel, "Öğrenci No:", txtNo);
@@ -58,23 +66,25 @@ public class OgrenciEkleGUI extends JFrame {
         JButton btnKaydet = new JButton("Kaydet");
         btnKaydet.setFont(new Font("Segoe UI", Font.BOLD, 15));
         btnKaydet.setForeground(Color.WHITE);
-        btnKaydet.setBackground(new Color(13, 110, 253));
+        btnKaydet.setBackground(new Color(13, 110, 253)); // Kurumsal Mavi
         btnKaydet.setFocusPainted(false);
         btnKaydet.setAlignmentX(Component.CENTER_ALIGNMENT);
         btnKaydet.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
         btnKaydet.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        // --- OOP ENTEGRASYONU YAPILAN KISIM ---
+        // --- OOP ENTEGRASYONU VE İŞ MANTIĞI ---
         btnKaydet.addActionListener(e -> {
             try {
-                // 1. Temel Boşluk Kontrolleri
+                // 1. Temel Doğrulama (Basic Validation)
+                // Form alanlarının boş olup olmadığı kontrol edildi.
                 if (txtAd.getText().trim().isEmpty()) throw new GecersizGirisBilgisiException("Ad boş olamaz.");
                 if (txtSoyad.getText().trim().isEmpty()) throw new GecersizGirisBilgisiException("Soyad boş olamaz.");
                 if (txtNo.getText().trim().isEmpty()) throw new GecersizGirisBilgisiException("Öğrenci No boş olamaz.");
                 if (txtBolum.getText().trim().isEmpty()) throw new GecersizGirisBilgisiException("Bölüm boş olamaz.");
 
-                // 2. NESNE OLUŞTURMA (Polimorfizm Kullanımı)
-                // LisansOgrenci üretiyoruz ama Ogrenci referansında tutuyoruz.
+                // 2. Nesne Oluşturma (Polimorfizm)
+                // Veriler doğrudan dosyaya yazılmadan önce bir 'Ogrenci' nesnesine dönüştürüldü.
+                // 'LisansOgrenci' (Concrete Class) üretilip, 'Ogrenci' (Abstract Class) referansında tutuldu.
                 Ogrenci yeniOgrenci = new LisansOgrenci(
                         txtAd.getText().trim(),
                         txtSoyad.getText().trim(),
@@ -82,41 +92,49 @@ public class OgrenciEkleGUI extends JFrame {
                         txtBolum.getText().trim()
                 );
 
-                // 3. SETTER METOTLARI İLE VALIDATION (Sınıf Kurallarını Çalıştır)
-                // Bölüm kontrolünü sınıf üzerinden yapıyoruz
+                // 3. Kapsülleme (Encapsulation) ile Veri Kontrolü
+                // Setter metotları, sınıf içindeki kuralları (Validation Rules) tetikler.
                 yeniOgrenci.setBolum(txtBolum.getText().trim());
 
-                // Not Ortalaması Kontrolü (Sınıfın içindeki 0-100 kuralı burada çalışacak)
+                // Ortalama alanının boşluk kontrolü
                 if (txtOrt.getText().trim().isEmpty()) throw new GecersizGirisBilgisiException("Ortalama boş olamaz.");
+
                 try {
+                    // Sayısal veri dönüşümü
                     int ortDeger = Integer.parseInt(txtOrt.getText().trim());
-                    // BURASI KRİTİK: Eğer 101 girilirse Ogrenci sınıfı hata fırlatacak
+
+                    // BURASI KRİTİK: Nesneye "Notumu ayarla" diyoruz.
+                    // Eğer kullanıcı 0-100 dışı bir değer girdiyse, Ogrenci sınıfı hata fırlatacak.
+                    // Böylece iş mantığı (Business Logic) arayüz kodundan ayrıştırılmış oldu.
                     yeniOgrenci.setNotOrtalamasi(ortDeger);
+
                 } catch (NumberFormatException nfe) {
                     throw new GecersizGirisBilgisiException("Ortalama sayısal bir değer olmalıdır.");
                 }
 
-                // 4. DOSYAYA KAYDETME
-                // Verileri artık doğrulanmış nesneden (yeniOgrenci) alıyoruz
+                // 4. Kalıcılık (Persistence)
+                // Nesne üzerindeki doğrulanmış veriler dosya yazma servisine iletildi.
                 DosyaIslemleri.ogrenciEkle(
                         yeniOgrenci.getAd(),
                         yeniOgrenci.getSoyad(),
                         yeniOgrenci.getBolum(),
                         yeniOgrenci.getOgrenciNo(),
-                        txtSinif.getText().trim(), // Sınıf bilgisi modelde olmadığı için direkt alıyoruz
+                        txtSinif.getText().trim(), // Sınıf bilgisi modelde tutulmadığı için direkt alındı.
                         String.valueOf(txtOrt.getText().trim())
                 );
 
-                // İsteğe bağlı: Polimorfizm örneği olarak konsola rapor basabilirsin
+                // İsteğe bağlı: Polimorfik metot çağrısı testi (Konsol çıktısı için)
                 System.out.println(yeniOgrenci.detayliRaporOlustur());
 
+                // Başarılı işlem bildirimi
                 JOptionPane.showMessageDialog(this, "Öğrenci başarıyla eklendi.");
                 this.dispose();
 
             } catch (GecersizGirisBilgisiException ex) {
-                // Ogrenci sınıfından gelen hatalar (örn: "Not 0-100 arasında olmalı") burada yakalanır
+                // Model katmanından (Ogrenci sınıfı) fırlatılan iş mantığı hataları burada yakalanır.
                 JOptionPane.showMessageDialog(this, ex.getMessage(), "Geçersiz İşlem", JOptionPane.WARNING_MESSAGE);
             } catch (Exception ex) {
+                // Beklenmedik sistem hataları
                 ex.printStackTrace();
                 JOptionPane.showMessageDialog(this, "Hata: " + ex.getMessage(), "Sistem Hatası", JOptionPane.ERROR_MESSAGE);
             }
@@ -126,6 +144,9 @@ public class OgrenciEkleGUI extends JFrame {
         cardPanel.add(btnKaydet);
         mainPanel.add(cardPanel);
     }
+
+    // --- Yardımcı Metotlar (UI Helpers) ---
+    // Kod tekrarını önlemek için bileşen üretimleri metotlara bölündü.
 
     private JTextField createField() {
         JTextField tf = new JTextField(15);
@@ -140,6 +161,9 @@ public class OgrenciEkleGUI extends JFrame {
         JLabel l = new JLabel(labelText);
         l.setFont(new Font("Segoe UI", Font.PLAIN, 13));
         l.setAlignmentX(Component.LEFT_ALIGNMENT);
-        p.add(l); p.add(Box.createVerticalStrut(5)); p.add(field); p.add(Box.createVerticalStrut(10));
+        p.add(l);
+        p.add(Box.createVerticalStrut(5));
+        p.add(field);
+        p.add(Box.createVerticalStrut(10));
     }
 }

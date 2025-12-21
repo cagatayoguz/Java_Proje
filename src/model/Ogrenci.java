@@ -3,7 +3,7 @@ package model;
 import java.time.LocalDate;
 import exception.GecersizGirisBilgisiException;
 
-public abstract class Ogrenci extends Kisiler implements Kaydedilebilir {
+public abstract class Ogrenci extends Kisiler implements Kaydedilebilir,Yazdirilabilir {
 
     private String ogrenciNo;
     private String bolum;

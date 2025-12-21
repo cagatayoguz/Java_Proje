@@ -7,15 +7,18 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+// Yönetici panelinde, duyuru ekleme ve silme işlemlerinin seçildiği ara menü sınıfı.
 public class DuyuruYonetimMenuGUI extends JFrame {
 
+    // Arayüz standartlarını korumak için sabit renkler tanımlandı.
     private final Color BG_COLOR = new Color(248, 249, 250);
     private final Color CARD_BG = Color.WHITE;
-    private final Color ACCENT_COLOR = new Color(155, 89, 182); // Mor Ton
+    private final Color ACCENT_COLOR = new Color(155, 89, 182); // Vurgu rengi (Mor)
 
     public DuyuruYonetimMenuGUI() {
         setTitle("Duyuru Yönetimi");
         setSize(600, 400);
+        // Bu pencere kapandığında ana uygulama çalışmaya devam etsin diye DISPOSE kullanıldı.
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
@@ -23,20 +26,24 @@ public class DuyuruYonetimMenuGUI extends JFrame {
         mainPanel.setBackground(BG_COLOR);
         setContentPane(mainPanel);
 
-        // Başlık
+        // --- Başlık Alanı ---
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(BG_COLOR);
         headerPanel.setBorder(new EmptyBorder(30, 40, 10, 40));
+
         JLabel lblTitle = new JLabel("Duyuru İşlemleri");
         lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 24));
         headerPanel.add(lblTitle, BorderLayout.NORTH);
         mainPanel.add(headerPanel, BorderLayout.NORTH);
 
-        // Kartlar
+        // --- Menü Seçenekleri (Grid) ---
+        // Seçeneklerin yan yana (1 satır, 2 sütun) ve düzenli durması için GridLayout tercih edildi.
         JPanel gridPanel = new JPanel(new GridLayout(1, 2, 20, 20));
         gridPanel.setBackground(BG_COLOR);
         gridPanel.setBorder(new EmptyBorder(20, 40, 40, 40));
 
+        // 'Ekle' ve 'Sil' seçenekleri, yardımcı metot kullanılarak panele eklendi.
+        // Lambda ifadeleri ile ilgili GUI sınıflarının açılması sağlandı.
         gridPanel.add(createCard("Duyuru Ekle", "Yeni duyuru yayınla.", "📢",
                 e -> new DuyuruEkleGUI().setVisible(true)));
 
@@ -46,15 +53,21 @@ public class DuyuruYonetimMenuGUI extends JFrame {
         mainPanel.add(gridPanel, BorderLayout.CENTER);
     }
 
+    /**
+     * Kod tekrarını önlemek ve tutarlı bir tasarım sağlamak amacıyla,
+     * menü kartlarını oluşturan parametrik metot tasarlandı.
+     */
     private JPanel createCard(String title, String desc, String icon, java.awt.event.ActionListener action) {
         JPanel card = new JPanel(new BorderLayout());
         card.setBackground(CARD_BG);
+        // Kart etrafına ince çerçeve ve iç boşluk eklendi.
         card.setBorder(BorderFactory.createCompoundBorder(
                 new LineBorder(new Color(230, 230, 230), 1),
                 new EmptyBorder(20, 20, 20, 20)
         ));
         card.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
+        // İkon ve metin yerleşimi
         JLabel lblIcon = new JLabel(icon);
         lblIcon.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 28));
         lblIcon.setBorder(new EmptyBorder(0, 0, 0, 15));
@@ -71,13 +84,21 @@ public class DuyuruYonetimMenuGUI extends JFrame {
         textPanel.add(lblD);
         card.add(textPanel, BorderLayout.CENTER);
 
+        // Kullanıcı deneyimini artırmak için Mouse olayları dinlendi (Hover efekti).
         card.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) { action.actionPerformed(null); }
+            public void mouseClicked(MouseEvent e) {
+                // Tıklama anında parametre olarak gelen aksiyon tetiklendi.
+                action.actionPerformed(null);
+            }
+
             public void mouseEntered(MouseEvent e) {
+                // Mouse üzerine gelince kenarlık rengi mor yapıldı.
                 card.setBorder(new LineBorder(ACCENT_COLOR, 1));
                 lblT.setForeground(ACCENT_COLOR);
             }
+
             public void mouseExited(MouseEvent e) {
+                // Mouse çekilince eski haline döndürüldü.
                 card.setBorder(new LineBorder(new Color(230, 230, 230), 1));
                 lblT.setForeground(Color.BLACK);
             }

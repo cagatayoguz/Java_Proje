@@ -20,20 +20,23 @@ public class DuyuruListeGUI extends JFrame {
         lblBaslik.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
         add(lblBaslik, BorderLayout.NORTH);
 
-        // Tablo
+        // Tablo Modeli: Hücrelerin üzerine çift tıklandığında düzenlenmesini engellemek için
+        // isCellEditable metodunu override ettik.
         String[] kolonlar = {"Tarih", "Konu", "İçerik"};
         DefaultTableModel model = new DefaultTableModel(kolonlar, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return false; // Düzenlenemesin
+                return false;
             }
         };
 
         JTable table = new JTable(model);
         table.setRowHeight(30);
-        table.getColumnModel().getColumn(0).setPreferredWidth(100); // Tarih sütunu dar
-        table.getColumnModel().getColumn(1).setPreferredWidth(200); // Konu sütunu orta
-        table.getColumnModel().getColumn(2).setPreferredWidth(500); // İçerik sütunu geniş
+
+        // İçerik kısmı uzun olacağı için sütun genişliklerini içeriğe göre optimize ettik.
+        table.getColumnModel().getColumn(0).setPreferredWidth(100); // Tarih
+        table.getColumnModel().getColumn(1).setPreferredWidth(200); // Konu
+        table.getColumnModel().getColumn(2).setPreferredWidth(500); // İçerik
 
         // Verileri Yükle
         verileriYukle(model);
@@ -43,6 +46,7 @@ public class DuyuruListeGUI extends JFrame {
     }
 
     private void verileriYukle(DefaultTableModel model) {
+        // Service katmanındaki dosya okuma metodu çağrılarak tablo dolduruldu.
         List<String[]> duyurular = DosyaIslemleri.duyurulariOku();
         for (String[] d : duyurular) {
             model.addRow(d);

@@ -5,6 +5,7 @@ public abstract class Alan {
     private String adi;
     private int kapasite;
 
+    //Alan constructor
     public Alan(String adi, int kapasite) {
         this.adi = adi;
         this.kapasite = kapasite;

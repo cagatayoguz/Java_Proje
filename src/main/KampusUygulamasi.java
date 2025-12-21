@@ -1,7 +1,6 @@
 package main;
 import service.KutuphaneServisi;
 import gui.AnaMenuGUI;
-import java.io.IOException;
 
 public class KampusUygulamasi {
 
@@ -19,7 +18,6 @@ public class KampusUygulamasi {
             return;
         }
 
-        // Swing Arayüzünü Başlat (Bonus: Bölüm 12)
         // Arayüz kodunu basitleştirmek için burada ana menüyü başlatıyoruz.
         java.awt.EventQueue.invokeLater(() -> {
             new AnaMenuGUI().setVisible(true);

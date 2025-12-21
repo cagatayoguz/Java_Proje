@@ -9,9 +9,10 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import exception.GecersizGirisBilgisiException;
 
+// Yönetim paneline erişim sağlamak için kimlik doğrulamasının yapıldığı arayüz sınıfı.
 public class YonetimGirisGUI extends JFrame {
 
-    // Sabit kullanıcı adı ve şifre
+    // Simülasyon amaçlı sabit (Hardcoded) yönetici kimlik bilgileri.
     private static final String KULLANICI_ADI = "admin";
     private static final String SIFRE = "1234";
 
@@ -20,24 +21,30 @@ public class YonetimGirisGUI extends JFrame {
     private JButton btnGiris;
 
     public YonetimGirisGUI() {
+        // Pencere yapılandırması (Başlık, Boyut, Konumlandırma) gerçekleştirildi.
         setTitle("Yönetim Paneli Girişi");
-        setSize(450, 400); // Daha ideal bir boyut
+        setSize(450, 400); // Kullanıcı odaklı ideal boyut
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setLocationRelativeTo(null); // Ekranın tam ortasında aç
+        setLocationRelativeTo(null); // Ekranın tam ortasında açılması sağlandı.
 
         // --- Ana Panel (Arka Plan) ---
+        // Modern bir görünüm için açık gri-mavi tonu tercih edildi.
         JPanel mainPanel = new JPanel();
-        mainPanel.setBackground(new Color(240, 242, 245)); // Açık gri-mavi modern arka plan
-        mainPanel.setLayout(new GridBagLayout()); // Öğeleri ortalamak için
+        mainPanel.setBackground(new Color(240, 242, 245));
+        // Giriş kartını tam ortaya sabitlemek için GridBagLayout kullanıldı.
+        mainPanel.setLayout(new GridBagLayout());
         setContentPane(mainPanel);
 
-        // --- Kart Paneli (Beyaz Kutu) ---
+        // --- Kart Paneli (Giriş Formu) ---
+        // Form elemanlarını barındıran beyaz zeminli kart yapısı oluşturuldu.
         JPanel cardPanel = new JPanel();
         cardPanel.setBackground(Color.WHITE);
         cardPanel.setLayout(new BoxLayout(cardPanel, BoxLayout.Y_AXIS));
+
+        // Karta derinlik katmak için ince gri çerçeve ve geniş iç boşluk (Padding) eklendi.
         cardPanel.setBorder(BorderFactory.createCompoundBorder(
-                new LineBorder(new Color(220, 220, 220), 1, true), // İnce gri çerçeve
-                new EmptyBorder(40, 40, 40, 40) // İç boşluk
+                new LineBorder(new Color(220, 220, 220), 1, true),
+                new EmptyBorder(40, 40, 40, 40)
         ));
 
         // --- 1. Başlık ---
@@ -71,13 +78,14 @@ public class YonetimGirisGUI extends JFrame {
         btnGiris = new JButton("Giriş Yap");
         btnGiris.setFont(new Font("Segoe UI", Font.BOLD, 15));
         btnGiris.setForeground(Color.WHITE);
-        btnGiris.setBackground(new Color(60, 100, 180)); // Güzel bir mavi tonu
+        btnGiris.setBackground(new Color(60, 100, 180)); // Güven veren mavi tonu
         btnGiris.setFocusPainted(false);
         btnGiris.setBorder(new EmptyBorder(10, 0, 10, 0));
         btnGiris.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
         btnGiris.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        // Hover Efekti (Üzerine gelince renk değişimi)
+        // Kullanıcı Deneyimi (UX): Hover Efekti
+        // Mouse üzerine geldiğinde buton rengi açılarak etkileşim hissi verildi.
         btnGiris.addMouseListener(new MouseAdapter() {
             public void mouseEntered(MouseEvent evt) {
                 btnGiris.setBackground(new Color(80, 120, 200));
@@ -87,18 +95,18 @@ public class YonetimGirisGUI extends JFrame {
             }
         });
 
-        // Butona aksiyon ekle
+        // Buton aksiyonu tanımlandı.
         btnGiris.addActionListener(this::girisYapAction);
 
-        // *** ENTER TUŞU AYARI ***
-        // Bu pencere aktifken Enter'a basılırsa butona basılmış sayar.
+        // *** UX İyileştirmesi: ENTER Tuşu ***
+        // Form üzerindeyken Enter tuşuna basıldığında 'Giriş Yap' butonunun tetiklenmesi sağlandı.
         this.getRootPane().setDefaultButton(btnGiris);
 
-        // --- Bileşenleri Karta Ekleme ---
+        // --- Bileşenlerin Karta Yerleşimi ---
         cardPanel.add(lblBaslik);
-        cardPanel.add(Box.createVerticalStrut(30)); // Boşluk
+        cardPanel.add(Box.createVerticalStrut(30));
 
-        // Hizalama için sol tarafa yaslı paneller
+        // Kullanıcı Adı Paneli (Hizalama için)
         JPanel pnlUser = new JPanel(new BorderLayout());
         pnlUser.setBackground(Color.WHITE);
         pnlUser.add(lblUser, BorderLayout.NORTH);
@@ -108,6 +116,7 @@ public class YonetimGirisGUI extends JFrame {
         cardPanel.add(pnlUser);
         cardPanel.add(Box.createVerticalStrut(15));
 
+        // Şifre Paneli (Hizalama için)
         JPanel pnlPass = new JPanel(new BorderLayout());
         pnlPass.setBackground(Color.WHITE);
         pnlPass.add(lblPass, BorderLayout.NORTH);
@@ -118,38 +127,40 @@ public class YonetimGirisGUI extends JFrame {
         cardPanel.add(Box.createVerticalStrut(30));
         cardPanel.add(btnGiris);
 
-        // Kartı ana panele ekle
+        // Hazırlanan kart ana panele eklendi.
         mainPanel.add(cardPanel);
     }
 
-    // TextField tasarımı için yardımcı metot
+    // --- Yardımcı Metot: Text Alanı Tasarımı ---
     private JTextField bilesenTextOlustur() {
         JTextField txt = new JTextField(15);
         txt.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         txt.setBorder(BorderFactory.createCompoundBorder(
                 new LineBorder(new Color(200, 200, 200)),
-                new EmptyBorder(5, 10, 5, 10))); // İç boşluk (Padding)
+                new EmptyBorder(5, 10, 5, 10))); // İçerik ile kenarlık arasına boşluk
         txt.setMaximumSize(new Dimension(Integer.MAX_VALUE, 35));
         return txt;
     }
 
+    // --- Giriş Doğrulama Mantığı ---
     private void girisYapAction(ActionEvent e) {
         String kullaniciAdi = txtKullaniciAdi.getText();
         String sifre = new String(txtSifre.getPassword());
 
         try {
+            // Basit doğrulama kontrolü
             if (!kullaniciAdi.equals(KULLANICI_ADI) || !sifre.equals(SIFRE)) {
-                // Hatalı giriş
+                // Hatalı giriş durumunda özel istisna (Custom Exception) fırlatıldı.
                 throw new GecersizGirisBilgisiException("Kullanıcı adı veya şifre hatalı!");
             }
 
-            // Başarılı giriş
+            // Başarılı giriş: Yönetim menüsü açıldı ve giriş ekranı kapatıldı.
             new YonetimMenuGUI().setVisible(true);
-            this.dispose(); // Giriş ekranını kapat
+            this.dispose();
 
         } catch (GecersizGirisBilgisiException ex) {
+            // Hata mesajı kullanıcıya gösterildi ve şifre alanı temizlendi.
             JOptionPane.showMessageDialog(this, ex.getMessage(), "Giriş Hatası", JOptionPane.ERROR_MESSAGE);
-            // Şifre alanını temizle
             txtSifre.setText("");
         }
     }

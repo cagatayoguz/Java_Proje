@@ -3,7 +3,6 @@ package gui;
 import service.DosyaIslemleri;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import java.awt.*;
@@ -12,23 +11,27 @@ import java.awt.event.KeyEvent;
 import java.util.List;
 import java.util.Map;
 
+// Kütüphane envanterinin görüntülendiği, arama yapıldığı ve
+// Ödünç/İade işlemlerinin tetiklendiği ana arayüz sınıfı.
 public class KutuphaneListeGUI extends JFrame {
 
+    // Tablo işlemlerini yönetmek için gerekli model ve sıralayıcı nesneler.
     private DefaultTableModel model;
     private JTable table;
     private TableRowSorter<DefaultTableModel> sorter;
 
     public KutuphaneListeGUI() {
+        // Pencere ayarları (Başlık, Boyut, Kapanma davranışı)
         setTitle("Kütüphane - Kitap Listesi");
         setSize(1000, 650);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
         JPanel mainPanel = new JPanel(new BorderLayout());
-        mainPanel.setBackground(new Color(248, 249, 250));
+        mainPanel.setBackground(new Color(248, 249, 250)); // Göz yormayan gri ton
         setContentPane(mainPanel);
 
-        // --- ÜST PANEL ---
+        // --- 1. ÜST PANEL (Başlık ve Arama) ---
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(new Color(248, 249, 250));
         headerPanel.setBorder(new EmptyBorder(20, 40, 20, 40));
@@ -37,6 +40,7 @@ public class KutuphaneListeGUI extends JFrame {
         lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 26));
         headerPanel.add(lblTitle, BorderLayout.NORTH);
 
+        // Arama çubuğu
         JTextField txtAra = new JTextField(20);
         JPanel searchPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         searchPanel.setBackground(new Color(248, 249, 250));
@@ -45,15 +49,20 @@ public class KutuphaneListeGUI extends JFrame {
         headerPanel.add(searchPanel, BorderLayout.SOUTH);
         mainPanel.add(headerPanel, BorderLayout.NORTH);
 
-        // --- TABLO ---
+        // --- 2. TABLO YAPISI ---
         String[] kolonlar = {"Kitap Adı", "Yazar", "ISBN", "Durum", "İade Tarihi", "Alan Öğrenci"};
+
+        // Tablo üzerindeki hücrelerin elle değiştirilmesini engelledim.
+        // Veri tutarlılığı sadece butonlar üzerinden sağlanmalı.
         model = new DefaultTableModel(kolonlar, 0) {
             @Override
             public boolean isCellEditable(int row, int column) { return false; }
         };
 
         table = new JTable(model);
-        table.setRowHeight(30);
+        table.setRowHeight(30); // Okunabilirlik için satır yüksekliği artırıldı.
+
+        // Tabloyu filtreleyebilmek için Sorter bağladım.
         sorter = new TableRowSorter<>(model);
         table.setRowSorter(sorter);
 
@@ -61,29 +70,37 @@ public class KutuphaneListeGUI extends JFrame {
         scrollPane.setBorder(new EmptyBorder(0, 40, 0, 40));
         mainPanel.add(scrollPane, BorderLayout.CENTER);
 
+        // Verileri dosyadan çekip tabloya dolduran metodu çağırdım.
         verileriYukle();
 
+        // --- Anlık Arama Fonksiyonu ---
+        // Kullanıcı her tuşa bastığında (KeyReleased) tabloyu filtreliyoruz.
         txtAra.addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
                 String text = txtAra.getText();
-                if (text.trim().length() == 0) sorter.setRowFilter(null);
-                else sorter.setRowFilter(RowFilter.regexFilter("(?i)" + text));
+                if (text.trim().length() == 0) {
+                    sorter.setRowFilter(null); // Yazı yoksa filtreyi kaldır
+                } else {
+                    // Regex kullanarak büyük/küçük harf duyarsız arama yapılıyor.
+                    sorter.setRowFilter(RowFilter.regexFilter("(?i)" + text));
+                }
             }
         });
 
-        // --- ALT BUTONLAR ---
+        // --- 3. ALT PANEL (Butonlar) ---
         JPanel footerPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 20, 30));
         footerPanel.setBackground(new Color(248, 249, 250));
 
         JButton btnTalep = new JButton("Talep Oluştur");
-        btnTalep.setBackground(new Color(13, 110, 253));
+        btnTalep.setBackground(new Color(13, 110, 253)); // Mavi
         btnTalep.setForeground(Color.WHITE);
 
         JButton btnIade = new JButton("İade Et");
-        btnIade.setBackground(new Color(220, 53, 69));
+        btnIade.setBackground(new Color(220, 53, 69)); // Kırmızı
         btnIade.setForeground(Color.WHITE);
 
+        // Buton aksiyonları ilgili metotlara yönlendirildi.
         btnTalep.addActionListener(e -> talepEtAction());
         btnIade.addActionListener(e -> iadeEtAction());
 
@@ -92,12 +109,14 @@ public class KutuphaneListeGUI extends JFrame {
         mainPanel.add(footerPanel, BorderLayout.SOUTH);
     }
 
+    // --- Veri Yükleme Metodu ---
     private void verileriYukle() {
-        model.setRowCount(0);
+        model.setRowCount(0); // Tabloyu temizle
         List<String[]> kitaplar = DosyaIslemleri.kitaplariOkuDetayli();
+
         for (String[] k : kitaplar) {
             String durum = k[3];
-            // Durum Türkçeleştirme
+            // Veritabanındaki kodları kullanıcı dostu metinlere çevirdim.
             if(durum.equals("Bekliyor")) durum = "Onay Bekliyor";
             else if(durum.equals("Oduncte")) durum = "Ödünçte";
 
@@ -105,30 +124,40 @@ public class KutuphaneListeGUI extends JFrame {
         }
     }
 
+    // --- TALEP ETME İŞLEMİ ---
     private void talepEtAction() {
         int row = table.getSelectedRow();
-        if (row == -1) { JOptionPane.showMessageDialog(this, "Lütfen bir kitap seçiniz."); return; }
+        if (row == -1) {
+            JOptionPane.showMessageDialog(this, "Lütfen bir kitap seçiniz.");
+            return;
+        }
+
+        // Sıralama yapıldığı için modeldeki gerçek indeksi bulmamız gerekiyor.
         int modelRow = table.convertRowIndexToModel(row);
 
         String durum = (String) model.getValueAt(modelRow, 3);
         String isbn = (String) model.getValueAt(modelRow, 2);
 
+        // Kitap müsait değilse işlem yapılmasına izin verilmiyor.
         if (!durum.equalsIgnoreCase("Müsait") && !durum.equalsIgnoreCase("Musait")) {
             JOptionPane.showMessageDialog(this, "Bu kitap şu an müsait değil (" + durum + ").");
             return;
         }
 
+        // Öğrenci doğrulama adımı
         String ogrenciNo = JOptionPane.showInputDialog(this, "Öğrenci Numaranız:");
         if (ogrenciNo != null && !ogrenciNo.trim().isEmpty()) {
             Map<String, String[]> ogrenciler = DosyaIslemleri.ogrencileriOku();
+
             if (ogrenciler.containsKey(ogrenciNo)) {
                 String[] bilgiler = ogrenciler.get(ogrenciNo);
                 String tamAd = bilgiler[0] + " " + bilgiler[1];
 
                 try {
+                    // Servis katmanına talep iletiliyor.
                     DosyaIslemleri.kitapTalepEt(isbn, tamAd);
                     JOptionPane.showMessageDialog(this, "Talebiniz alındı! Yönetici onayından sonra teslim alabilirsiniz.");
-                    verileriYukle();
+                    verileriYukle(); // Tabloyu güncelle
                 } catch (Exception ex) { ex.printStackTrace(); }
             } else {
                 JOptionPane.showMessageDialog(this, "Öğrenci numarası bulunamadı!", "Hata", JOptionPane.ERROR_MESSAGE);
@@ -137,84 +166,69 @@ public class KutuphaneListeGUI extends JFrame {
     }
 
     // --- GÜVENLİ İADE METODU ---
-    // --- 2. İADE ALMA (TAM VE HATASIZ HALİ) ---
-    // --- 2. İADE ALMA (GÜVENLİ VE KATI KURAL) ---
+    // Kitabın doğru kişiden alınıp alınmadığını kontrol eden algoritma.
     private void iadeEtAction() {
-        // 1. Satır Seçili mi?
+        // 1. Seçim Kontrolü
         int row = table.getSelectedRow();
         if (row == -1) {
             JOptionPane.showMessageDialog(this, "Lütfen iade edilecek kitabı seçiniz.");
             return;
         }
 
-        // 2. Tablodan Verileri Çek
+        // 2. Veri Çekme
         int modelRow = table.convertRowIndexToModel(row);
-
         String kitapAdi = (String) model.getValueAt(modelRow, 0);
         String isbn = (String) model.getValueAt(modelRow, 2);
         String durum = (String) model.getValueAt(modelRow, 3);
         String kitapAlanKisi = (String) model.getValueAt(modelRow, 5); // Kitabı alan asıl kişi
 
-        // 3. Kitap zaten müsait mi?
+        // 3. Mantıksal Kontrol: Zaten kütüphanedeyse iade alınamaz.
         if (durum.equalsIgnoreCase("Müsait") || durum.equalsIgnoreCase("Musait")) {
             JOptionPane.showMessageDialog(this, "Bu kitap zaten kütüphanede (Ödünç verilmemiş).");
             return;
         }
 
-        // 4. Öğrenci Numarasını İste
+        // 4. Öğrenci Doğrulama
         String ogrenciNo = JOptionPane.showInputDialog(this, "İade eden öğrencinin numarasını giriniz:");
 
         if (ogrenciNo != null && !ogrenciNo.trim().isEmpty()) {
-            java.util.Map<String, String[]> ogrenciler = service.DosyaIslemleri.ogrencileriOku();
+            Map<String, String[]> ogrenciler = DosyaIslemleri.ogrencileriOku();
 
             if (ogrenciler.containsKey(ogrenciNo)) {
                 String[] bilgiler = ogrenciler.get(ogrenciNo);
-                String iadeEdenIsim = bilgiler[0] + " " + bilgiler[1]; // Öğrenci Adı + Soyadı
+                String iadeEdenIsim = bilgiler[0] + " " + bilgiler[1];
 
-                // 5. İSİM KONTROLÜ (GÜVENLİK DUVARI)
+                // 5. GÜVENLİK DUVARI (Security Check)
                 // Kitabı alan kişi ile iade eden kişi aynı mı?
+                // Büyük/küçük harf duyarlılığı olmadan, boşlukları temizleyerek kontrol ediyoruz.
                 boolean isimlerAyni = kitapAlanKisi.trim().equalsIgnoreCase(iadeEdenIsim.trim());
 
                 if (!isimlerAyni) {
-                    // --- BURASI DEĞİŞTİ: ARTIK SORU SORMUYOR, DİREKT REDDEDİYOR ---
+                    // İsimler tutmuyorsa işlem kesinlikle reddediliyor.
                     JOptionPane.showMessageDialog(this,
                             "⛔ HATA: İsim Uyuşmazlığı!\n\n" +
                                     "Kitabı Alan: " + kitapAlanKisi + "\n" +
                                     "İade Eden: " + iadeEdenIsim + "\n\n" +
                                     "Güvenlik gereği iade işlemi gerçekleştirilemez.",
                             "İşlem Engellendi", JOptionPane.ERROR_MESSAGE);
-                    return; // Metodu burada kesip atıyoruz, aşağıya inemez.
+                    return;
                 }
 
-                // 6. İsimler Tutuyorsa Onay İste
+                // 6. Onay ve İşlem
                 int onay = JOptionPane.showConfirmDialog(this,
                         "Kitap: " + kitapAdi + "\nİade Eden: " + iadeEdenIsim + "\n\nİade işlemini onaylıyor musunuz?",
                         "İade Onayı", JOptionPane.YES_NO_OPTION);
 
                 if (onay == JOptionPane.YES_OPTION) {
                     try {
-                        // Tablodan Yazar Adını al (Nesne oluşturmak için lazım)
-                        String yazarAdi = (String) model.getValueAt(modelRow, 1);
-
-                        // Geçici bir Kitap nesnesi oluşturuyoruz (Durumu: Müsait = true yapıyoruz)
-                        if (onay == JOptionPane.YES_OPTION) {
-                            try {
-                                // --- DEĞİŞİKLİK BURADA ---
-                                // Artık doğrudan yazdığın o metodu çağırıyoruz:
-                                service.DosyaIslemleri.kitapIadeEt(isbn);
-
-                                JOptionPane.showMessageDialog(this, "✅ İade başarıyla alındı.");
-                                verileriYukle(); // Listeyi ve sayacı güncelle
-                            } catch (Exception ex) {
-                                ex.printStackTrace();
-                                JOptionPane.showMessageDialog(this, "Hata: " + ex.getMessage());
-                            }
-                        }
+                        // Dosya işlemleri servisi çağrılarak kitap durumu güncelleniyor.
+                        DosyaIslemleri.kitapIadeEt(isbn);
 
                         JOptionPane.showMessageDialog(this, "✅ İade başarıyla alındı.");
                         verileriYukle(); // Listeyi yenile
                     } catch (Exception ex) {
                         ex.printStackTrace();
+                        JOptionPane.showMessageDialog(this, "Hata: " + ex.getMessage());
                     }
                 }
             } else {
