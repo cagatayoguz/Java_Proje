@@ -2,86 +2,76 @@ package model;
 
 import service.DosyaIslemleri;
 import java.io.IOException;
-import exception.GecersizGirisBilgisiException;
 
-public class Kitap implements Yazdirilabilir, Kaydedilebilir {
+public class Kitap implements Kaydedilebilir, Yazdirilabilir {
 
     private String kitapAdi;
-    private String yazarAdi;
+    private String yazar;
     private String isbn;
-    private boolean musaitMi;
+    private String durum; // "Müsait", "Oduncte" vb.
 
-    // --- YAPICI METOT (CONSTRUCTOR) - SORUN BURADAYDI ---
-    public Kitap(String kitapAdi, String yazarAdi, String isbn, boolean musaitMi) {
-        this.kitapAdi = kitapAdi; // Bu satır yoksa tablo NULL olur
-        this.yazarAdi = yazarAdi; // Bu satır yoksa yazar NULL olur
-        this.isbn = isbn;         // Bu satır yoksa ISBN NULL olur
-        this.musaitMi = musaitMi;
-    }
-    // Kitap.java içine ekle:
-    public Kitap(String kitapAdi) {
-        this(kitapAdi, "Bilinmiyor", "0000", true); // Diğer değerleri varsayılan atar
-    }
-    // --- GETTERLAR ---
-    public String getYazarAdi() { return yazarAdi; }
-    public String getIsbn() { return isbn; }
-    public void setIsbn(String isbn) throws GecersizGirisBilgisiException {
-        if (isbn == null || isbn.trim().length() < 3) {
-            throw new GecersizGirisBilgisiException("ISBN numarası çok kısa! En az 3 karakter olmalıdır.");
-        }
+    public Kitap(String kitapAdi, String yazar, String isbn, String durum) {
+        this.kitapAdi = kitapAdi;
+        this.yazar = yazar;
         this.isbn = isbn;
+        this.durum = durum;
     }
-    public boolean isMusaitMi() { return musaitMi; }
-    public void setMusaitMi(boolean musaitMi) { this.musaitMi = musaitMi; }
 
-    // --- INTERFACE METOTLARI ---
+    // --- INTERFACE (KAYDEDİLEBİLİR) METOTLARI ---
+
     @Override
     public boolean kaydet() {
         try {
-            String durum = musaitMi ? "Müsait" : "Oduncte";
-            DosyaIslemleri.kitapEkle(kitapAdi, yazarAdi, isbn, durum);
+            // Kitabı servisi kullanarak dosyaya ekler.
+            DosyaIslemleri.kitapEkle(this.kitapAdi, this.yazar, this.isbn, this.durum);
             return true;
         } catch (IOException e) {
+            e.printStackTrace();
             return false;
         }
     }
-//Sil metodu
+
     @Override
     public boolean sil(String id) {
         try {
+            // ISBN numarasına göre dosyadan siler.
             DosyaIslemleri.kitapSil(id);
             return true;
         } catch (IOException e) {
+            e.printStackTrace();
             return false;
         }
     }
-//Güncelle metodu
+
     @Override
     public boolean guncelle() {
-        sil(this.isbn);   // Eskisini sil
-        return kaydet();  // Yenisini ekle
+        if (sil(this.isbn)) {
+            return kaydet();
+        }
+        return false;
+    }
+
+    // --- DİĞER METOTLAR ---
+
+    @Override
+    public String detayliRaporOlustur() {
+        return String.format("Kitap: %s | Yazar: %s | ISBN: %s | Durum: %s", kitapAdi, yazar, isbn, durum);
     }
 
     @Override
-    public String bilgiRaporuOlustur() { return kitapAdi; }
-    @Override
-    public String detayliRaporOlustur() { return kitapAdi + " - " + isbn; }
-    @Override
-    public boolean durumKontrol() { return musaitMi; }
-    @Override
-    public String toString() { return kitapAdi; }
-    // ... Diğer kodların en altına, class bitmeden hemen önceye ...
+    public boolean durumKontrol() {
+        return false;
+    }
 
-
-    // Kitap.java içindeki ciktiAl metodu
     @Override
     public void ciktiAl() {
-        System.out.println("------------------------------------");
-        System.out.println("📚 KİTAP BİLGİ KARTI"); // Başlığı düzelttik
-        // Zaten detayliRaporOlustur() metodun isim ve ISBN döndürüyor,
-        // yazar adını da ekleyerek tek satırda tertemiz yazalım:
-        System.out.println("Kitap Detayı: " + this.detayliRaporOlustur() + " (Yazar: " + yazarAdi + ")");
-        System.out.println("Durum: " + (musaitMi ? "Rafta" : "Ödünç Verildi"));
-        System.out.println("------------------------------------");
+        System.out.println(detayliRaporOlustur());
     }
+
+    // Getter & Setter
+    public String getKitapAdi() { return kitapAdi; }
+    public String getYazar() { return yazar; }
+    public String getIsbn() { return isbn; }
+    public String getDurum() { return durum; }
+    public void setDurum(String durum) { this.durum = durum; }
 }

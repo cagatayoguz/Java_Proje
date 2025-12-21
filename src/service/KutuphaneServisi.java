@@ -11,45 +11,46 @@ public class KutuphaneServisi {
     private Depo<Kitap> kitapDeposu;
 
     public KutuphaneServisi() {
-        // Depo nesnesini oluşturuyoruz
+        // Generic depo nesnesini oluşturuyoruz
         this.kitapDeposu = new Depo<>();
         baslangicVerisiYukle();
     }
 
     private void baslangicVerisiYukle() {
         try {
-            // Dosyadan verileri detaylı okuyoruz (6 sütunlu yapı için)
+            // Dosyadan verileri detaylı okuyoruz (Ad, Yazar, ISBN, Durum, Tarih, AlanKişi)
             List<String[]> dosyaVerileri = DosyaIslemleri.kitaplariOkuDetayli();
 
             if (dosyaVerileri.isEmpty()) {
                 // DURUM 1: Dosya boşsa varsayılan 50 kitabı yükle
+                // (KitapBaslangicVerisi sınıfının da yeni Kitap yapısına uygun olduğunu varsayıyoruz)
                 List<Kitap> baslangicKitaplari = KitapBaslangicVerisi.get50Kitap();
 
                 for (Kitap k : baslangicKitaplari) {
                     // 1. Depoya (RAM) ekle
                     kitapDeposu.ekle(k);
 
-                    // 2. Dosyaya kalıcı olarak kaydet (Interface metodu üzerinden)
+                    // 2. Dosyaya kalıcı olarak kaydet
+                    // (Artık k.kaydet() metodu DosyaIslemleri'ni otomatik çağırıyor)
                     k.kaydet();
                 }
             } else {
                 // DURUM 2: Dosyada veri varsa onları RAM'e (Depo'ya) al
                 for (String[] veri : dosyaVerileri) {
-                    if (veri.length >= 3) { // En az Ad, Yazar, ISBN olmalı
+                    // En az Ad, Yazar, ISBN olmalı
+                    if (veri.length >= 3) {
 
-                        // --- KESİN ÇÖZÜM (Karakter Hatası Kontrolü) ---
-                        String okunanDurum = (veri.length > 3) ? veri[3].toLowerCase() : "musait";
+                        String ad = veri[0];
+                        String yazar = veri[1];
+                        String isbn = veri[2];
 
-                        // İçinde "usait" veya "üsait" geçiyorsa Müsait kabul et
-                        boolean musaitMi = okunanDurum.contains("usait") || okunanDurum.contains("üsait");
+                        // DÜZELTME: Artık karmaşık boolean kontrolüne gerek yok.
+                        // Dosyadan gelen 3. indeks zaten durumu (String) tutuyor.
+                        // Eğer veri eksikse varsayılan olarak "Müsait" atıyoruz.
+                        String durum = (veri.length > 3) ? veri[3] : "Müsait";
 
-                        // Ancak "odun" veya "odün" geçiyorsa kesinlikle Müsait değildir
-                        if (okunanDurum.contains("odun") || okunanDurum.contains("ödün")) {
-                            musaitMi = false;
-                        }
-
-                        // Kitap nesnesini oluştur
-                        Kitap k = new Kitap(veri[0], veri[1], veri[2], musaitMi);
+                        // Yeni Kitap Constructor yapısına uygun nesne oluşturma
+                        Kitap k = new Kitap(ad, yazar, isbn, durum);
 
                         // Generic Depo'ya ekle
                         kitapDeposu.ekle(k);
@@ -63,29 +64,29 @@ public class KutuphaneServisi {
         }
     }
 
-    // Ödev Gereksinimi: Listeyi Sıralı Getirme (Collections.sort)
+    // Ödev Gereksinimi: Listeyi Sıralı Getirme
     public List<Kitap> getSiraliKitapListesi() {
-        // Depo içindeki sıralama metodunu tetikliyoruz
+        // Depo içindeki sıralama metodunu tetikliyoruz (Kitap sınıfındaki CompareTo çalışır)
         kitapDeposu.ismeGoreSirala();
-
-        // Sıralanmış listeyi döndürüyoruz
         return kitapDeposu.getListe();
     }
 
-    // Eski kodlarla uyumluluk için (Sıralı olmayan veya direkt liste)
+    // Sıralama olmadan direkt listeyi verir
     public List<Kitap> tumKitaplariGetir() {
         return kitapDeposu.getListe();
     }
+
+    // Yazar adına göre filtreleme
     public List<Kitap> tumKitaplariGetir(String yazarAdi) {
         List<Kitap> tumu = kitapDeposu.getListe();
         List<Kitap> filtreli = new ArrayList<>();
 
         for (Kitap k : tumu) {
-            if (k.getYazarAdi().equalsIgnoreCase(yazarAdi)) {
+            // Kitap sınıfındaki getter metodunun adı 'getYazar' olmalı
+            if (k.getYazar().equalsIgnoreCase(yazarAdi)) {
                 filtreli.add(k);
             }
         }
         return filtreli;
     }
-
 }

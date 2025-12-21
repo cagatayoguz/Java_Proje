@@ -84,10 +84,6 @@ public class Kutuphane extends Alan implements Kaydedilebilir,Yazdirilabilir {
     @Override
     public boolean guncelle() { return true; }
 
-    @Override
-    public String bilgiRaporuOlustur() {
-        return "";
-    }
 
     @Override
     public String detayliRaporOlustur() {

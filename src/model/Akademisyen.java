@@ -1,30 +1,64 @@
 package model;
 
-import exception.GecersizGirisBilgisiException;
+import service.DosyaIslemleri; // Gelecekte kullanılacak
+import java.io.IOException;
 
-public abstract class Akademisyen extends Kisiler {
+public abstract class Akademisyen extends Kisiler implements Kaydedilebilir, Yazdirilabilir {
 
+    private String sicilNo;
     private String unvan;
-    private String uzmanlikAlani;
+    private String bolum;
 
-    //Akademisyen Constructor
-    public Akademisyen(String ad, String soyad, String unvan, String uzmanlikAlani) {
+    public Akademisyen(String ad, String soyad, String sicilNo, String unvan, String bolum) {
         super(ad, soyad);
+        this.sicilNo = sicilNo;
         this.unvan = unvan;
-        this.uzmanlikAlani = uzmanlikAlani;
+        this.bolum = bolum;
     }
 
-    //Akademisyenin ünvanını alıyoruz
+    // --- INTERFACE (KAYDEDİLEBİLİR) METOTLARI ---
+
     @Override
-    public String getPozisyon() { return unvan + " - " + uzmanlikAlani; }
+    public boolean kaydet() {
+        // NOT: DosyaIslemleri sınıfında henüz 'akademisyenEkle' metodu olmadığı için
+        // burası şimdilik işlem yapmaz. Servise o metot eklendiğinde buradaki yorumu kaldırabilirsin.
+        /*
+        try {
+            DosyaIslemleri.akademisyenEkle(getAd(), getSoyad(), sicilNo, unvan, bolum);
+            return true;
+        } catch (IOException e) {
+            return false;
+        }
+        */
+        System.out.println("UYARI: Akademisyen kayıt servisi henüz aktif değil.");
+        return false;
+    }
+
+    @Override
+    public boolean sil(String id) {
+        // DosyaIslemleri.akademisyenSil(id); eklendiğinde burası aktif edilecek.
+        return false;
+    }
+
+    @Override
+    public boolean guncelle() {
+        return false;
+    }
+
+    // --- DİĞER METOTLAR ---
+
+    @Override
+    public String getPozisyon() {
+        return unvan + " - " + bolum;
+    }
+
+    @Override
+    public String detayliRaporOlustur() {
+        return String.format("%s %s %s | Sicil: %s", unvan, getAd(), getSoyad(), sicilNo);
+    }
 
     // Getterlar
+    public String getSicilNo() { return sicilNo; }
     public String getUnvan() { return unvan; }
-    public void setUnvan(String unvan) throws GecersizGirisBilgisiException {
-        if (unvan == null || unvan.trim().isEmpty()) {
-            throw new GecersizGirisBilgisiException("Akademisyen unvanı boş bırakılamaz!");
-        }
-        this.unvan = unvan;
-    }
-    public String getUzmanlikAlani() { return uzmanlikAlani; }
+    public String getBolum() { return bolum; }
 }

@@ -2,21 +2,8 @@ package model;
 
 public class OgretimUyesi extends Akademisyen {
 
-    public OgretimUyesi(String ad, String soyad, String unvan, String uzmanlikAlani, String eposta) {
-        // Kişiler sınıfı TC ve Doğum Tarihi istiyor, onları varsayılan (dummy) veri geçebiliriz
-        // çünkü listede sadece Ad, Unvan, Bölüm lazım.
-        super(ad, soyad, unvan, uzmanlikAlani);
-        this.eposta = eposta; // E-postayı aşağıda tanımladım
-    }
-
-    private String eposta;
-
-    public String getEposta() { return eposta; }
-    public void setEposta(String eposta) { this.eposta = eposta; }
-
-    @Override
-    public String detayliRaporOlustur() {
-        return "";
+    public OgretimUyesi(String ad, String soyad, String sicilNo, String unvan, String bolum) {
+        super(ad, soyad, sicilNo, unvan, bolum);
     }
 
     @Override
@@ -25,17 +12,7 @@ public class OgretimUyesi extends Akademisyen {
     }
 
     @Override
-    public boolean kaydet() {
-        return false;
-    }
-
-    @Override
-    public boolean sil(String id) {
-        return false;
-    }
-
-    @Override
-    public boolean guncelle() {
-        return false;
+    public void ciktiAl() {
+        System.out.println("Öğretim Üyesi: " + detayliRaporOlustur());
     }
 }

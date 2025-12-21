@@ -1,69 +1,97 @@
 package model;
 
-import java.time.LocalDate;
+import service.DosyaIslemleri;
 import exception.GecersizGirisBilgisiException;
+import java.io.IOException;
 
-public abstract class Ogrenci extends Kisiler implements Kaydedilebilir,Yazdirilabilir {
+public class Ogrenci extends Kisiler implements Kaydedilebilir, Yazdirilabilir {
 
     private String ogrenciNo;
     private String bolum;
     private int notOrtalamasi;
 
-    // SADECE KULLANILAN CONSTRUCTOR (Kısmi Yapıcı)
-    // TC ve Doğum Tarihi projede tutulmadığı için üst sınıfa (Kisiler) varsayılan değer gönderiyoruz.
     public Ogrenci(String ad, String soyad, String ogrenciNo, String bolum) {
         super(ad, soyad);
         this.ogrenciNo = ogrenciNo;
         this.bolum = bolum;
-        this.notOrtalamasi = 0; // Varsayılan başlangıç
+        this.notOrtalamasi = 0; // Varsayılan başlangıç değeri
     }
 
-    // --- SETTER METOTLARI (Validation İçin Kullanılıyor) ---
+    // --- INTERFACE (KAYDEDİLEBİLİR) METOTLARI ---
 
-    // OgrenciEkleGUI'de kullanılıyor
-    public void setBolum(String bolum) throws GecersizGirisBilgisiException {
-        if (bolum == null || bolum.trim().isEmpty()) {
-            throw new GecersizGirisBilgisiException("Bolum alani bos birakilamaz.");
+    @Override
+    public boolean kaydet() {
+        try {
+            // Dosya servisini çağırarak veriyi gerçekten dosyaya yazıyoruz.
+            DosyaIslemleri.ogrenciEkle(
+                    getAd(),
+                    getSoyad(),
+                    this.bolum,
+                    this.ogrenciNo,
+                    "1. Sınıf", // Varsayılan değer
+                    String.valueOf(this.notOrtalamasi)
+            );
+            return true;
+        } catch (IOException e) {
+            System.err.println("Kayıt hatası: " + e.getMessage());
+            return false;
         }
-        this.bolum = bolum;
     }
 
-    // OgrenciEkleGUI'de kullanılıyor
-    public void setNotOrtalamasi(int notOrtalamasi) throws GecersizGirisBilgisiException {
-        if (notOrtalamasi < 0 || notOrtalamasi > 100) {
-            throw new GecersizGirisBilgisiException("Not ortalamasi 0 ile 100 arasinda olmalidir.");
+    @Override
+    public boolean sil(String id) {
+        try {
+            // Dosya servisinden silme işlemini çağırıyoruz.
+            DosyaIslemleri.ogrenciSil(id);
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
         }
-        this.notOrtalamasi = notOrtalamasi;
     }
 
-    // --- OVERRIDE METOTLAR ---
+    @Override
+    public boolean guncelle() {
+        // Güncelleme mantığı: Önce sil, sonra yeni haliyle tekrar kaydet.
+        if (sil(this.ogrenciNo)) {
+            return kaydet();
+        }
+        return false;
+    }
+
+    // --- DİĞER OVERRIDE VE GETTER/SETTER METOTLARI ---
 
     @Override
     public String getPozisyon() {
-        return "Ogrenci - " + this.bolum;
+        return "Öğrenci - " + this.bolum;
     }
 
     @Override
     public String detayliRaporOlustur() {
-        // Mezuniyet yılı kalktığı için burayı sadeleştirdik
-        return String.format("Ogr No: %s | Bolum: %s | Ortalama: %d | Durum: Aktif",
-                ogrenciNo, bolum, notOrtalamasi);
+        return String.format("No: %s | Bölüm: %s | Ort: %d", ogrenciNo, bolum, notOrtalamasi);
     }
 
-    // --- INTERFACE METOTLARI (Depo sınıfı için gerekli) ---
     @Override
-    public boolean kaydet() { return true; }
+    public boolean durumKontrol() {
+        return false;
+    }
 
     @Override
-    public boolean sil(String id) { return true; }
+    public void ciktiAl() {
+        System.out.println(detayliRaporOlustur());
+    }
 
-    @Override
-    public boolean guncelle() { return true; }
+    public void setBolum(String bolum) throws GecersizGirisBilgisiException {
+        if (bolum == null || bolum.trim().isEmpty()) throw new GecersizGirisBilgisiException("Bölüm boş olamaz.");
+        this.bolum = bolum;
+    }
 
-    // --- GETTER METOTLARI (DosyaIslemleri için gerekli) ---
+    public void setNotOrtalamasi(int not) throws GecersizGirisBilgisiException {
+        if (not < 0 || not > 100) throw new GecersizGirisBilgisiException("Not 0-100 arası olmalı.");
+        this.notOrtalamasi = not;
+    }
+
     public String getOgrenciNo() { return ogrenciNo; }
-
     public String getBolum() { return bolum; }
-
     public int getNotOrtalamasi() { return notOrtalamasi; }
 }

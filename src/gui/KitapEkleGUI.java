@@ -1,8 +1,6 @@
 package gui;
 
 import model.Kitap;
-import model.Kutuphane;
-import service.KutuphaneServisi;
 import exception.GecersizGirisBilgisiException;
 
 import javax.swing.*;
@@ -10,106 +8,83 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 
-// Kullanıcının sisteme yeni kitap girişi yapmasını sağlayan arayüz sınıfı.
 public class KitapEkleGUI extends JFrame {
 
     public KitapEkleGUI() {
-        // Pencere yapılandırması (Başlık, Boyut, Konum) gerçekleştirildi.
         setTitle("Hızlı Kitap Ekle");
         setSize(400, 450);
-        // Bu pencere kapatıldığında ana menü açık kalsın diye DISPOSE tercih edildi.
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        // Formun ekranın tam ortasında ve estetik durması için GridBagLayout düzeni kullanıldı.
         JPanel mainPanel = new JPanel(new GridBagLayout());
-        mainPanel.setBackground(new Color(248, 249, 250)); // Kurumsal gri arka plan
+        mainPanel.setBackground(new Color(248, 249, 250));
         setContentPane(mainPanel);
 
-        // --- Kart Paneli Tasarımı ---
-        // Bileşenleri gruplamak ve modern bir görünüm sağlamak amacıyla kart yapısı kurgulandı.
+        // --- Kart Tasarımı ---
         JPanel card = new JPanel();
-        card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS)); // Dikey hizalama
+        card.setLayout(new BoxLayout(card, BoxLayout.Y_AXIS));
         card.setBackground(Color.WHITE);
-
-        // Karta ince bir çerçeve ve iç boşluk (padding) eklendi.
         card.setBorder(BorderFactory.createCompoundBorder(
                 new LineBorder(new Color(230, 230, 230), 1),
                 new EmptyBorder(30, 30, 30, 30)
         ));
 
-        // Başlık etiketi
+        // Başlık
         JLabel lblTitle = new JLabel("Kitap Kaydı");
         lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 20));
         lblTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
         card.add(lblTitle);
-        card.add(Box.createVerticalStrut(20)); // Dikey boşluk
+        card.add(Box.createVerticalStrut(20));
 
-        // --- Form Alanlarının Oluşturulması ---
-        // Kod tekrarını önlemek için yardımcı metot (createField) kullanıldı.
+        // Form Alanları
         JTextField txtAd = createField();
         JTextField txtYazar = createField();
         JTextField txtIsbn = createField();
 
-        // Etiket ve input alanları yardımcı metotla panele eklendi.
         addLabel(card, "Kitap Adı:", txtAd);
         addLabel(card, "Yazar:", txtYazar);
         addLabel(card, "ISBN No:", txtIsbn);
 
-        // --- Kaydet Butonu ---
+        // Kaydet Butonu
         JButton btnKaydet = new JButton("Kaydet");
-        btnKaydet.setBackground(new Color(13, 110, 253)); // Mavi vurgu rengi
+        btnKaydet.setBackground(new Color(13, 110, 253));
         btnKaydet.setForeground(Color.WHITE);
         btnKaydet.setFont(new Font("Segoe UI", Font.BOLD, 14));
         btnKaydet.setAlignmentX(Component.CENTER_ALIGNMENT);
         btnKaydet.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
 
-        // --- BUTON İŞLEM MANTIĞI ---
+        // --- BUTON İŞLEM MANTIĞI (OOP ENTEGRASYONU) ---
         btnKaydet.addActionListener(e -> {
             try {
-                // 1. Validasyon Kontrolü
-                // Zorunlu alanların doluluğu kontrol edildi.
+                // 1. Validasyon
                 if (txtAd.getText().trim().isEmpty() || txtIsbn.getText().trim().isEmpty()) {
                     throw new GecersizGirisBilgisiException("Kitap Adı ve ISBN zorunludur.");
                 }
 
-                // 2. OOP Entegrasyonu: Kutuphane Sınıfı
-                // Doğrudan dosya işlemi yerine, iş mantığı katmanı (Business Layer) olan
-                // Kutuphane sınıfı üzerinden işlem yürütüldü.
-                Kutuphane raf = new Kutuphane("Sanal Raf");
-
-                // Mükerrer ISBN kontrolü yapabilmek için mevcut kitap listesi servisten çekildi
-                // ve sanal rafa yüklendi.
-                KutuphaneServisi servis = new KutuphaneServisi();
-                raf.mevcutKitaplariYukle(servis.tumKitaplariGetir());
-
-                // Girilen verilerle yeni bir Kitap nesnesi örneklendi.
+                // 2. Nesne Oluşturma
+                // Model sınıfındaki constructor'a uygun olarak String durum ("Müsait") gönderiyoruz.
                 Kitap yeniKitap = new Kitap(
                         txtAd.getText().trim(),
                         txtYazar.getText().trim(),
                         txtIsbn.getText().trim(),
-                        true // Varsayılan olarak 'Mevcut' (true) işaretlendi.
+                        "Müsait" // Varsayılan durum
                 );
 
-                // Kutuphane sınıfındaki ekleme metodu çağrılarak mantıksal kontrol (Duplicate Check) yapıldı.
-                // Eğer aynı ISBN varsa, bu metot hata fırlatacak ve işlem duracaktır.
-                raf.kitapEkle(yeniKitap);
-
-                // 3. Kalıcılık (Persistence)
-                // Mantıksal kontroller geçildikten sonra veri dosyaya yazıldı.
+                // 3. Kaydetme İşlemi (Interface Kullanımı)
+                // "yeniKitap" nesnesi, "Kaydedilebilir" interface'ini uyguladığı için
+                // kaydet() metoduna sahiptir ve bu metot arka planda dosyaya yazar.
                 if (yeniKitap.kaydet()) {
-                    JOptionPane.showMessageDialog(this, "Kitap başarıyla eklendi.");
-                    this.dispose(); // İşlem başarılıysa pencere kapatıldı.
+                    JOptionPane.showMessageDialog(this, "Kitap kütüphaneye başarıyla eklendi.");
+                    this.dispose();
                 } else {
                     JOptionPane.showMessageDialog(this, "Kayıt sırasında hata oluştu!", "Hata", JOptionPane.ERROR_MESSAGE);
                 }
 
             } catch (GecersizGirisBilgisiException ex) {
-                // Kullanıcı hatası (Validasyon) uyarısı gösterildi.
                 JOptionPane.showMessageDialog(this, ex.getMessage(), "Uyarı", JOptionPane.WARNING_MESSAGE);
             } catch (Exception ex) {
-                // Sistem hataları konsola basıldı.
                 ex.printStackTrace();
+                JOptionPane.showMessageDialog(this, "Sistem hatası: " + ex.getMessage(), "Hata", JOptionPane.ERROR_MESSAGE);
             }
         });
 
@@ -118,16 +93,13 @@ public class KitapEkleGUI extends JFrame {
         mainPanel.add(card);
     }
 
-    // --- Yardımcı Metotlar (Utility Methods) ---
-
-    // Standart boyutlarda TextField üreten metot.
+    // Yardımcı Metotlar
     private JTextField createField() {
         JTextField tf = new JTextField(15);
         tf.setMaximumSize(new Dimension(Integer.MAX_VALUE, 30));
         return tf;
     }
 
-    // Label ve TextField'i düzenli bir şekilde panele ekleyen metot.
     private void addLabel(JPanel p, String text, JTextField field) {
         JLabel l = new JLabel(text);
         l.setAlignmentX(Component.LEFT_ALIGNMENT);

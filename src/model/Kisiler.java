@@ -25,11 +25,6 @@ public abstract class Kisiler implements Yazdirilabilir,Kaydedilebilir {
     // Alt sınıflar (Ogrenci, Akademisyen) bunu kendine göre dolduracak
     public abstract String getPozisyon();
 
-    @Override
-    public String bilgiRaporuOlustur() {
-        // Artık sadece isim değil, "Pozisyon: Ad Soyad" şeklinde daha dolu bir bilgi döner
-        return "[" + getPozisyon() + "] " + tamAdGetir();
-    }
 
     // Bu metodu burada tanımlıyoruz, alt sınıflar otomatik sahip oluyor
     @Override

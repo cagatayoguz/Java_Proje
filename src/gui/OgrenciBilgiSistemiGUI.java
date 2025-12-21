@@ -15,6 +15,7 @@ public class OgrenciBilgiSistemiGUI extends JFrame {
         // Pencere yapılandırması (Başlık, Boyut, Konum) gerçekleştirildi.
         setTitle("Öğrenci Sorgulama");
         setSize(500, 400);
+
         // Pencere kapatıldığında ana menünün açık kalması için DISPOSE tercih edildi.
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -51,6 +52,7 @@ public class OgrenciBilgiSistemiGUI extends JFrame {
         JTextField txtNo = new JTextField(15);
         txtNo.setFont(new Font("Segoe UI", Font.PLAIN, 16));
         txtNo.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
+
         // Input alanına modern bir görünüm için özel kenarlık tanımlandı.
         txtNo.setBorder(BorderFactory.createCompoundBorder(
                 new LineBorder(new Color(200, 200, 200)),
@@ -61,7 +63,7 @@ public class OgrenciBilgiSistemiGUI extends JFrame {
         JButton btnSorgula = new JButton("Sorgula");
         btnSorgula.setFont(new Font("Segoe UI", Font.BOLD, 15));
         btnSorgula.setForeground(Color.WHITE);
-        btnSorgula.setBackground(new Color(13, 110, 253)); // Kurumsal Mavi
+        btnSorgula.setBackground(new Color(13, 110, 253));
         btnSorgula.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
         btnSorgula.setFocusPainted(false);
         btnSorgula.setCursor(new Cursor(Cursor.HAND_CURSOR));
