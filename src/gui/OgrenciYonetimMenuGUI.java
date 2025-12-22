@@ -89,7 +89,6 @@ public class OgrenciYonetimMenuGUI extends JFrame {
         textPanel.add(lblD);
         card.add(textPanel, BorderLayout.CENTER);
 
-        // --- Kullanıcı Deneyimi (UX) ---
         // Mouse üzerine geldiğinde (Hover) kenarlık rengi değiştirilerek görsel geri bildirim sağlandı.
         card.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {

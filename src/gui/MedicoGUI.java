@@ -13,7 +13,6 @@ public class MedicoGUI extends JFrame {
         setTitle("Medico - Sağlık Merkezi");
         setSize(600, 700);
 
-        // genişlik ayarlanıyor
         // Ana menü akışını bozmamak için DISPOSE tercih edildi.
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -30,12 +29,10 @@ public class MedicoGUI extends JFrame {
         mainPanel.add(lblBaslik, BorderLayout.NORTH);
 
         //liste paneli
-        // Elemanların alt alta nizami dizilmesi için tek sütunlu GridLayout kullanılıyor
         JPanel listePanel = new JPanel(new GridLayout(0, 1, 0, 10));
         listePanel.setBackground(Color.WHITE);
         listePanel.setBorder(new EmptyBorder(10, 20, 10, 20));
 
-        // Veritabanı kullanılmadı Array kullanıldı.
         // Format: {Bölüm, İsim, Durum, Çalışma Saatleri}
         String[][] doktorlar = {
                 {"Dahiliye", "Dr. Ahmet Yılmaz", "Müsait", "09:00 - 18:00"},

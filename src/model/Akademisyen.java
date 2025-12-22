@@ -1,6 +1,5 @@
 package model;
 
-import service.DosyaIslemleri; // Gelecekte kullanılacak
 import java.io.IOException;
 
 public abstract class Akademisyen extends Kisiler {

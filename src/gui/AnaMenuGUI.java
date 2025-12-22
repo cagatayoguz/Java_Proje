@@ -43,7 +43,7 @@ public class AnaMenuGUI extends JFrame {
         buttonPanel.setOpaque(false); // Şeffaf yaptım ki arkadaki üniversite resmi görünsün
         buttonPanel.setBorder(new EmptyBorder(0, 0, 60, 0)); // Alt taraftan biraz yukarı itelim
 
-//bilgi sistemi        // Aşağıdaki 'zarifButonOlustur' metodunu kullanarak kod tekrarından kurtulundu
+      // Aşağıdaki createCard metodunu kullanarak kod tekrarından kurtulundu
         JButton btnBilgi = createCard("Bilgi Sistemi");
         btnBilgi.addActionListener(e -> {
             // Bilgi menüsünü aç
@@ -86,7 +86,6 @@ public class AnaMenuGUI extends JFrame {
         backgroundPanel.add(buttonPanel, BorderLayout.SOUTH);
     }
 
-    // Yardımcı Metot: Zarif Buton Tasarımı
     // Her buton için aynı kodları kopyala-yapıştır yapmamak için  metodu
     private JButton createCard(String text) {
         JButton btn = new JButton(text);

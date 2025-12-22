@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import service.TarihIslemleri;
+import java.util.Collections;
 
 public class DuyuruListeGUI extends JFrame {
 
@@ -23,23 +24,23 @@ public class DuyuruListeGUI extends JFrame {
         mainPanel.setBackground(Color.WHITE);
         setContentPane(mainPanel);
 
-        // --- Başlık ---
+        //  Başlık
         JLabel lblBaslik = new JLabel("Güncel Duyurular");
         lblBaslik.setFont(new Font("Segoe UI", Font.BOLD, 24));
         lblBaslik.setBorder(new EmptyBorder(20, 20, 20, 20));
         mainPanel.add(lblBaslik, BorderLayout.NORTH);
 
-        // --- Tablo Modeli ---
+        // Tablo Modeli
         String[] kolonlar = {"Tarih", "Başlık", "İçerik"};
         DefaultTableModel model = new DefaultTableModel(kolonlar, 0) {
             @Override
             public boolean isCellEditable(int row, int column) { return false; }
         };
 
-        // --- Verileri Çek ve Filtrele (ÖNEMLİ KISIM) ---
+        // Verileri Çek ve Filtrele
         List<String[]> duyurular = DosyaIslemleri.duyurulariOku();
-
         // Bugünün tarihi
+        Collections.reverse(duyurular);
         LocalDate bugun = LocalDate.now();
 
         for (String[] d : duyurular) {

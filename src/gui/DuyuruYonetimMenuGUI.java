@@ -54,9 +54,7 @@ public class DuyuruYonetimMenuGUI extends JFrame {
     }
 
 
-    // Kod tekrarını önlemek ve tutarlı bir tasarım sağlamak amacıyla,
     //menü kartlarını oluşturan parametrik metot tasarlandı.
-
     private JPanel createCard(String title, String desc, String icon, java.awt.event.ActionListener action) {
         JPanel card = new JPanel(new BorderLayout());
         card.setBackground(CARD_BG);

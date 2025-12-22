@@ -14,19 +14,17 @@ public class DuyuruSilGUI extends JFrame {
     private JTable table;
 
     public DuyuruSilGUI() {
-        // Pencere yapılandırması (Başlık, Boyut, Konum)
         setTitle("Duyuruları Yönet");
         setSize(800, 500);
         // Pencere kapatıldığında ana uygulama akışının devam etmesi için DISPOSE tercih edilir
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        // Ana panel oluşturuldu ve arka plan rengi belirlendi.
         JPanel mainPanel = new JPanel(new BorderLayout());
         mainPanel.setBackground(Color.WHITE);
         setContentPane(mainPanel);
 
-        // --- 1. Üst Panel (Header) ---
+        // üst Panel
         JPanel header = new JPanel(new FlowLayout(FlowLayout.LEFT));
         header.setBackground(new Color(248, 249, 250));
 

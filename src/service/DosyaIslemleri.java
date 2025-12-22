@@ -182,13 +182,7 @@ public class DosyaIslemleri {
         return k;
     }
 
-    // --- DUYURU VE SPOR İŞLEMLERİ ---
-    // (Mantık olarak Öğrenci ve Kitap işlemleriyle aynı CRUD yapısını kullanır)
-
-    // DosyaIslemleri.java içi:
-
-    // --- 1. ASIL İŞÇİ METOT (Bunu sakın silme/değiştirme) ---
-// Bu metot, kendisine verilen 3 bilgiyi alır ve dosyaya yazar.
+    // Bu metot, kendisine verilen 3 bilgiyi alır ve dosyaya yazar.
     public static void duyuruEkle(String tarih, String baslik, String icerik) throws IOException {
         File file = new File(DUYURU_DOSYASI);
         if (file.getParentFile() != null) file.getParentFile().mkdirs();
@@ -200,8 +194,7 @@ public class DosyaIslemleri {
         }
     }
 
-    // --- 2. YARDIMCI METOT (Overloading - Senin eklediğin kısım) ---
-// Bu metot sadece tarihi hesaplar ve işi yukarıdaki "Asıl İşçi"ye devreder.
+    // Bu metot sadece tarihi hesaplar ve işi yukarıdaki metoda devreder
     public static void duyuruEkle(String baslik, String icerik) throws IOException {
 
         // Tarihi formatlayarak alıyoruz (Az önce yaptığımız format ayarı)

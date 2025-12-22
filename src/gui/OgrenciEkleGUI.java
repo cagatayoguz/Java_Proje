@@ -21,7 +21,7 @@ public class OgrenciEkleGUI extends JFrame {
         mainPanel.setBackground(new Color(248, 249, 250));
         setContentPane(mainPanel);
 
-        // --- KART PANELİ ---
+        // KART PANELİ
         JPanel cardPanel = new JPanel();
         cardPanel.setLayout(new BoxLayout(cardPanel, BoxLayout.Y_AXIS));
         cardPanel.setBackground(Color.WHITE);
@@ -42,7 +42,7 @@ public class OgrenciEkleGUI extends JFrame {
         JTextField txtSoyad = createField();
         JTextField txtNo = createField();
         JTextField txtBolum = createField();
-        JTextField txtSinif = createField(); // Not: Sınıf bilgisi modelde varsayılan "1. Sınıf" tutuluyor ama burdan da alabiliriz.
+        JTextField txtSinif = createField();
         JTextField txtOrt = createField();
 
         addLabeledField(cardPanel, "Adı:", txtAd);
@@ -62,17 +62,16 @@ public class OgrenciEkleGUI extends JFrame {
         btnKaydet.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
         btnKaydet.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-        // --- OOP ENTEGRASYONU ---
+        // Kaydet butonu
         btnKaydet.addActionListener(e -> {
             try {
-                //Boş alan kontrolü
+                // Boş alan kontrolü
                 if (txtAd.getText().trim().isEmpty() || txtSoyad.getText().trim().isEmpty() ||
                         txtNo.getText().trim().isEmpty() || txtBolum.getText().trim().isEmpty()) {
                     throw new GecersizGirisBilgisiException("Lütfen tüm alanları doldurunuz.");
                 }
 
-                //polimorfizm ile nesne oluşturluyor
-                // Doğrudan servisi çağırmak yerine önce nesneyi oluşturuyo
+                // Doğrudan servisi çağırmak yerine önce nesneyi oluşturuyoruz.
                 Ogrenci yeniOgrenci = new LisansOgrenci(
                         txtAd.getText().trim(),
                         txtSoyad.getText().trim(),
@@ -85,15 +84,14 @@ public class OgrenciEkleGUI extends JFrame {
 
                 if (!txtOrt.getText().trim().isEmpty()) {
                     try {
-                        int ort = Integer.parseInt(txtOrt.getText().trim());
+                        double ort = Double.parseDouble(txtOrt.getText().trim());
                         yeniOgrenci.setNotOrtalamasi(ort);
                     } catch (NumberFormatException nfe) {
                         throw new GecersizGirisBilgisiException("Ortalama sayısal bir değer olmalıdır.");
                     }
                 }
 
-                // 4. KAYDETME İŞLEMİ (Interface Kullanımı)
-                // Nesneye "kendini kaydet" diyoruz. Arka planda DosyaIslemleri çalışıyor.
+                // Arka planda DosyaIslemleri çalışıyor.
                 if (yeniOgrenci.kaydet()) {
                     JOptionPane.showMessageDialog(this, "Öğrenci sisteme başarıyla kaydedildi.");
                     this.dispose();

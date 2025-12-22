@@ -75,4 +75,5 @@ public class Kitap implements Kaydedilebilir, Yazdirilabilir {
     public String getIsbn() { return isbn; }
     public String getDurum() { return durum; }
     public void setDurum(String durum) { this.durum = durum; }
+
 }

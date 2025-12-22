@@ -64,82 +64,73 @@ public class BolumSecimGUI extends JFrame {
         mainPanel.add(scrollPane, BorderLayout.CENTER);
     }
 
-
+    
     private void bolumleriYukle(String fakulte, JPanel panel) {
 
-        // TEKNOLOJİ FAKÜLTESİ KONTROLÜ
-        if (fakulte.contains("Teknoloji")) {
+        switch (fakulte) {
 
-            panel.add(createCard("Yazılım Mühendisliği", "Uygulama, Geliştirme...", "💾", () -> {
-                dosyaAc("C:\\Users\\cagat\\Downloads\\teknoloji bilgisayar.xls");
-            }));
+            // TEKNOLOJİ FAKÜLTESİ
+            case "Teknoloji Fakültesi":
+                panel.add(createCard("Yazılım Mühendisliği", "Uygulama, Geliştirme...", "💾", () -> {
+                    dosyaAc("C:\\Users\\cagat\\Downloads\\teknoloji bilgisayar.xls");
+                }));
+                panel.add(createCard("Elektrik-Elektronik Müh.", "Devreler, Sinyaller...", "⚡", () -> {
+                    dosyaAc("C:\\Users\\cagat\\Downloads\\teknoloji elektrik.pdf");
+                }));
+                panel.add(createCard("Enerji Sistemleri Müh.", "Yenilenebilir Enerji...", "🔋", () -> {
+                    dosyaAc("C:\\Users\\cagat\\Downloads\\Enerji Sistemleri teknoloji.xlsx");
+                }));
+                panel.add(createCard("Otomotiv Mühendisliği", "Araç Teknolojileri...", "🚗", () -> {
+                    dosyaAc("C:\\Users\\cagat\\Downloads\\teknoloji otomotiv.pdf");
+                }));
+                break;
 
-            // MEKATRONİK YERİNE ELEKTRİK-ELEKTRONİK GÜNCELLEMESİ YAPILDI
-            panel.add(createCard("Elektrik-Elektronik Müh.", "Devreler, Sinyaller...", "⚡", () -> {
-                dosyaAc("C:\\Users\\cagat\\Downloads\\teknoloji elektrik.pdf");
-            }));
+            // MÜHENDİSLİK FAKÜLTESİ
+            case "Mühendislik Fakültesi":
+                panel.add(createCard("Bilgisayar Mühendisliği", "Donanım, Algoritma...", "💻", () -> {
+                    dosyaAc("C:\\Users\\cagat\\Downloads\\Mühendislik Bilgisayar.pdf");
+                }));
+                panel.add(createCard("Elektrik-Elektronik Müh.", "Devreler...", "⚡", () -> {
+                    dosyaAc("C:\\Users\\cagat\\Downloads\\mühendislik elektrik.pdf");
+                }));
+                panel.add(createCard("Endüstri Mühendisliği", "Verimlilik...", "🏭", () -> {
+                    dosyaAc("C:\\Users\\cagat\\Downloads\\Mühendislik endüstri.pdf");
+                }));
+                panel.add(createCard("İnşaat Mühendisliği", "Yapı, Statik...", "🏗️", () -> {
+                    dosyaAc("C:\\Users\\cagat\\Downloads\\İNŞAAT MÜHENDİSLİĞİ Mühendislik.pdf");
+                }));
+                break;
 
-            // ENERJİ İÇİN İKON GÜNCELLEMESİ YAPILDI (PİL LOGOSU)
-            panel.add(createCard("Enerji Sistemleri Müh.", "Yenilenebilir Enerji...", "🔋", () -> {
-                dosyaAc("C:\\Users\\cagat\\Downloads\\Enerji Sistemleri teknoloji.xlsx");
-            }));
+            // FEN FAKÜLTESİ
+            case "Fen Fakültesi":
+                panel.add(createCard("Matematik", "Analiz, Cebir...", "📐", () -> {
+                    dosyaAc("C:\\Users\\cagat\\Downloads\\mat ders pro.pdf");
+                }));
+                panel.add(createCard("Fizik", "Kuantum, Optik...", "⚛️", () -> {
+                    dosyaAc("C:\\Users\\cagat\\Downloads\\fizik ders pro.pdf");
+                }));
+                panel.add(createCard("Kimya", "Organik, Analitik...", "🧪", () -> {
+                    dosyaAc("C:\\Users\\cagat\\Downloads\\kimya ders pro.pdf");
+                }));
+                break;
 
-            panel.add(createCard("Otomotiv Mühendisliği", "Araç Teknolojileri...", "🚗", () -> {
-                dosyaAc("C:\\Users\\cagat\\Downloads\\teknoloji otomotiv.pdf");
-            }));
-        }
+            // EĞİTİM FAKÜLTESİ
+            case "Eğitim Fakültesi":
+                panel.add(createCard("Sınıf Öğretmenliği", "İlköğretim...", "abc", () -> {
+                    dosyaAc("C:\\Users\\cagat\\Downloads\\Sınıf öğretmenliği.pdf");
+                }));
+                panel.add(createCard("İngilizce Öğretmenliği", "Dil Eğitimi...", "🇬🇧", () -> {
+                    dosyaAc("C:\\Users\\cagat\\Downloads\\İngilizce Öğretmenliği.pdf");
+                }));
+                panel.add(createCard("Rehberlik ve PDR", "Psikolojik Danışma...", "🧠", () -> {
+                    dosyaAc("C:\\Users\\cagat\\Downloads\\REHBERLİK VE PSİKOLOJİK DANIŞMANLIK.pdf");
+                }));
+                break;
 
-        // MÜHENDİSLİK FAKÜLTESİ KONTROLÜ
-
-        else if (fakulte.contains("Mühendislik")) {
-
-            panel.add(createCard("Bilgisayar Mühendisliği", "Donanım, Algoritma...", "💻", () -> {
-                dosyaAc("C:\\Users\\cagat\\Downloads\\Mühendislik Bilgisayar.pdf");
-            }));
-
-            panel.add(createCard("Elektrik-Elektronik Müh.", "Devreler...", "⚡", () -> {
-                dosyaAc("C:\\Users\\cagat\\Downloads\\mühendislik elektrik.pdf");
-            }));
-
-            panel.add(createCard("Endüstri Mühendisliği", "Verimlilik...", "🏭", () -> {
-                dosyaAc("C:\\Users\\cagat\\Downloads\\Mühendislik endüstri.pdf");
-            }));
-
-            panel.add(createCard("İnşaat Mühendisliği", "Yapı, Statik...", "🏗️", () -> {
-                dosyaAc("C:\\Users\\cagat\\Downloads\\İNŞAAT MÜHENDİSLİĞİ Mühendislik.pdf");
-            }));
-        }
-
-        // FEN FAKÜLTESİ KONTROLÜ
-        else if (fakulte.contains("Fen")) {
-
-            panel.add(createCard("Matematik", "Analiz, Cebir...", "📐", () -> {
-                dosyaAc("C:\\Users\\cagat\\Downloads\\mat ders pro.pdf");
-            }));
-
-            panel.add(createCard("Fizik", "Kuantum, Optik...", "⚛️", () -> {
-                dosyaAc("C:\\Users\\cagat\\Downloads\\fizik ders pro.pdf");
-            }));
-
-            panel.add(createCard("Kimya", "Organik, Analitik...", "🧪", () -> {
-                dosyaAc("C:\\Users\\cagat\\Downloads\\kimya ders pro.pdf");
-            }));
-        }
-
-        // EĞİTİM FAKÜLTESİ KONTROLÜ
-        else if (fakulte.contains("Eğitim")) {
-
-            panel.add(createCard("Sınıf Öğretmenliği", "İlköğretim...", "abc", () -> {
-                dosyaAc("C:\\Users\\cagat\\Downloads\\Sınıf öğretmenliği.pdf");
-            }));
-
-            panel.add(createCard("İngilizce Öğretmenliği", "Dil Eğitimi...", "🇬🇧", () -> {
-                dosyaAc("C:\\Users\\cagat\\Downloads\\İngilizce Öğretmenliği.pdf");
-            }));
-
-            panel.add(createCard("Rehberlik ve PDR", "Psikolojik Danışma...", "🧠", () -> {
-                dosyaAc("C:\\Users\\cagat\\Downloads\\REHBERLİK VE PSİKOLOJİK DANIŞMANLIK.pdf");
-            }));
+            default:
+                // Eşleşen fakülte bulunamazsa yapılacak işlem (opsiyonel)
+                System.out.println("Bilinmeyen Fakülte: " + fakulte);
+                break;
         }
     }
 
@@ -197,7 +188,7 @@ public class BolumSecimGUI extends JFrame {
         return card;
     }
 
-    // -DOSYA AÇMA İŞLEMİ
+    // DOSYA AÇMA İŞLEMİ
     // Java'nın Desktop sınıfı kullanılarak, dosya uzantısı ne olursa olsun (PDF, Excel, vb.)
     // işletim sisteminin varsayılan uygulaması ile açılması sağlandı.
     private void dosyaAc(String path) {

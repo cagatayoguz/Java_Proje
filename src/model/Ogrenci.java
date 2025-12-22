@@ -3,7 +3,7 @@ import service.DosyaIslemleri;
 import exception.GecersizGirisBilgisiException;
 import java.io.IOException;
 
-public class Ogrenci extends Kisiler{
+public class  Ogrenci extends Kisiler{
 
     private String ogrenciNo;
     private String bolum;
@@ -16,12 +16,12 @@ public class Ogrenci extends Kisiler{
         this.notOrtalamasi = 0; // Varsayılan başlangıç değeri
     }
 
-    // --- INTERFACE (KAYDEDİLEBİLİR) METOTLARI ---
+    // KAYDEDİLEBİLİR metodları
 
     @Override
     public boolean kaydet() {
         try {
-            // Dosya servisini çağırarak veriyi gerçekten dosyaya yazıyoruz.
+            // Dosya servisini çağırarak veriyi dosyaya yazıyoruz.
             DosyaIslemleri.ogrenciEkle(
                     getAd(),
                     getSoyad(),
@@ -58,7 +58,7 @@ public class Ogrenci extends Kisiler{
         return false;
     }
 
-    // --- DİĞER OVERRIDE VE GETTER/SETTER METOTLARI ---
+    // DİĞER OVERRIDE VE GETTER/SETTER METOTLARI
 
     @Override
     public String getPozisyon() {
@@ -79,18 +79,29 @@ public class Ogrenci extends Kisiler{
     public void ciktiAl() {
         System.out.println(detayliRaporOlustur());
     }
+    public String getBolum() { return bolum; }
 
     public void setBolum(String bolum) throws GecersizGirisBilgisiException {
         if (bolum == null || bolum.trim().isEmpty()) throw new GecersizGirisBilgisiException("Bölüm boş olamaz.");
         this.bolum = bolum;
     }
+    public double getNotOrtalamasi() { return notOrtalamasi; }
 
-    public void setNotOrtalamasi(double not) throws GecersizGirisBilgisiException {
-        if (not < 0 || not > 100) throw new GecersizGirisBilgisiException("Not 0-100 arası olmalı.");
-        this.notOrtalamasi = not;
+
+    public void setOgrenciNo(String ogrenciNo) throws GecersizGirisBilgisiException {
+        if (ogrenciNo == null || ogrenciNo.trim().isEmpty()) {
+            throw new GecersizGirisBilgisiException("Öğrenci numarası boş olamaz!");
+        }
+        // Örnek: Öğrenci numarası 9 haneli olmalı kuralı
+        if (ogrenciNo.length() != 9) {
+            throw new GecersizGirisBilgisiException("Öğrenci numarası 9 haneli olmalıdır.");
+        }
+        this.ogrenciNo = ogrenciNo;
     }
 
-    public String getOgrenciNo() { return ogrenciNo; }
-    public String getBolum() { return bolum; }
-    public double getNotOrtalamasi() { return notOrtalamasi; }
-}
+    public void setNotOrtalamasi(double notOrtalamasi) throws GecersizGirisBilgisiException {
+        if (notOrtalamasi < 0.0 || notOrtalamasi > 4.0) {
+            throw new GecersizGirisBilgisiException("Not ortalaması 0.0 ile 4.0 arasında olmalıdır.");
+        }
+        this.notOrtalamasi = notOrtalamasi;
+    }}

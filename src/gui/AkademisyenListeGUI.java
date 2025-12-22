@@ -47,8 +47,7 @@ public class AkademisyenListeGUI extends JFrame {
 
         mainPanel.add(topPanel, BorderLayout.NORTH);
 
-        // --- TABLO KISMI ---
-        // Modelimizdeki verilere uygun sütunlar:
+        // TABLO KISMI
         String[] kolonlar = {"Unvan", "Ad Soyad", "Bölüm", "e posta"};
 
         model = new DefaultTableModel(kolonlar, 0) {
@@ -81,7 +80,7 @@ public class AkademisyenListeGUI extends JFrame {
         scrollPane.getViewport().setBackground(Color.WHITE);
         mainPanel.add(scrollPane, BorderLayout.CENTER);
 
-        // --- ARAMA FİLTRESİ ---
+        // ARAMA FİLTRESİ
         txtAra.getDocument().addDocumentListener(new DocumentListener() {
             public void insertUpdate(DocumentEvent e) { filtrele(); }
             public void removeUpdate(DocumentEvent e) { filtrele(); }
@@ -98,7 +97,7 @@ public class AkademisyenListeGUI extends JFrame {
             }
         });
 
-        // --- ALT PANEL ---
+        //  ALT PANEL
         JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 30, 20));
         bottomPanel.setBackground(Color.WHITE);
 

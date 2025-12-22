@@ -75,13 +75,13 @@ public class NotHesaplamaGUI extends JFrame {
         return p;
     }
 
-    // --- 2. SEKME: DİNAMİK ORTALAMA
+    // DİNAMİK ORTALAMA
     private JPanel createDonemPanel() {
         JPanel main = new JPanel(new BorderLayout(0, 10));
         main.setBorder(new EmptyBorder(10, 15, 10, 15));
         main.setBackground(Color.WHITE);
 
-        // -- Üst Kısım: Sayı Girişi --
+        // Üst Kısım: Sayı Girişi
         JPanel top = new JPanel(new FlowLayout(FlowLayout.LEFT));
         top.setBackground(Color.WHITE);
 
@@ -95,7 +95,7 @@ public class NotHesaplamaGUI extends JFrame {
         top.add(txtSayi);
         top.add(btnOlustur);
 
-        // -- Liste Başlıkları --
+        // Liste Başlıkları
         JPanel header = new JPanel(new GridLayout(1, 2));
         header.setBackground(Color.WHITE);
         header.add(new JLabel("Not (0-100)", 0));
@@ -105,14 +105,14 @@ public class NotHesaplamaGUI extends JFrame {
         topContainer.add(top, BorderLayout.NORTH);
         topContainer.add(header, BorderLayout.SOUTH);
 
-        // -- Orta Kısım: Kaydırılabilir Liste --
+        // Orta Kısım: Kaydırılabilir Liste
         formPanel = new JPanel();
         formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.Y_AXIS));
         formPanel.setBackground(Color.WHITE);
         JScrollPane scroll = new JScrollPane(formPanel);
         scroll.setBorder(BorderFactory.createEmptyBorder());
 
-        // -- Alt Kısım: Hesapla --
+        // Alt Kısım: Hesapla
         JPanel bottom = new JPanel(new BorderLayout(5, 5));
         bottom.setBackground(Color.WHITE);
         JLabel lblOrt = new JLabel("Ortalama: -", 0);
@@ -159,7 +159,7 @@ public class NotHesaplamaGUI extends JFrame {
                 }
                 if(tKredi==0) lblOrt.setText("Veri Girilmedi");
                 else {
-                    double sonuc = tPuan/tKredi;
+                    double sonuc = (tPuan/tKredi)/25;
                     lblOrt.setText(String.format("Ortalama: %.2f", sonuc));
                     // OOP Proje şartı: Model sınıfı kullanımı (dummy check)
                     new model.Ogrenci("Sanal", "Ogrenci", "0", "-") {
@@ -178,11 +178,11 @@ public class NotHesaplamaGUI extends JFrame {
         return main;
     }
 
-    // --- Helper Metotlar (Kod Kısaltma) ---
+    // Yardımcı Metotlar 
     private JTextField createField() {
         JTextField t = new JTextField();
         t.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-        t.setPreferredSize(new Dimension(0, 28)); // İsteğiniz üzerine küçültüldü
+        t.setPreferredSize(new Dimension(0, 28));
         t.setBorder(BorderFactory.createCompoundBorder(
                 new LineBorder(Color.LIGHT_GRAY, 1, true), new EmptyBorder(2, 5, 2, 5)));
         return t;

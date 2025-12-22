@@ -19,7 +19,7 @@ Beyaz Diş,Jack London,978-975-08-0877-0,Musait,-,-
 Martin Eden,Jack London,978-975-08-0845-9,Musait,-,-
 Simyacı,Paulo Coelho,978-975-07-1350-0,Oduncte,18.02.2026,-
 Küçük Prens,Antoine de Saint-Exupéry,978-975-07-1400-0,Musait,-,-
-Yeraltından Notlar,Dostoyevski,978-975-07-1450-0,Musait,-,-
+Yeraltından Notlar,Dostoyevski,978-975-07-1450-0,Oduncte,04.01.2026,çağatay oğuz
 Fareler ve İnsanlar,John Steinbeck,978-975-07-1500-0,Oduncte,01.03.2026,-
 Gazap Üzümleri,John Steinbeck,978-975-07-1550-0,Musait,-,-
 Dracula,Bram Stoker,978-975-07-1600-0,Musait,-,-
@@ -46,5 +46,3 @@ Gurur ve Ceza,Jane Austen,978-975-07-2600-0,Musait,-,-
 İnsan Ne ile Yaşar,Lev Tolstoy,978-975-07-2650-0,Musait,-,-
 Körlük,José Saramago,978-975-07-2700-0,Musait,-,-
 Suç ve Ceza,Dostoyevski,978-605-7798-01-1,Müsait,-,-
-a,a,u,Müsait,-,-
-e,r,t,Müsait,-,-

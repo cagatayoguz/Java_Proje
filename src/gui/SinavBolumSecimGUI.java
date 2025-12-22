@@ -65,72 +65,80 @@ public class SinavBolumSecimGUI extends JFrame {
     // Sınav takvimleri (PDF, Excel, JPG) yerel diskten çağrılmaktadır.
     private void bolumleriYukle(String fakulte, JPanel panel) {
 
-        // TEKNOLOJİ FAKÜLTESİ KONTROLÜ
-        if (fakulte.contains("Teknoloji")) {
-            panel.add(createCard("Yazılım Mühendisliği", "Vize/Final Takvimi...", "💾", () -> {
-                dosyaAc("C:\\Users\\cagat\\Downloads\\Bilgisayar teknoloji Final.xlsx");
-            }));
+        switch (fakulte) {
 
-            panel.add(createCard("Elektrik-Elektronik Müh.", "Sınav Tarihleri...", "⚡", () -> {
-                dosyaAc("veriler/sinav_takvimleri/Elektrik-Elektronik Müh..jpg");
-            }));
+            // TEKNOLOJİ FAKÜLTESİ
+            case "Teknoloji Fakültesi":
+                panel.add(createCard("Yazılım Mühendisliği", "Vize/Final Takvimi...", "💾", () -> {
+                    dosyaAc("C:\\Users\\cagat\\Downloads\\Bilgisayar teknoloji Final.xlsx");
+                }));
 
-            panel.add(createCard("Enerji Sistemleri Müh.", "Program...", "🔋", () -> {
-                dosyaAc("C:\\Users\\cagat\\Downloads\\Enerji Sistemleri Final.xlsx");
-            }));
+                panel.add(createCard("Elektrik-Elektronik Müh.", "Sınav Tarihleri...", "⚡", () -> {
+                    dosyaAc("veriler/sinav_takvimleri/Elektrik-Elektronik Müh..jpg");
+                }));
 
-            panel.add(createCard("Otomotiv Mühendisliği", "Sınavlar...", "🚗", () -> {
-                dosyaAc("C:\\Users\\cagat\\Downloads\\Otomotiv Final.xlsx");
-            }));
-        }
+                panel.add(createCard("Enerji Sistemleri Müh.", "Program...", "🔋", () -> {
+                    dosyaAc("C:\\Users\\cagat\\Downloads\\Enerji Sistemleri Final.xlsx");
+                }));
 
-        // MÜHENDİSLİK FAKÜLTESİ KONTROLÜ
-        else if (fakulte.contains("Mühendislik")) {
-            panel.add(createCard("Bilgisayar Mühendisliği", "Sınav Takvimi...", "💻", () -> {
-                dosyaAc("C:\\Users\\cagat\\Downloads\\Mühendislk Bilgisayar Final.pdf");
-            }));
+                panel.add(createCard("Otomotiv Mühendisliği", "Sınavlar...", "🚗", () -> {
+                    dosyaAc("C:\\Users\\cagat\\Downloads\\Otomotiv Final.xlsx");
+                }));
+                break;
 
-            panel.add(createCard("Elektrik-Elektronik Müh.", "Tarihler...", "⚡", () -> {
-                dosyaAc("C:\\Users\\cagat\\Downloads\\Mühendislik Elektrik Final.xls");
-            }));
+            // MÜHENDİSLİK FAKÜLTESİ
+            case "Mühendislik Fakültesi":
+                panel.add(createCard("Bilgisayar Mühendisliği", "Sınav Takvimi...", "💻", () -> {
+                    dosyaAc("C:\\Users\\cagat\\Downloads\\Mühendislk Bilgisayar Final.pdf");
+                }));
 
-            panel.add(createCard("Endüstri Mühendisliği", "Program...", "🏭", () -> {
-                dosyaAc("C:\\Users\\cagat\\Downloads\\Mühendilik Endüstri Fİnal.pdf");
-            }));
+                panel.add(createCard("Elektrik-Elektronik Müh.", "Tarihler...", "⚡", () -> {
+                    dosyaAc("C:\\Users\\cagat\\Downloads\\Mühendislik Elektrik Final.xls");
+                }));
 
-            panel.add(createCard("İnşaat Mühendisliği", "Sınavlar...", "🏗️", () -> {
-                dosyaAc("C:\\Users\\cagat\\Downloads\\Mühendislik İnşaat Final.pdf");
-            }));
-        }
+                panel.add(createCard("Endüstri Mühendisliği", "Program...", "🏭", () -> {
+                    dosyaAc("C:\\Users\\cagat\\Downloads\\Mühendilik Endüstri Fİnal.pdf");
+                }));
 
-        // FEN FAKÜLTESİ KONTROLÜ
-        else if (fakulte.contains("Fen")) {
-            panel.add(createCard("Matematik", "Analiz, Cebir Sınavları...", "📐", () -> {
-                dosyaAc("C:\\Users\\cagat\\Downloads\\Matematik Final.pdf");
-            }));
+                panel.add(createCard("İnşaat Mühendisliği", "Sınavlar...", "🏗️", () -> {
+                    dosyaAc("C:\\Users\\cagat\\Downloads\\Mühendislik İnşaat Final.pdf");
+                }));
+                break;
 
-            panel.add(createCard("Fizik", "Fizik Sınavları...", "⚛️", () -> {
-                dosyaAc("C:\\Users\\cagat\\Downloads\\Fizik Final.pdf");
-            }));
+            // FEN FAKÜLTESİ
+            case "Fen Fakültesi":
+                panel.add(createCard("Matematik", "Analiz, Cebir Sınavları...", "📐", () -> {
+                    dosyaAc("C:\\Users\\cagat\\Downloads\\Matematik Final.pdf");
+                }));
 
-            panel.add(createCard("Kimya", "Kimya Sınavları...", "🧪", () -> {
-                dosyaAc("C:\\Users\\cagat\\Downloads\\Kimya Final.pdf");
-            }));
-        }
+                panel.add(createCard("Fizik", "Fizik Sınavları...", "⚛️", () -> {
+                    dosyaAc("C:\\Users\\cagat\\Downloads\\Fizik Final.pdf");
+                }));
 
-        // EĞİTİM FAKÜLTESİ KONTROLÜ
-        else if (fakulte.contains("Eğitim")) {
-            panel.add(createCard("Sınıf Öğretmenliği", "Sınavlar...", "abc", () -> {
-                dosyaAc("C:\\Users\\cagat\\Downloads\\Sınıf Öğretmenliği Final.pdf");
-            }));
+                panel.add(createCard("Kimya", "Kimya Sınavları...", "🧪", () -> {
+                    dosyaAc("C:\\Users\\cagat\\Downloads\\Kimya Final.pdf");
+                }));
+                break;
 
-            panel.add(createCard("İngilizce Öğretmenliği", "Sınavlar...", "🇬🇧", () -> {
-                dosyaAc("veriler/sinav_takvimleri/İngilizce Öğretmenliği.jpg");
-            }));
+            // EĞİTİM FAKÜLTESİ
+            case "Eğitim Fakültesi":
+                panel.add(createCard("Sınıf Öğretmenliği", "Sınavlar...", "abc", () -> {
+                    dosyaAc("C:\\Users\\cagat\\Downloads\\Sınıf Öğretmenliği Final.pdf");
+                }));
 
-            panel.add(createCard("Rehberlik ve PDR", "Sınavlar...", "🧠", () -> {
-                dosyaAc("C:\\Users\\cagat\\Downloads\\REHBERLİK VE PSİKOLOJİK Final.pdf");
-            }));
+                panel.add(createCard("İngilizce Öğretmenliği", "Sınavlar...", "🇬🇧", () -> {
+                    dosyaAc("veriler/sinav_takvimleri/İngilizce Öğretmenliği.jpg");
+                }));
+
+                panel.add(createCard("Rehberlik ve PDR", "Sınavlar...", "🧠", () -> {
+                    dosyaAc("C:\\Users\\cagat\\Downloads\\REHBERLİK VE PSİKOLOJİK Final.pdf");
+                }));
+                break;
+
+            default:
+                // Eşleşen fakülte bulunamazsa veya farklı bir isim gelirse
+                System.out.println("Sınav takvimi için bilinmeyen fakülte: " + fakulte);
+                break;
         }
     }
 

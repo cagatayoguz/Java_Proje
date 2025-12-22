@@ -16,6 +16,7 @@ public class KutuphaneServisi {
         baslangicVerisiYukle();
     }
 
+    //başlangıçtaki kitapları yükler
     private void baslangicVerisiYukle() {
         try {
             // Dosyadan verileri detaylı okuyoruz

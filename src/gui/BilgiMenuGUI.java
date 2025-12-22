@@ -49,10 +49,7 @@ public class BilgiMenuGUI extends JFrame {
         headerPanel.add(lblSubtitle, BorderLayout.SOUTH);
         mainPanel.add(headerPanel, BorderLayout.NORTH);
 
-        // Kartlar Alanı grid
         // Kartların düzenli durması için GridLayout kullanıldı.
-        // Satır sayısı dinamik, sütun sayısı sabit olacak şekilde ayarlandı.
-        // Kartlar arasındaki boşluklar.
         JPanel gridPanel = new JPanel(new GridLayout(0, 2, 25, 25));
         gridPanel.setBackground(BG_COLOR);
         gridPanel.setBorder(new EmptyBorder(10, 50, 50, 50));
@@ -179,7 +176,6 @@ public class BilgiMenuGUI extends JFrame {
     }
 
 
-    //  Modern Kart Bileşeni Oluşturucu Metot
     //Her buton için aynı kodları yazmamak adına, parametre alan dinamik bir yapı kuruldu.
 
     private JPanel createCard(String title, String desc, String icon, java.awt.event.ActionListener action) {
@@ -221,13 +217,11 @@ public class BilgiMenuGUI extends JFrame {
         card.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                // Parametre olarak gelen aksiyon tetiklendi
                 action.actionPerformed(null);
             }
 
             @Override
             public void mouseEntered(MouseEvent e) {
-                //Mavi çerçeve ve hafif renkli arka plan uygulandı
                 card.setBackground(new Color(250, 251, 255));
                 card.setBorder(BorderFactory.createCompoundBorder(
                         new LineBorder(ACCENT_BLUE, 1),

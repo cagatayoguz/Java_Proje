@@ -18,7 +18,7 @@ public class DuyuruEkleGUI extends JFrame {
         mainPanel.setBackground(new Color(248, 249, 250));
         setContentPane(mainPanel);
 
-        // --- Kart Paneli ---
+        // Kart Paneli
         JPanel cardPanel = new JPanel();
         cardPanel.setLayout(new BoxLayout(cardPanel, BoxLayout.Y_AXIS));
         cardPanel.setBackground(Color.WHITE);
@@ -34,9 +34,10 @@ public class DuyuruEkleGUI extends JFrame {
         cardPanel.add(lblTitle);
         cardPanel.add(Box.createVerticalStrut(20));
 
-        // --- 1. Tarih Alanı (EKSİK OLAN KISIM EKLENDİ) ---
+        // Tarih Alanı
         JLabel lTarih = new JLabel("Tarih (İsteğe Bağlı):");
         lTarih.setAlignmentX(Component.LEFT_ALIGNMENT);
+
         // Kullanıcıya ipucu vermek için ToolTip ekledik
         JTextField txtTarih = new JTextField();
         txtTarih.setToolTipText("Boş bırakırsanız bugünün tarihi atılır.");
@@ -47,7 +48,7 @@ public class DuyuruEkleGUI extends JFrame {
         cardPanel.add(txtTarih);
         cardPanel.add(Box.createVerticalStrut(15));
 
-        // --- 2. Duyuru Başlığı Alanı ---
+        //  Duyuru Başlığı Alanı
         JLabel l1 = new JLabel("Duyuru Başlığı:");
         l1.setAlignmentX(Component.LEFT_ALIGNMENT);
         JTextField txtBaslik = new JTextField();
@@ -58,7 +59,7 @@ public class DuyuruEkleGUI extends JFrame {
         cardPanel.add(txtBaslik);
         cardPanel.add(Box.createVerticalStrut(15));
 
-        // --- 3. İçerik Alanı ---
+        // İçerik Alanı
         JLabel l2 = new JLabel("İçerik:");
         l2.setAlignmentX(Component.LEFT_ALIGNMENT);
         JTextArea txtIcerik = new JTextArea(6, 20);
@@ -72,7 +73,7 @@ public class DuyuruEkleGUI extends JFrame {
         cardPanel.add(scroll);
         cardPanel.add(Box.createVerticalStrut(20));
 
-        // --- Yayınla Butonu ---
+        // Yayınla Butonu
         JButton btnYayinla = new JButton("Yayınla");
         btnYayinla.setBackground(new Color(155, 89, 182));
         btnYayinla.setForeground(Color.WHITE);
@@ -80,7 +81,7 @@ public class DuyuruEkleGUI extends JFrame {
         btnYayinla.setAlignmentX(Component.CENTER_ALIGNMENT);
         btnYayinla.setMaximumSize(new Dimension(Integer.MAX_VALUE, 40));
 
-        // --- BUTON AKSİYONU (SIKI DENETİMLİ VERSİYON) ---
+        // BUTON AKSİYONU
         btnYayinla.addActionListener(e -> {
             try {
                 String tarihStr = txtTarih.getText().trim();
